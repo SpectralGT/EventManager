@@ -13,3 +13,67 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Admin {
+  id       String @id @default(cuid())
+  username String @unique // Use username for login
+  password String // Store hashed passwords only!
+
+  @@map("admins")
+}
+
+model Attendee {
+  id       String  @id @default(cuid())
+  username String  @unique // Use username for login
+  name     String?
+  password String // Store hashed passwords only!
+  // Add any other attendee-specific fields here
+
+  isFamily Boolean @default(false)
+  balance  Int     @default(1000)
+  debt     Int     @default(-1000)
+
+  Orders Order[]
+
+  @@map("attendees")
+}
+
+model Operator {
+  id       String  @id @default(cuid())
+  username String  @unique // Use username for login
+  name     String?
+  password String // Store hashed passwords only!
+
+  // Add any other operator-specific fields here
+  @@map("operators")
+}
+
+model Event {
+  id String @id @default(cuid())
+
+  imgURL      String
+  title       String
+  description String
+
+  startDate DateTime
+  endDate   DateTime
+
+  tickets Json
+  Orders   Order[]
+
+  @@map("events")
+}
+
+model Order {
+  id String @id @default(cuid())
+
+  Attendee   Attendee @relation(fields: [attendeeId], references: [id])
+  attendeeId String
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  items Json
+
+  @@map("orders")
+}
