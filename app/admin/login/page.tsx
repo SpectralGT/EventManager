@@ -4,6 +4,9 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -66,8 +69,9 @@ export default function AdminLoginPage() {
       <h1>Admin Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
-          <input
+          <Label htmlFor="username">Username:</Label>
+
+          <Input
             id="username"
             type="text"
             value={username}
@@ -77,8 +81,8 @@ export default function AdminLoginPage() {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
-          <input
+          <Label htmlFor="password">Password:</Label>
+          <Input
             id="password"
             type="password"
             value={password}
@@ -89,7 +93,7 @@ export default function AdminLoginPage() {
         </div>
         {/* Display errors to the user */}
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        <Button type="submit">Login</Button>
       </form>
     </div>
   );

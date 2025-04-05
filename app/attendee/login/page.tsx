@@ -4,6 +4,7 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
+import { Button } from '@/components/ui/button';
 
 export default function AttendeeLoginPage() {
   const [username, setUsername] = useState('');
@@ -89,7 +90,8 @@ export default function AttendeeLoginPage() {
         </div>
         {/* Display errors to the user */}
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        {/* <button type="submit">Login</button> */}
+        <Button type='submit'>Login Login</Button>
       </form>
     </div>
   );
