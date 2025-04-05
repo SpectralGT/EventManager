@@ -13,6 +13,7 @@ type UserRole = 'admin' | 'attendee' | 'operator';
 // --- Type Augmentation for NextAuth ---
 // Extend the built-in types to include custom properties like id, role, username
 declare module 'next-auth' {
+  // @ts-ignore
   interface User extends NextAuthUser {
     // Add properties returned by the authorize callback
     id: string;
@@ -35,7 +36,6 @@ declare module 'next-auth/jwt' {
     id: string;
     role: UserRole;
     username: string;
-    name?: string | null; // Keep standard properties if needed
   }
 }
 // --- End Type Augmentation ---
@@ -114,7 +114,6 @@ export const authOptions: NextAuthOptions = {
           return {
             id: user.id,
             username: user.username,
-            name: user.name,
             role: userRole, // ** Crucial: Add the role here! **
             // email: null // No email in this schema
           };
@@ -124,7 +123,7 @@ export const authOptions: NextAuthOptions = {
           return null; // Return null on any unexpected error
         } finally {
           // Optional: Disconnect Prisma client in serverless environments
-          // await prisma.$disconnect();
+          await prisma.$disconnect();
         }
       },
     }),
