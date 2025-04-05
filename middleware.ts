@@ -99,6 +99,7 @@ export const config = {
 
     // Explicitly include protected root-level pages if any (e.g., /dashboard)
     // '/dashboard',
+    
 
     // Include specific API routes that need protection (if not covered by above regex)
      '/api/admin/:path*',

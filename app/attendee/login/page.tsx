@@ -1,11 +1,11 @@
-// src/app/admin/login/page.tsx
+// src/app/Attendee/login/page.tsx
 'use client'; // This component uses client-side interactivity
 
 import { useState, FormEvent, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
 
-export default function AdminLoginPage() {
+export default function AttendeeLoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     const callbackError = searchParams.get('error');
     if (callbackError) {
       if (callbackError === 'CredentialsSignin') {
-        setError('Invalid username or password for Admin.');
+        setError('Invalid username or password for Attendee.');
       } else {
         setError('An unexpected login error occurred.');
       }
@@ -42,17 +42,17 @@ export default function AdminLoginPage() {
     // Check the result of the sign-in attempt
     if (result?.error) {
       // Handle errors (e.g., wrong credentials returned null from authorize)
-      console.error('Admin Login Error:', result.error);
+      console.error('Attendee Login Error:', result.error);
        if (result.error === 'CredentialsSignin' || result.error === 'Callback') { // Callback can sometimes indicate credential errors too
-           setError('Invalid username or password for Admin.');
+           setError('Invalid username or password for Attendee.');
        } else {
            setError('Login failed. Please try again.');
        }
     } else if (result?.ok) {
-      // Login successful! Redirect to the admin-specific dashboard or desired page
-      console.log('Admin login successful, redirecting...');
+      // Login successful! Redirect to the Attendee-specific dashboard or desired page
+      console.log('Attendee login successful, redirecting...');
       // Redirect to the intended page or a default dashboard
-      const callbackUrl = searchParams.get('callbackUrl') || '/admin/profile';
+      const callbackUrl = searchParams.get('callbackUrl') || '/attendee/profile';
       router.push(callbackUrl);
       router.refresh(); // Refresh server components potentially affected by login state
     } else {
@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
 
   return (
     <div>
-      <h1>Admin Login</h1>
+      <h1>Attendee Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Username:</label>
