@@ -4,7 +4,10 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function AttendeeLoginPage() {
   const [username, setUsername] = useState('');
@@ -63,36 +66,42 @@ export default function AttendeeLoginPage() {
   };
 
   return (
-    <div>
-      <h1>Attendee Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            autoComplete="username" // Help password managers
-          />
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Attendee Login</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username:</Label>
+                    <Input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password:</Label>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      autoComplete="current-password" // Help password managers
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    Login
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password" // Help password managers
-          />
-        </div>
-        {/* Display errors to the user */}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {/* <button type="submit">Login</button> */}
-        <Button type='submit'>Login Login</Button>
-      </form>
+      </div>
     </div>
   );
 }

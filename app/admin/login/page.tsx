@@ -65,47 +65,6 @@ export default function AdminLoginPage() {
       setError("An unexpected error occurred during login.");
     }
   };
-
-  {
-    /* <Card>
-  <CardHeader>
-    <CardTitle>Admin Longin</CardTitle>
-  </CardHeader>
-  <CardContent>
-  <form onSubmit={handleSubmit}>
-        <div>
-          <Label htmlFor="username">Username:</Label>
-
-          <Input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            autoComplete="username" // Help password managers
-          />
-        </div>
-        <div>
-          <Label htmlFor="password">Password:</Label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password" // Help password managers
-          />
-        </div>
-        {/* Display errors to the user */
-  }
-  // {error && <p style={{ color: 'red' }}>{error}</p>}
-  //       </form>
-  //   </CardContent>
-  //   <CardFooter>
-  //         <Button type="submit">Login</Button>
-  //   </CardFooter>
-  // </Card> */}
-
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
