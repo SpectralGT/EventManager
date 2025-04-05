@@ -1,28 +1,29 @@
 // src/app/admin/login/page.tsx
-'use client'; // This component uses client-side interactivity
+"use client"; // This component uses client-side interactivity
 
-import { useState, FormEvent, useEffect } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { useState, FormEvent, useEffect } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation"; // Use 'next/navigation' for App Router
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 
 export default function AdminLoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams(); // To read query params like ?error=
 
   // Check for errors passed in URL query params (e.g., from NextAuth redirect)
   useEffect(() => {
-    const callbackError = searchParams.get('error');
+    const callbackError = searchParams.get("error");
     if (callbackError) {
-      if (callbackError === 'CredentialsSignin') {
-        setError('Invalid username or password for Admin.');
+      if (callbackError === "CredentialsSignin") {
+        setError("Invalid username or password for Admin.");
       } else {
-        setError('An unexpected login error occurred.');
+        setError("An unexpected login error occurred.");
       }
     }
   }, [searchParams]);
@@ -33,41 +34,45 @@ export default function AdminLoginPage() {
     setError(null); // Clear previous errors
 
     // Attempt to sign in using the 'credentials' provider
-    const result = await signIn('credentials', {
+    const result = await signIn("credentials", {
       // Prevent NextAuth from automatically redirecting, so we can handle errors/success manually
       redirect: false,
       // Pass the credentials to the 'authorize' function in NextAuth config
       username: username,
       password: password,
-      role: 'admin', // <-- ** CRITICAL: Specify the role for this login page **
+      role: "admin", // <-- ** CRITICAL: Specify the role for this login page **
     });
 
     // Check the result of the sign-in attempt
     if (result?.error) {
       // Handle errors (e.g., wrong credentials returned null from authorize)
-      console.error('Admin Login Error:', result.error);
-       if (result.error === 'CredentialsSignin' || result.error === 'Callback') { // Callback can sometimes indicate credential errors too
-           setError('Invalid username or password for Admin.');
-       } else {
-           setError('Login failed. Please try again.');
-       }
+      console.error("Admin Login Error:", result.error);
+      if (result.error === "CredentialsSignin" || result.error === "Callback") {
+        // Callback can sometimes indicate credential errors too
+        setError("Invalid username or password for Admin.");
+      } else {
+        setError("Login failed. Please try again.");
+      }
     } else if (result?.ok) {
       // Login successful! Redirect to the admin-specific dashboard or desired page
-      console.log('Admin login successful, redirecting...');
+      console.log("Admin login successful, redirecting...");
       // Redirect to the intended page or a default dashboard
-      const callbackUrl = searchParams.get('callbackUrl') || '/admin/dashboard';
+      const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
       router.push(callbackUrl);
       router.refresh(); // Refresh server components potentially affected by login state
     } else {
       // Handle other potential issues (though result?.ok should cover success)
-       setError('An unexpected error occurred during login.');
+      setError("An unexpected error occurred during login.");
     }
   };
 
-  return (
-    <div>
-      <h1>Admin Login</h1>
-      <form onSubmit={handleSubmit}>
+  {
+    /* <Card>
+  <CardHeader>
+    <CardTitle>Admin Longin</CardTitle>
+  </CardHeader>
+  <CardContent>
+  <form onSubmit={handleSubmit}>
         <div>
           <Label htmlFor="username">Username:</Label>
 
@@ -91,10 +96,53 @@ export default function AdminLoginPage() {
             autoComplete="current-password" // Help password managers
           />
         </div>
-        {/* Display errors to the user */}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <Button type="submit">Login</Button>
-      </form>
+        {/* Display errors to the user */
+  }
+  // {error && <p style={{ color: 'red' }}>{error}</p>}
+  //       </form>
+  //   </CardContent>
+  //   <CardFooter>
+  //         <Button type="submit">Login</Button>
+  //   </CardFooter>
+  // </Card> */}
+
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Admin Login</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="username">Username:</Label>
+                    <Input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password:</Label>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      autoComplete="current-password" // Help password managers
+                    />
+                  </div>
+                  <Button type="submit" className="w-full">
+                    Login
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
