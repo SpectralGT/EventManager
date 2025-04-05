@@ -22,11 +22,14 @@ function middleware(req: NextRequestWithAuth) {
     if (pathStartsWith('admin')) {
       return NextResponse.redirect(new URL('/admin/login', req.url));
     }
-    if (pathStartsWith('attendee')) {
+    else if (pathStartsWith('attendee')) {
       return NextResponse.redirect(new URL('/attendee/login', req.url));
     }
-    if (pathStartsWith('operator')) {
+    else if (pathStartsWith('operator')) {
       return NextResponse.redirect(new URL('/operator/login', req.url));
+    }
+    else{
+      return NextResponse.redirect(new URL('/login', req.url));
     }
     // Allow access to public pages or potentially redirect other protected pages
     // to a default login or home page if needed.
