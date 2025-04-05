@@ -72,6 +72,9 @@ export default function AdminLoginPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Admin Login</CardTitle>
+
+              {/* Display errors to the user */}
+              {error && <p style={{ color: "red" }}>{error}</p>}
             </CardHeader>
             <CardContent>
               <form>
@@ -93,7 +96,7 @@ export default function AdminLoginPage() {
                       autoComplete="current-password" // Help password managers
                     />
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" onClick={handleSubmit} className="w-full">
                     Login
                   </Button>
                 </div>

@@ -72,6 +72,8 @@ export default function AttendeeLoginPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl">Attendee Login</CardTitle>
+              {/* Display errors to the user */}
+              {error && <p style={{ color: "red" }}>{error}</p>}
             </CardHeader>
             <CardContent>
               <form>
@@ -93,7 +95,7 @@ export default function AttendeeLoginPage() {
                       autoComplete="current-password" // Help password managers
                     />
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" onClick={handleSubmit} className="w-full">
                     Login
                   </Button>
                 </div>

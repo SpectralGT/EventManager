@@ -1,6 +1,7 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import LogoutButton from "./LogoutButton"
 
 export default function Header() {
   return (
@@ -28,7 +29,7 @@ export default function Header() {
               Services
             </Link>
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Contact
+              <LogoutButton></LogoutButton>
             </Link>
           </div>
         </SheetContent>
@@ -64,7 +65,7 @@ export default function Header() {
           className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
           prefetch={false}
         >
-          Contact
+          <LogoutButton></LogoutButton>
         </Link>
       </nav>
     </header>
