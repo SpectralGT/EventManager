@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 
 // Instantiate Prisma Client
 const prisma = new PrismaClient();
+
 // Define a type for our roles for better type safety
 type UserRole = 'admin' | 'attendee' | 'operator';
 
