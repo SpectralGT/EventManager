@@ -1,4 +1,23 @@
-import { List, Datagrid, TextField, BooleanField, EditButton, Edit, SimpleForm, TextInput, BooleanInput, Create } from 'react-admin';
+import {
+  List,
+  Datagrid,
+  TextField,
+  BooleanField,
+  EditButton,
+  Edit,
+  SimpleForm,
+  TextInput,
+  BooleanInput,
+  Create,
+  ReferenceArrayField,
+  SingleFieldList,
+  ChipField,
+  ArrayField,
+  ReferenceManyField,
+  PasswordInput,
+  useUnique,
+  NumberInput
+} from "react-admin";
 
 export const AttendeeList = () => (
   <List>
@@ -9,33 +28,43 @@ export const AttendeeList = () => (
       <BooleanField source="isFamily" />
       <TextField source="balance" />
       <TextField source="debt" />
+      <ReferenceManyField label="Orders" reference="order" target="attendeeId">
+        <Datagrid rowClick="edit">
+          <ChipField source="id" />
+        </Datagrid>
+      </ReferenceManyField>
       <EditButton />
     </Datagrid>
   </List>
 );
 
-export const AttendeeEdit = () => (
+export const AttendeeEdit = () => {
+  const unique = useUnique();
+
+  return(
   <Edit>
     <SimpleForm>
-      <TextInput source="username" />
+      <TextInput source="username" validate={unique()}  />
       <TextInput source="name" />
-      <TextInput source="password" />
+      <PasswordInput source="password" />
       <BooleanInput source="isFamily" />
-      <TextInput source="balance" />
-      <TextInput source="debt" />
+      <NumberInput source="balance" defaultValue={1000}/>
+      <NumberInput source="debt" defaultValue={-1000}/>
     </SimpleForm>
-  </Edit>
-);
+  </Edit>)
+};
 
-export const AttendeeCreate = () => (
+export const AttendeeCreate = () => {
+  const unique = useUnique();
+return(
   <Create>
     <SimpleForm>
-      <TextInput source="username" />
+      <TextInput source="username" validate={unique()}/>
       <TextInput source="name" />
-      <TextInput source="password" />
+      <PasswordInput source="password" />
       <BooleanInput source="isFamily" />
-      <TextInput source="balance" />
-      <TextInput source="debt" />
+      <NumberInput source="balance" defaultValue={1000}/>
+      <NumberInput source="debt" defaultValue={-1000}/>
     </SimpleForm>
-  </Create>
-);
+  </Create>)
+};

@@ -1,14 +1,14 @@
 // components/admin/Event.tsx
 import { List, Datagrid, TextField, Edit, SimpleForm, TextInput, DateInput, Create, EditButton, ArrayInput, SimpleFormIterator, NumberInput, ArrayField,ReferenceArrayField, NumberField } from "react-admin";
 
-const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
-const jsonParse = (value: string) => {
-  try {
-    return JSON.parse(value);
-  } catch (e) {
-    return [];
-  }
-};
+// const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
+// const jsonParse = (value: string) => {
+//   try {
+//     return JSON.parse(value);
+//   } catch (e) {
+//     return [];
+//   }
+// };
 
 export const EventList = () => (
   <List>
@@ -27,7 +27,7 @@ export const EventList = () => (
       </ArrayField>
 
 
-      <ReferenceArrayField reference="Order" source="orders" label="Orders" />
+      {/* <ReferenceArrayField reference="Order" source="orders" label="Orders" /> */}
 
       <EditButton />
     </Datagrid>
