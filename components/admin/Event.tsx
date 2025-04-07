@@ -1,5 +1,23 @@
 // components/admin/Event.tsx
-import { List, Datagrid, TextField, Edit, SimpleForm, TextInput, DateInput, Create, EditButton, ArrayInput, SimpleFormIterator, NumberInput, ArrayField,ReferenceArrayField, NumberField } from "react-admin";
+import {
+  List,
+  Datagrid,
+  TextField,
+  Edit,
+  SimpleForm,
+  TextInput,
+  DateInput,
+  Create,
+  EditButton,
+  ArrayInput,
+  SimpleFormIterator,
+  NumberInput,
+  ArrayField,
+  ReferenceArrayField,
+  NumberField,
+  DateField,
+  DateTimeInput,
+} from "react-admin";
 
 // const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
 // const jsonParse = (value: string) => {
@@ -16,8 +34,8 @@ export const EventList = () => (
       <TextField source="id" />
       <TextField source="title" />
       <TextField source="description" />
-      <TextField source="startDate" />
-      <TextField source="endDate" />
+      <DateField source="startDate" />
+      <DateField source="endDate" />
       <ArrayField source="tickets">
         <Datagrid bulkActionButtons={false}>
           <TextField source="name" />
@@ -25,7 +43,6 @@ export const EventList = () => (
           <NumberField source="quantity" />
         </Datagrid>
       </ArrayField>
-
 
       {/* <ReferenceArrayField reference="Order" source="orders" label="Orders" /> */}
 
