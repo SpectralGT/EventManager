@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, EditButton, Edit, SimpleForm, TextInput, Create } from 'react-admin';
+import { List, Datagrid, TextField, EditButton, Edit, SimpleForm, TextInput, Create, useUnique, PasswordInput } from "react-admin";
 
 export const OperatorList = () => (
   <List>
@@ -11,22 +11,30 @@ export const OperatorList = () => (
   </List>
 );
 
-export const OperatorEdit = () => (
-  <Edit>
-    <SimpleForm>
-      <TextInput source="username" />
-      <TextInput source="name" />
-      <TextInput source="password" />
-    </SimpleForm>
-  </Edit>
-);
+export const OperatorEdit = () => {
+  const unique = useUnique();
 
-export const OperatorCreate = () => (
-  <Create>
-    <SimpleForm>
-      <TextInput source="username" />
-      <TextInput source="name" />
-      <TextInput source="password" />
-    </SimpleForm>
-  </Create>
-);
+  return (
+    <Edit>
+      <SimpleForm>
+        <TextInput source="username" validate={unique()} />
+        <TextInput source="name" />
+        <PasswordInput source="password" />
+      </SimpleForm>
+    </Edit>
+  );
+};
+
+export const OperatorCreate = () => {
+  const unique = useUnique();
+
+  return (
+    <Create>
+      <SimpleForm>
+        <TextInput source="username" validate={unique()} />
+        <TextInput source="name" />
+        <PasswordInput source="password" />
+      </SimpleForm>
+    </Create>
+  );
+};
