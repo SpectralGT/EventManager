@@ -59,7 +59,7 @@ model Event {
   endDate   DateTime
 
   tickets Json
-  Orders   Order[]
+  orders   Order[]
 
   @@map("events")
 }

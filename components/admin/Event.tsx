@@ -1,0 +1,67 @@
+// components/admin/Event.tsx
+import {
+    List, Datagrid, TextField, Edit, SimpleForm, TextInput, DateInput, Create,
+    EditButton, ArrayInput, SimpleFormIterator,NumberInput
+  } from 'react-admin';
+  
+  const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
+  const jsonParse = (value: string) => {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      return [];
+    }
+  };
+  
+  export const EventList = () => (
+    <List>
+      <Datagrid rowClick="edit">
+        <TextField source="id" />
+        <TextField source="title" />
+        <TextField source="description" />
+        <TextField source="startDate" />
+        <TextField source="endDate" />
+        <EditButton />
+      </Datagrid>
+    </List>
+  );
+  
+  export const EventEdit = () => (
+    <Edit>
+      <SimpleForm>
+        <TextInput source="imgURL" />
+        <TextInput source="title" />
+        <TextInput source="description" />
+        <DateInput source="startDate" />
+        <DateInput source="endDate" />
+
+<ArrayInput source="tickets">
+                <SimpleFormIterator inline>
+                    <TextInput source="name" helperText={false} />
+                    <NumberInput source="price" helperText={false} />
+                    <NumberInput source="quantity" helperText={false} />
+                </SimpleFormIterator>
+            </ArrayInput>
+      </SimpleForm>
+    </Edit>
+  );
+  
+  export const EventCreate = () => (
+    <Create>
+      <SimpleForm>
+        <TextInput source="imgURL" />
+        <TextInput source="title" />
+        <TextInput source="description" />
+        <DateInput source="startDate" />
+        <DateInput source="endDate" />
+        <TextInput
+          source="tickets"
+          label="Tickets (JSON)"
+          multiline
+          parse={jsonParse}
+          format={jsonFormat}
+        />
+      </SimpleForm>
+    </Create>
+  );
+  
