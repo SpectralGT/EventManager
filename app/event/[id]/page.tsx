@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+
+import { Order, Item } from "@/lib/types";
+import { Ticket } from "lucide-react";
 
 interface Ticket {
-  type: string;
+  name: string;
   price: number;
+  quantity: number;
+  serveStartTime: string;
+  serveEndTime: string;
 }
 
 interface Event {
@@ -32,101 +32,109 @@ interface Event {
 export default function EventDetailPage() {
   const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [items, setItems] = useState<Item[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetch(`/api/event/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!Array.isArray(data.tickets)) return;
-
+        if (!Array.isArray(data.tickets)) return <p className="p-6">Error loading tickets</p>;
+        
         setEvent(data);
 
-        const initialQuantities: Record<string, number> = {};
-        data.tickets.forEach((ticket: Ticket) => {
-          initialQuantities[ticket.type] = 0;
+        const tickets = data.tickets;
+        const newItems: Item[] = [];
+        tickets?.forEach((e:Item) => {
+          const newItem: Item = {
+            name: e.name,
+            quantity: 0,
+            served: 0,
+            price: e.price,
+            serveStartTime: e.serveStartTime,
+            serveEndTime: e.serveEndTime,
+          };
+          newItems.push(newItem);
+          setItems(newItems);
         });
-        setQuantities(initialQuantities);
+        console.log(items);
       });
   }, [id]);
 
   if (!event) return <p className="p-6">Loading...</p>;
 
-  const totalPrice =
-    Array.isArray(event.tickets)
-      ? event.tickets.reduce((total, ticket) => {
-          const qty = quantities[ticket.type] || 0;
-          return total + ticket.price * qty;
-        }, 0)
-      : 0;
-
   const handlePay = async () => {
-    const attendeeId = 'your-attendee-id'; // Replace with real logic
+    const attendeeId = "null";
 
     const res = await fetch(`/api/event/${event.id}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        attendeeId,
-        items: quantities,
+        items: items,
       }),
     });
 
     if (res.ok) {
-      alert('Order placed successfully!');
+      alert("Order placed successfully!");
       setDialogOpen(false);
     } else {
-      alert('Order failed.');
+      alert("Order failed.");
     }
+  };
+
+  const changeItems = (name: string, quantity: number, increament: number) => {
+    const newItems = items;
+    newItems.forEach((e) => {
+      if (e.name == name) {
+        e.quantity = quantity + increament;
+      }
+    });
+
+    let total = 0;
+    newItems.forEach((e) => (total += e.quantity * e.price));
+
+    setTotalPrice(total);
+    setItems(newItems);
   };
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <Card>
         <CardContent className="p-4">
-          <img
-            src={event.imgURL}
-            alt={event.title}
-            className="w-full h-64 object-cover rounded-lg mb-4"
-          />
+          <img src={event.imgURL} alt={event.title} className="w-full h-64 object-cover rounded-lg mb-4" />
           <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
           <p className="text-muted-foreground mb-4">{event.description}</p>
-          <p><strong>Start:</strong> {new Date(event.startDate).toLocaleString()}</p>
-          <p><strong>End:</strong> {new Date(event.endDate).toLocaleString()}</p>
+          <p>
+            <strong>Start:</strong> {new Date(event.startDate).toLocaleString()}
+          </p>
+          <p>
+            <strong>End:</strong> {new Date(event.endDate).toLocaleString()}
+          </p>
 
           <div className="mt-6 space-y-4">
             <h2 className="text-xl font-semibold">Select Tickets</h2>
-            {event.tickets?.map((ticket) => (
-              <div key={ticket.type} className="flex items-center gap-4">
+            {items.map((item) => (
+              // <div key={item.name} className="flex items-center gap-4">
+              //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+
+                <div key={item.name} className="flex w-full max-w-sm items-center space-x-2">
                 <Label className="min-w-[100px] capitalize">
-                  {ticket.type} – ₹{ticket.price}
+                  {item.name} - ₹{item.price}
                 </Label>
-                <Input
-                  type="number"
-                  min={0}
-                  value={quantities[ticket.type] ?? 0}
-                  className="w-24"
-                  onChange={(e) =>
-                    setQuantities({
-                      ...quantities,
-                      [ticket.type]: parseInt(e.target.value) || 0,
-                    })
-                  }
-                />
-              </div>
+                  <Button onClick={(e) => changeItems(item.name, item.quantity, -1)}>-</Button>
+                  <Input type="number" min={0} defaultValue={0} value={item.quantity} className="w-24" onChange={(e) => changeItems(item.name, Number(item.quantity), 0)} />
+                  <Button onClick={(e) => changeItems(item.name, item.quantity, 1)}>+</Button>
+                </div>
+              // </div>
             ))}
           </div>
 
           <div className="mt-6">
             <p className="font-medium">Total Price: ₹{totalPrice}</p>
-            <Button
-              disabled={totalPrice === 0}
-              className="mt-2"
-              onClick={() => setDialogOpen(true)}
-            >
+            <Button disabled={totalPrice === 0} className="mt-2" onClick={() => setDialogOpen(true)}>
               Buy Tickets
             </Button>
           </div>
@@ -140,14 +148,7 @@ export default function EventDetailPage() {
             <DialogTitle>Confirm Your Order</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            {event.tickets?.map((ticket) =>
-              quantities[ticket.type] > 0 ? (
-                <p key={ticket.type}>
-                  {quantities[ticket.type]} * {ticket.type} = ₹
-                  {quantities[ticket.type] * ticket.price}
-                </p>
-              ) : null
-            )}
+            {items.map((item) => (item.quantity > 0 ? <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${item.quantity}  = ₹${item.price * item.quantity}`}</p> : null))}
             <p className="font-semibold mt-2">Total: ₹{totalPrice}</p>
           </div>
           <DialogFooter>
