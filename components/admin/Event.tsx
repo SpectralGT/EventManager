@@ -17,6 +17,7 @@ import {
   NumberField,
   DateField,
   DateTimeInput,
+  TimeInput,
 } from "react-admin";
 
 // const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
@@ -41,6 +42,8 @@ export const EventList = () => (
           <TextField source="name" />
           <NumberField source="price" />
           <NumberField source="quantity" />
+          <DateField source="serveStartTime" />
+          <DateField source="serveEndTime" />
         </Datagrid>
       </ArrayField>
 
@@ -62,9 +65,11 @@ export const EventEdit = () => (
 
       <ArrayInput source="tickets">
         <SimpleFormIterator inline>
-          <TextInput source="name" helperText={false} />
-          <NumberInput source="price" helperText={false} />
-          <NumberInput source="quantity" helperText={false} />
+          <TextInput source="name" />
+          <NumberInput source="price" />
+          <NumberInput source="quantity" />
+          <TimeInput source="serveStartTime" />
+          <TimeInput source="serveEndTime" />
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
@@ -81,9 +86,11 @@ export const EventCreate = () => (
       <DateInput source="endDate" />
       <ArrayInput source="tickets">
         <SimpleFormIterator inline>
-          <TextInput source="name" helperText={false} />
-          <NumberInput source="price" helperText={false} />
-          <NumberInput source="quantity" helperText={false} />
+          <TextInput source="name" />
+          <NumberInput source="price" />
+          <NumberInput source="quantity" />
+          <TimeInput source="serveStartTime" />
+          <TimeInput source="serveEndTime" />
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
