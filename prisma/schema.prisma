@@ -59,7 +59,7 @@ model Event {
   endDate   DateTime
 
   tickets Json
-  orders   Order[]
+  Order   Order[]
 
   @@map("events")
 }
@@ -70,10 +70,10 @@ model Order {
   Attendee   Attendee @relation(fields: [attendeeId], references: [id])
   attendeeId String
 
-  event   Event  @relation(fields: [eventId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
   eventId String
 
-  items Json
+  items   Json
 
   @@map("orders")
 }
