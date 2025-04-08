@@ -67,6 +67,8 @@ export default function EventDetailPage() {
   const handlePay = async () => {
     const attendeeId = "null";
 
+    console.log(items);
+
     const res = await fetch(`/api/event/${event.id}`, {
       method: "POST",
       headers: {
