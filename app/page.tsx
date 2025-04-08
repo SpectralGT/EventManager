@@ -39,7 +39,7 @@ export default function Home() {
           <>
           
           <Link
-            href={`/events/${event.id}`}
+            href={`/event/${event.id}`}
             key={event.id}
             className="block hover:shadow-lg transition-shadow rounded-xl"
           >

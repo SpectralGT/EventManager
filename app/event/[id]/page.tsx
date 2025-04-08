@@ -4,9 +4,20 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+
+interface Ticket {
+  type: string;
+  price: number;
+}
 
 interface Event {
   id: string;
@@ -15,49 +26,53 @@ interface Event {
   imgURL: string;
   startDate: string;
   endDate: string;
-  tickets: {
-    [type: string]: {
-      price: number;
-    };
-  };
+  tickets: Ticket[];
 }
 
 export default function EventDetailPage() {
-  const params = useParams();
+  const { id } = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/event/${params.id}`)
-      .then(res => res.json())
+    fetch(`/api/event/${id}`)
+      .then((res) => res.json())
       .then((data) => {
+        if (!Array.isArray(data.tickets)) return;
+
         setEvent(data);
+
         const initialQuantities: Record<string, number> = {};
-        Object.keys(data.tickets).forEach(type => {
-          initialQuantities[type] = 0;
+        data.tickets.forEach((ticket: Ticket) => {
+          initialQuantities[ticket.type] = 0;
         });
         setQuantities(initialQuantities);
       });
-  }, [params.id]);
+  }, [id]);
 
   if (!event) return <p className="p-6">Loading...</p>;
 
-  const totalPrice = Object.entries(quantities).reduce(
-    (sum, [type, qty]) => sum + qty * event.tickets[type].price,
-    0
-  );
+  const totalPrice =
+    Array.isArray(event.tickets)
+      ? event.tickets.reduce((total, ticket) => {
+          const qty = quantities[ticket.type] || 0;
+          return total + ticket.price * qty;
+        }, 0)
+      : 0;
 
   const handlePay = async () => {
-    const res = await fetch('/api/order', {
+    const attendeeId = 'your-attendee-id'; // Replace with real logic
+
+    const res = await fetch(`/api/event/${event.id}`, {
       method: 'POST',
-      body: JSON.stringify({
-        eventId: event.id,
-        items: quantities, // send selected ticket quantities
-      }),
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        attendeeId,
+        items: quantities,
+      }),
     });
 
     if (res.ok) {
@@ -84,16 +99,21 @@ export default function EventDetailPage() {
 
           <div className="mt-6 space-y-4">
             <h2 className="text-xl font-semibold">Select Tickets</h2>
-            {Object.entries(event.tickets).map(([type, { price }]) => (
-              <div key={type} className="flex items-center gap-4">
-                <Label className="min-w-[80px] capitalize">{type} – ₹{price}</Label>
+            {event.tickets?.map((ticket) => (
+              <div key={ticket.type} className="flex items-center gap-4">
+                <Label className="min-w-[100px] capitalize">
+                  {ticket.type} – ₹{ticket.price}
+                </Label>
                 <Input
                   type="number"
                   min={0}
-                  value={quantities[type]}
+                  value={quantities[ticket.type] ?? 0}
                   className="w-24"
                   onChange={(e) =>
-                    setQuantities({ ...quantities, [type]: parseInt(e.target.value) || 0 })
+                    setQuantities({
+                      ...quantities,
+                      [ticket.type]: parseInt(e.target.value) || 0,
+                    })
                   }
                 />
               </div>
@@ -113,17 +133,18 @@ export default function EventDetailPage() {
         </CardContent>
       </Card>
 
-      {/* Confirm Dialog */}
+      {/* Confirmation Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Confirm Your Order</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            {Object.entries(quantities).map(([type, qty]) =>
-              qty > 0 ? (
-                <p key={type}>
-                  {qty} × {type} = ₹{qty * event.tickets[type].price}
+            {event.tickets?.map((ticket) =>
+              quantities[ticket.type] > 0 ? (
+                <p key={ticket.type}>
+                  {quantities[ticket.type]} * {ticket.type} = ₹
+                  {quantities[ticket.type] * ticket.price}
                 </p>
               ) : null
             )}
