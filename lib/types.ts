@@ -19,3 +19,12 @@ export interface Order{
   eventId : string;
   items : Item[];
 }
+
+export interface AttendeeOrder{
+  id:string
+  attendeeId : string;
+  eventId : string;
+  eventTitle : string;
+  items : Item[];
+  createdAt : string;
+}
