@@ -20,6 +20,8 @@ export interface Order{
   items : Item[];
 }
 
+
+
 export interface AttendeeOrder{
   id:string
   attendeeId : string;
@@ -27,4 +29,11 @@ export interface AttendeeOrder{
   eventTitle : string;
   items : Item[];
   createdAt : string;
+}
+
+export interface Profile {
+  id: string;
+  username: string;
+  balance: number;
+  orders: AttendeeOrder[];
 }

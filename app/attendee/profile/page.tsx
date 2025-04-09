@@ -1,16 +1,12 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card";
-import { AttendeeOrder, Order } from "@/lib/types";
+import { AttendeeOrder, Order,Profile } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 export default function Home() {
-  interface Profile {
-    id: string;
-    username: string;
-    balance: string;
-    orders: AttendeeOrder[];
-  }
+
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
@@ -24,7 +20,8 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">UserName : {profile?.username}</h1>
       <h1 className="text-2xl font-bold mb-4">Balance : {profile?.balance}</h1>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        {profile?.orders.map((order) => (
+
+        {profile?.orders.forEach((order) => (
           <Link href={`/attendee/order/${order.id}`} key={order.id} className="block hover:shadow-lg transition-shadow rounded-xl">
             <Card className="h-full">
               <CardContent className="p-4">
@@ -36,6 +33,7 @@ export default function Home() {
             </Card>
           </Link>
         ))}
+        
       </div>
     </div>
   );

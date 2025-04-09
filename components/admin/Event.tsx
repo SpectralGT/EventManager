@@ -68,8 +68,8 @@ export const EventEdit = () => (
           <TextInput source="name" />
           <NumberInput source="price" />
           <NumberInput source="quantity" />
-          <TimeInput source="serveStartTime" />
-          <TimeInput source="serveEndTime" />
+          <TimeInput source="serveStartTime" parse={(date: Date) => (date ? new Date(date).toISOString() : null)}/>
+          <TimeInput source="serveEndTime" parse={(date: Date) => (date ? new Date(date).toISOString() : null)}/>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
@@ -82,15 +82,15 @@ export const EventCreate = () => (
       <TextInput source="imgURL" />
       <TextInput source="title" />
       <TextInput source="description" />
-      <DateInput source="startDate" />
-      <DateInput source="endDate" />
+      <DateTimeInput source="startDate"  parse={(date: Date) => (date ? new Date(date).toISOString() : null)}/>
+      <DateTimeInput source="endDate"  parse={(date: Date) => (date ? new Date(date).toISOString() : null)}/>
       <ArrayInput source="tickets">
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />
           <NumberInput source="quantity" />
-          <TimeInput source="serveStartTime" />
-          <TimeInput source="serveEndTime" />
+          <TimeInput source="serveStartTime"/>
+          <TimeInput source="serveEndTime"/>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
