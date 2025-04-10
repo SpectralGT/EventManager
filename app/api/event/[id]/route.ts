@@ -88,7 +88,7 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: { id:
       }
     });
 
-    prisma.order.create
+
 
     console.log(items);
 
