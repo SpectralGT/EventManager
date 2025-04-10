@@ -6,11 +6,11 @@ import { AttendeeOrder, Order, Profile } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-export default function Home() {
+export default function OrderByID() {
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
-    fetch("/api/attendee/profile") // assumes API route returns profile
+    fetch("/api/attendee/order/${id}") // assumes API route returns profile
       .then((res) => res.json())
       .then((data:Profile)=>{
         setProfile(data)
