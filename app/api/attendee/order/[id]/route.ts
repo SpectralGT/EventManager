@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { NextRequestWithAuth } from "next-auth/middleware";
 
-import { AttendeeOrder, Item, Order, Profile } from "@/lib/types";
+import { AttendeeOrder, Item, Order, OrderByID, Profile } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 import { Prisma } from "@prisma/client";
 
@@ -42,20 +42,19 @@ async function getNewOrders(
   return newOrders;
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest,{ params }: { params: { id: string } }) {
   try {
+
+    
+  const { id } = await params;
+
+console.log();
     // const token = req.nextauth.token;
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
-    const attendeeDetails = await prisma.attendee.findUnique({
-      where: { id: attendeeId },
-      select: { username: true, balance: true },
-    });
-
-
-    const orders = await prisma.order.findMany({
-      where: { attendeeId: attendeeId },
+    const order = await prisma.order.findUnique({
+      where: { id:id ,attendeeId: attendeeId},
       select: {
         id: true,
         attendeeId: true,
@@ -65,18 +64,24 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const newOrders = await getNewOrders(orders);
+    if(!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
-    let profile: Profile = {
-      id: attendeeId,
-      username: attendeeDetails!.username,
-      balance: Number(attendeeDetails!.balance),
-      orders: newOrders,
-    };
+    let eventTitle = await prisma.event.findUnique({
+        where: { id: order.eventId },
+        select: { title: true },})
 
-    profile.orders = newOrders;
+    
+    const newOrder:OrderByID = {
+        id:order.id,
+        attendeeId:order.attendeeId,
+        eventId:order.eventId,
+        eventTitle:eventTitle?eventTitle.title:"null",
+        createdAt:order.createdAt.toDateString(),
+        // @ts-ignore
+        items:order.items,
+    }
 
-    return NextResponse.json(profile);
+    return NextResponse.json(newOrder);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });

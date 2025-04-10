@@ -13,8 +13,7 @@ export default function Home() {
     fetch("/api/attendee/profile") // assumes API route returns profile
       .then((res) => res.json())
       .then((data:Profile)=>{
-        setProfile(data)
-        console.log(data)
+        setProfile(data);
       });
 
 
