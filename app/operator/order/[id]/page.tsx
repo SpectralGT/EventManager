@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useParams } from "next/navigation";
 import { AttendeeOrder } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 export interface Item {
   name: string;
@@ -13,6 +14,7 @@ export interface Item {
   serveStartTime: string;
   serveEndTime: string;
 }
+
 
 export default function OrderServePage() {
   const { id } = useParams();
@@ -28,16 +30,40 @@ export default function OrderServePage() {
       .then((data) => {
         if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
 
-        setItems(data.item);
-        console.log("GOT ITEMS");
+        setItems(data.items);
+        console.log(data.items);
         checkboxRefs.current = data.items.map((item: Item) => Array(item.quantity).fill(null));
       });
   }, [id]);
 
-  const updateServedCount = (itemIndex: number) => {
+
+  const postItems = async ()=>{
+    const res = await fetch(`/api/operator/order/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: items,
+        }),
+      });
+  
+      if (res.ok) {
+        alert("Order placed successfully!");
+      } else {
+        alert("Order failed.");
+      }
+
+}
+
+  const updateServedCount = async (itemIndex: number) => {
     const checkboxes = checkboxRefs.current[itemIndex];
-    const checkedCount = checkboxes.filter((cb) => cb?.value).length;
+    const checkedCount = checkboxes.filter((cb) =>  cb?.getAttribute('data-state') === 'checked').length;
     setItems((prev) => prev.map((item, i) => (i === itemIndex ? { ...item, served: checkedCount } : item)));
+    console.log(checkboxes.filter((cb) =>  cb?.getAttribute('data-state') === 'checked'));
+
+
+    
   };
 
   return (
@@ -58,7 +84,7 @@ export default function OrderServePage() {
                     }
                     checkboxRefs.current[itemIndex][checkboxIndex] = el;
                   }}
-                  onChange={() => updateServedCount(itemIndex)}
+                  onCheckedChange={() => updateServedCount(itemIndex)}
                   className="h-5 w-5"
                 />
               ))}
@@ -69,6 +95,9 @@ export default function OrderServePage() {
           </div>
         ))}
       </div>
+
+      <Button onClick={postItems}>Confirm & Pay</Button>
+
     </div>
   );
 }
