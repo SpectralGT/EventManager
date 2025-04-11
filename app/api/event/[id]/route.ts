@@ -45,6 +45,13 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: { id:
 
     items.forEach((e) => (e.served = 0));
 
+    let total = 0;
+
+    items.forEach(item=>{
+      total+=item.quantity*item.price;
+    })
+
+
     if (!items) {
       return NextResponse.json({ error: "Missing items" }, { status: 400 });
     }
@@ -89,8 +96,14 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: { id:
     });
 
 
-
-    console.log(items);
+    await prisma.attendee.update({
+      where:{id:attendeeId},
+      data:{
+        balance:{
+          decrement:total,
+        }
+      }
+    })
 
     return NextResponse.json(newOrder);
   } catch (error) {

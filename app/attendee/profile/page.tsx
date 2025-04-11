@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">UserName : <span className="text-primary">{profile?.username}</span></h1>
+      <h1 className="text-2xl font-bold mb-4">Username : <span className="text-primary">{profile?.username}</span></h1>
       <h1 className="text-2xl font-bold mb-4">Balance : <span className="text-primary">{profile?.balance}</span></h1>
 
       <Separator />

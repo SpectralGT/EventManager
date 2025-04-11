@@ -43,7 +43,7 @@ export default function Order() {
         <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} />
       </div>
 
-      <h1 className="text-2xl font-bold mb-4">
+      <h1 className="text-2xl font-bold mt-10">
         Event : <span className="text-primary">{order.eventTitle}</span>
       </h1>
       <h1 className="text-2xl font-bold mb-4">
