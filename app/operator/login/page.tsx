@@ -56,7 +56,7 @@ export default function OperatorLoginPage() {
       // Login successful! Redirect to the Operator-specific dashboard or desired page
       console.log("Operator login successful, redirecting...");
       // Redirect to the intended page or a default dashboard
-      const callbackUrl = searchParams.get("callbackUrl") || "/operator/task";
+      const callbackUrl = searchParams.get("callbackUrl") || "/operator/scanner";
       router.push(callbackUrl);
       router.refresh(); // Refresh server components potentially affected by login state
     } else {

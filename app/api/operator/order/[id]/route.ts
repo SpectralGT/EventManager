@@ -1,54 +1,53 @@
 // pages/api/order/[id].ts
-import prisma  from "@/lib/prisma"; // adjust to your prisma client path
+import prisma from "@/lib/prisma"; // adjust to your prisma client path
 import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Item } from "@/lib/types";
 
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { id } = await params;
+    const order = await prisma.order.findUnique({
+      where: { id: id as string },
+      select: {
+        id: true,
+        attendeeId: true,
+        eventId: true,
+        items: true,
+        createdAt: true,
+      },
+    });
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    const { id } = req.query;
+    console.log("GOT ORDER");
 
-    try {
-      const order = await prisma.order.findUnique({
-        where:{id:id as string},
-        select:{
-            id: true,
-            attendeeId: true,
-            eventId: true,
-            items: true,
-            createdAt: true,
-        }
-      });
-  
-      return res.json(order);
-    } catch (error) {
-      return res.status(500).json({ error: 'Failed to fetch order' });
-    }
+    return NextResponse.json(order);
+  } catch (error) {
+    console.log("ORDER NOT FOUND");
+    return NextResponse.json({ error: "Failed to fetch order" }, { status: 500 });
   }
+}
 
-
-export async function PATCH(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
-
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   if (req.method === "PATCH") {
     try {
-      const { items } = req.body;
+      const param = await params;
+      const id = param.id;
+      const body = await req.json();
+      const items = body.items;
 
-      // Optional: Validate `items` is an array
-      if (!Array.isArray(items)) {
-        return res.status(400).json({ error: "Invalid items array" });
-      }
+      if (!Array.isArray(items)) return NextResponse.json({ error: "No items in Ordeer Patch" }, { status: 500 });
 
-      await prisma.order.update({
+      const newOrder = await prisma.order.update({
         where: { id: id as string },
-        data: { items:items },
+        data: { items: items },
       });
 
-      return res.status(200);
+      return NextResponse.json(newOrder);
     } catch (error) {
       console.error("Update failed:", error);
-      return res.status(500).json({ error: "Failed to update order items" });
+      return NextResponse.json({ error: "Failed to Update Order Items" }, { status: 500 });
     }
   }
 
-  return res.status(405).json({ error: "Method not allowed" });
+  return NextResponse.json({ error: "Method no allowed" }, { status: 405 });
 }
