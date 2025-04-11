@@ -11,6 +11,8 @@ import { useParams } from "next/navigation";
 import { totalmem } from "os";
 import { useEffect, useState } from "react";
 
+import QRCode from "react-qr-code";
+
 export default function Order() {
   const { id } = useParams();
 
@@ -21,12 +23,13 @@ export default function Order() {
     fetch(`/api/attendee/order/${id}`) // assumes API route returns profile
       .then((res) => res.json())
       .then((data) => {
-
         setOrder(data);
 
-        if(data && data.items){
+        if (data && data.items) {
           let sum = 0;
-          data.items.forEach((item:any)=>{sum+= item.quantity*item.price})
+          data.items.forEach((item: any) => {
+            sum += item.quantity * item.price;
+          });
           setTotal(sum);
         }
       });
@@ -36,6 +39,10 @@ export default function Order() {
 
   return (
     <div className="p-6">
+      <div className="p-6 bg-white">
+        <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} />
+      </div>
+
       <h1 className="text-2xl font-bold mb-4">
         Event : <span className="text-primary">{order.eventTitle}</span>
       </h1>
@@ -64,7 +71,7 @@ export default function Order() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
-                  <TableCell className="text-right" >{item.price * item.quantity}</TableCell>
+                  <TableCell className="text-right">{item.price * item.quantity}</TableCell>
                 </TableRow>
 
                 // <Card className="h-full">
