@@ -91,7 +91,7 @@ export const EventCreate = () => (
           <TextInput source="name" />
           <NumberInput source="price" />
           <NumberInput source="quantity" />
-          <TimeInput source="serveStartTime" parse={(date: Date) => (date ? date.toISOString() : null)}/>
+          <TimeInput source="serveStartTime"/>
           <TimeInput source="serveEndTime"/>
         </SimpleFormIterator>
       </ArrayInput>

@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { AttendeeOrder,Item } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { redirect } from 'next/navigation'
 
 
 
@@ -42,7 +43,9 @@ export default function OrderServePage() {
       });
   
       if (res.ok) {
-        alert("Order placed successfully!");
+        alert("Order updated successfully!");
+        redirect(`/operator/scanner`);
+        
       } else {
         alert("Order failed.");
       }
@@ -53,7 +56,6 @@ export default function OrderServePage() {
     const checkboxes = checkboxRefs.current[itemIndex];
     const checkedCount = checkboxes.filter((cb) =>  cb?.getAttribute('data-state') === 'checked').length;
     setItems((prev) => prev.map((item, i) => (i === itemIndex ? { ...item, served: checkedCount } : item)));
-    console.log(checkboxes.filter((cb) =>  cb?.getAttribute('data-state') === 'checked'));
 
 
     
@@ -100,7 +102,7 @@ export default function OrderServePage() {
         ))}
       </div>
 
-      <Button className="text-black mt-102" onClick={postItems}>Save</Button>
+      <Button className="text-black mt-10" onClick={postItems}>Save</Button>
 
     </div>
   );
