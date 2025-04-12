@@ -8,11 +8,13 @@ import { EventList, EventEdit, EventCreate } from '../components/admin/Event';
 import { OrderList, OrderEdit, OrderCreate } from '../components/admin/Order';
 import { AdminList, AdminEdit, AdminCreate } from '../components/admin/Admin';
 import { OperatorList, OperatorEdit, OperatorCreate } from '../components/admin/Operator';
+import LogoutButton from "./LogoutButton"
 
 
 export default function AdminPanel() {
   return (
     <Admin dataProvider={dataProvider("/api/admin")}>
+      <LogoutButton></LogoutButton>
       <Resource name="attendee" list={AttendeeList} edit={AttendeeEdit} create={AttendeeCreate} />
       <Resource name="event" list={EventList} edit={EventEdit} create={EventCreate} />
       <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />

@@ -5,10 +5,10 @@ import LogoutButton from "./LogoutButton"
 
 export default function Header() {
   return (
-    <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
+    <header className="flex h-20 w-full shrink-0 items-center px-4 mt-10 md:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden">
+          <Button variant="outline" size="icon" className="lg:hidden ">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
@@ -20,53 +20,15 @@ export default function Header() {
           </Link>
           <div className="grid gap-2 pl-6 py-6">
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Home1
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              About
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Services
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
               <LogoutButton></LogoutButton>
             </Link>
           </div>
         </SheetContent>
       </Sheet>
-      <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-        <MountainIcon className="h-6 w-6" />
-        <span className="sr-only">Acme Inc</span>
-      </Link>
+  
       <nav className="ml-auto hidden lg:flex gap-6">
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          Home2
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          About
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          Services
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          <LogoutButton></LogoutButton>
-        </Link>
+        <LogoutButton></LogoutButton>
+      
       </nav>
     </header>
   )
