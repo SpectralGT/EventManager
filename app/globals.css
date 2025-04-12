@@ -192,5 +192,5 @@
 }
 
 .description h1 {
-  @apply text-1xl
+  @apply text-2xl;
 }

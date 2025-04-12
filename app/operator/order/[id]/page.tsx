@@ -3,17 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useParams } from "next/navigation";
-import { AttendeeOrder } from "@/lib/types";
+import { AttendeeOrder,Item } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
-export interface Item {
-  name: string;
-  price: number;
-  quantity: number;
-  served: number;
-  serveStartTime: string;
-  serveEndTime: string;
-}
 
 
 export default function OrderServePage() {
@@ -31,7 +24,7 @@ export default function OrderServePage() {
         if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
 
         setItems(data.items);
-        console.log(data.items);
+        setOrder(data);
         checkboxRefs.current = data.items.map((item: Item) => Array(item.quantity).fill(null));
       });
   }, [id]);
@@ -66,9 +59,20 @@ export default function OrderServePage() {
     
   };
 
+  if (!order) return <p className="p-6">Loading ...</p>;
+
+
   return (
     <div className="p-6">
       <h2 className="text-2xl font-semibold mb-6">Mark Served Items</h2>
+
+      
+      {/* <h1 className="text-2xl font-bold mb-4">
+        Event : <span className="text-primary">{order.eventTitle}</span>
+      </h1>
+
+      <Separator /> */}
+
       <div className="space-y-6">
         {items.map((item, itemIndex) => (
           <div key={itemIndex}>
@@ -96,7 +100,7 @@ export default function OrderServePage() {
         ))}
       </div>
 
-      <Button onClick={postItems}>Confirm & Pay</Button>
+      <Button className="text-black mt-102" onClick={postItems}>Save</Button>
 
     </div>
   );

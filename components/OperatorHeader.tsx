@@ -14,19 +14,9 @@ export default function Header() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
-          <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-            <MountainIcon className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
-          </Link>
           <div className="grid gap-2 pl-6 py-6">
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Home1
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              About
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Services
+            <Link href="/operator/scanner" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              Go to Scanner
             </Link>
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
               <LogoutButton></LogoutButton>
@@ -34,32 +24,16 @@ export default function Header() {
           </div>
         </SheetContent>
       </Sheet>
-      <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-        <MountainIcon className="h-6 w-6" />
-        <span className="sr-only">Acme Inc</span>
-      </Link>
+     
       <nav className="ml-auto hidden lg:flex gap-6">
         <Link
-          href="#"
+          href="/operator/scanner"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
           prefetch={false}
         >
-          Home2
+          Go to Scanner
         </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          About
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
-          prefetch={false}
-        >
-          Services
-        </Link>
+        
         <Link
           href="#"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
