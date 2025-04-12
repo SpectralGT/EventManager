@@ -58,6 +58,7 @@ export default function EventDetailPage() {
           newItems.push(newItem);
           setItems(newItems);
         });
+
         console.log(items);
       });
   }, [id]);
@@ -106,9 +107,10 @@ export default function EventDetailPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <Card>
         <CardContent className="p-4">
-          <img src={event.imgURL} alt={event.title} className="w-full h-64 object-cover rounded-lg mb-4" />
-          <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
-          <p className="text-muted-foreground mb-4">{event.description}</p>
+          <img src={event.imgURL} alt={event.title} className="w-full object-cover rounded-lg mb-4" />
+          <h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
+          <div className="text-muted-foreground mb-4 mt-4 description" dangerouslySetInnerHTML={{ __html: `<div> ${event.description} </div>` }}></div>
+          
           <p>
             <strong>Start:</strong> {new Date(event.startDate).toLocaleString()}
           </p>
@@ -126,16 +128,16 @@ export default function EventDetailPage() {
                 <Label className="min-w-[100px] capitalize">
                   {item.name} - ₹{item.price}
                 </Label>
-                  <Button onClick={(e) => changeItems(item.name, item.quantity, -1)}>-</Button>
+                  <Button className="font-extrabold" onClick={(e) => changeItems(item.name, item.quantity, -1)}>-</Button>
                   <Input type="number" min={0} defaultValue={0} value={item.quantity} className="w-24" onChange={(e) => changeItems(item.name, Number(item.quantity), 0)} />
-                  <Button onClick={(e) => changeItems(item.name, item.quantity, 1)}>+</Button>
+                  <Button className="font-extrabold" onClick={(e) => changeItems(item.name, item.quantity, 1)}>+</Button>
                 </div>
               // </div>
             ))}
           </div>
 
           <div className="mt-6">
-            <p className="font-medium">Total Price: ₹{totalPrice}</p>
+            <p className="font-extrabold">Total Price: ₹{totalPrice}</p>
             <Button disabled={totalPrice === 0} className="mt-2" onClick={() => setDialogOpen(true)}>
               Buy Tickets
             </Button>

@@ -48,12 +48,12 @@ export default function Home() {
                 <img
                   src={event.imgURL}
                   alt={event.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
+                  className="w-full object-cover rounded-lg mb-4"
                 />
                 <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                {/* <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                   {event.description}
-                </p>
+                </p> */}
                 <p className="text-sm text-muted-foreground">
                   <strong>Start:</strong>{' '}
                   {new Date(event.startDate).toLocaleDateString()}
@@ -67,120 +67,6 @@ export default function Home() {
           </Link>
 
           
-          <Link
-            href={`/events/${event.id}`}
-            key={event.id}
-            className="block hover:shadow-lg transition-shadow rounded-xl"
-          >
-            <Card className="h-full">
-              <CardContent className="p-4">
-                <img
-                  src={event.imgURL}
-                  alt={event.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                  {event.description}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>Start:</strong>{' '}
-                  {new Date(event.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>End:</strong>{' '}
-                  {new Date(event.endDate).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-
-          <Link
-            href={`/events/${event.id}`}
-            key={event.id}
-            className="block hover:shadow-lg transition-shadow rounded-xl"
-          >
-            <Card className="h-full">
-              <CardContent className="p-4">
-                <img
-                  src={event.imgURL}
-                  alt={event.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                  {event.description}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>Start:</strong>{' '}
-                  {new Date(event.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>End:</strong>{' '}
-                  {new Date(event.endDate).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-
-          <Link
-            href={`/events/${event.id}`}
-            key={event.id}
-            className="block hover:shadow-lg transition-shadow rounded-xl"
-          >
-            <Card className="h-full">
-              <CardContent className="p-4">
-                <img
-                  src={event.imgURL}
-                  alt={event.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                  {event.description}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>Start:</strong>{' '}
-                  {new Date(event.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>End:</strong>{' '}
-                  {new Date(event.endDate).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-
-
-          <Link
-            href={`/events/${event.id}`}
-            key={event.id}
-            className="block hover:shadow-lg transition-shadow rounded-xl"
-          >
-            <Card className="h-full">
-              <CardContent className="p-4">
-                <img
-                  src={event.imgURL}
-                  alt={event.title}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
-                <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                  {event.description}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>Start:</strong>{' '}
-                  {new Date(event.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  <strong>End:</strong>{' '}
-                  {new Date(event.endDate).toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
           
 
           </>

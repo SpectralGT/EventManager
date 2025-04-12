@@ -55,8 +55,8 @@ model Event {
   title       String
   description String
 
-  startDate DateTime
-  endDate   DateTime
+  startDate String
+  endDate   String
 
   tickets Json
   Order   Order[]
