@@ -87,7 +87,7 @@ export default function EventDetailPage() {
   const changeItems = (name: string, quantity: number, increament: number) => {
     const newItems = items;
     newItems.forEach((e) => {
-      if (e.name == name) {
+      if (e.name == name && (e.quantity+increament)>=0) {
         e.quantity = quantity + increament;
       }
     });
@@ -125,7 +125,7 @@ export default function EventDetailPage() {
                   {item.name} - ₹{item.price}
                 </Label>
                   <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, -1)}>-</Button>
-                  <Input type="number" min={0} defaultValue={0} value={item.quantity} className="w-24" onChange={() => changeItems(item.name, Number(item.quantity), 0)} />
+                  <Input type="number" min={0} defaultValue={0} className="w-24" value={item.quantity} onChange={() => changeItems(item.name, Number(item.quantity), 0)} />
                   <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, 1)}>+</Button>
                 </div>
               // </div>

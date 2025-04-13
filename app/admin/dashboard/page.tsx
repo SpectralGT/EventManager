@@ -6,7 +6,7 @@ import { NextPage } from "next";
 
 import AdminApp from "@/components/AdminApp";
 
-const Home: NextPage = () => {
+const Home = () => {
   if (typeof window !== "undefined") {
     return <AdminApp />;
   }
