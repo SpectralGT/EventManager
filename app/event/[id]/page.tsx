@@ -61,7 +61,7 @@ export default function EventDetailPage() {
 
         console.log(items);
       });
-  }, [id,items]);
+  }, [id]);
 
   if (!event) return <p className="p-6">Loading...</p>;
 
@@ -125,7 +125,7 @@ export default function EventDetailPage() {
                   {item.name} - ₹{item.price}
                 </Label>
                   <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, -1)}>-</Button>
-                  <Input type="number" min={0} defaultValue={0} className="w-24" value={item.quantity} onChange={() => changeItems(item.name, Number(item.quantity), 0)} />
+                  <Input type="number" min={0} defaultValue={0} className="w-24" value={item.quantity} />
                   <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, 1)}>+</Button>
                 </div>
               // </div>
