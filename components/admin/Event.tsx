@@ -13,7 +13,6 @@ import {
   SimpleFormIterator,
   NumberInput,
   ArrayField,
-  ReferenceArrayField,
   NumberField,
   DateField,
   DateTimeInput,

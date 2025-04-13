@@ -5,7 +5,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useParams } from "next/navigation";
 import { AttendeeOrder,Item } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { redirect } from 'next/navigation'
 
 

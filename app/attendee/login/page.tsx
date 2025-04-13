@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navig
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
 
 export default function AttendeeLoginPage() {
   const [username, setUsername] = useState('');

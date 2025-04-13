@@ -1,14 +1,10 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import { OrderByID } from "@/lib/types";
-import Image from "next/image";
-import Link from "next/link";
+import { Item, OrderByID } from "@/lib/types";
 import { useParams } from "next/navigation";
-import { totalmem } from "os";
 import { useEffect, useState } from "react";
 
 import QRCode from "react-qr-code";
@@ -17,7 +13,7 @@ export default function Order() {
   const { id } = useParams();
 
   const [order, setOrder] = useState<OrderByID | null>(null);
-  const [total, setTotal] = useState<Number>(0);
+  const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
     fetch(`/api/attendee/order/${id}`) // assumes API route returns profile
@@ -27,13 +23,13 @@ export default function Order() {
 
         if (data && data.items) {
           let sum = 0;
-          data.items.forEach((item: any) => {
+          data.items.forEach((item:Item) => {
             sum += item.quantity * item.price;
           });
           setTotal(sum);
         }
       });
-  }, []);
+  }, [id]);
 
   if (!order) return <p className="p-6">Loading ...</p>;
 

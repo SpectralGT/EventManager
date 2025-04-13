@@ -5,8 +5,10 @@ import { NextRequestWithAuth } from "next-auth/middleware";
 import { Item, Order } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = await params;
+
+
+export async function GET(req: NextRequest,{ params }: { params: Promise<{ id: string }>}) {
+  const id = (await params).id;
 
   try {
     const event = await prisma.event.findUnique({
@@ -27,12 +29,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 
     return NextResponse.json(event);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });
   }
 }
 
-export async function POST(req: NextRequestWithAuth, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequestWithAuth, { params }: { params: Promise<{ id: string }>}) {
   try {
     const param = await params;
     const body = await req.json();
@@ -90,7 +92,7 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: { id:
       data: {
     attendeeId:attendeeId,
     eventId:id,
-    //@ts-ignore
+    // @ts-expect-error : items can be anythin
     items:items
       }
     });
@@ -106,8 +108,7 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: { id:
     })
 
     return NextResponse.json(newOrder);
-  } catch (error) {
-    console.log(error);
+  } catch{
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
   }
 }

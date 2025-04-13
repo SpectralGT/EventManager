@@ -1,12 +1,11 @@
 // pages/api/order/[id].ts
 import prisma from "@/lib/prisma"; // adjust to your prisma client path
 import { NextRequest, NextResponse } from "next/server";
-import { NextApiRequest, NextApiResponse } from "next";
-import { Item } from "@/lib/types";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest,{ params }: { params: Promise<{ id: string }>}) {
+  
   try {
-    const { id } = await params;
+    const id = (await params).id;
     const order = await prisma.order.findUnique({
       where: { id: id as string },
       select: {
@@ -18,16 +17,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       },
     });
 
-    console.log("GOT ORDER");
 
     return NextResponse.json(order);
-  } catch (error) {
-    console.log("ORDER NOT FOUND");
+  } catch{
     return NextResponse.json({ error: "Failed to fetch order" }, { status: 500 });
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest,{ params }: { params: Promise<{ id: string }>}) {
   if (req.method === "PATCH") {
     try {
       const param = await params;
@@ -43,8 +40,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       });
 
       return NextResponse.json(newOrder);
-    } catch (error) {
-      console.error("Update failed:", error);
+    } catch {
       return NextResponse.json({ error: "Failed to Update Order Items" }, { status: 500 });
     }
   }

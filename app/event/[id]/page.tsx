@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-import { Order, Item } from "@/lib/types";
+import {Item } from "@/lib/types";
 import { Ticket } from "lucide-react";
 
 interface Ticket {
@@ -61,15 +61,11 @@ export default function EventDetailPage() {
 
         console.log(items);
       });
-  }, [id]);
+  }, [id,items]);
 
   if (!event) return <p className="p-6">Loading...</p>;
 
   const handlePay = async () => {
-    const attendeeId = "null";
-
-    console.log(items);
-
     const res = await fetch(`/api/event/${event.id}`, {
       method: "POST",
       headers: {
@@ -128,9 +124,9 @@ export default function EventDetailPage() {
                 <Label className="min-w-[100px] capitalize">
                   {item.name} - ₹{item.price}
                 </Label>
-                  <Button className="font-extrabold" onClick={(e) => changeItems(item.name, item.quantity, -1)}>-</Button>
-                  <Input type="number" min={0} defaultValue={0} value={item.quantity} className="w-24" onChange={(e) => changeItems(item.name, Number(item.quantity), 0)} />
-                  <Button className="font-extrabold" onClick={(e) => changeItems(item.name, item.quantity, 1)}>+</Button>
+                  <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, -1)}>-</Button>
+                  <Input type="number" min={0} defaultValue={0} value={item.quantity} className="w-24" onChange={() => changeItems(item.name, Number(item.quantity), 0)} />
+                  <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, 1)}>+</Button>
                 </div>
               // </div>
             ))}

@@ -1,13 +1,13 @@
 // src/app/admin/login/page.tsx
 "use client"; // This component uses client-side interactivity
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation"; // Use 'next/navigation' for App Router
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");
@@ -66,6 +66,7 @@ export default function AdminLoginPage() {
     }
   };
   return (
+
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col gap-6">

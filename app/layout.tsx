@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "../components/NextAuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <NextAuthProvider>{children}</NextAuthProvider>{" "}
+          <NextAuthProvider><Suspense fallback={<div>Loading...</div>}>{children}</Suspense></NextAuthProvider>{" "}
         </ThemeProvider>
       </body>
     </html>

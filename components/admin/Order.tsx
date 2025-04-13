@@ -19,14 +19,14 @@ import {
   ReferenceField,
 } from "react-admin";
 
-const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
-const jsonParse = (value: string) => {
-  try {
-    return JSON.parse(value);
-  } catch (e) {
-    return [];
-  }
-};
+// const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
+// const jsonParse = (value: string) => {
+//   try {
+//     return JSON.parse(value);
+//   } catch (e) {
+//     return [];
+//   }
+// };
 
 export const OrderList = () => (
   <List>

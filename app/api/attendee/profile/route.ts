@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { NextRequestWithAuth } from "next-auth/middleware";
 
-import { AttendeeOrder, Item, Order, Profile } from "@/lib/types";
+import { AttendeeOrder, Profile } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 import { Prisma } from "@prisma/client";
 
@@ -15,8 +14,6 @@ async function getNewOrders(
     createdAt: Date;
   }[]
 ) {
-
-
   const newOrders: AttendeeOrder[] = [];
   await Promise.all(
     orders.map(async (order) => {
@@ -25,12 +22,12 @@ async function getNewOrders(
         select: { title: true },
       });
 
-      const newOrder:AttendeeOrder = {
+      const newOrder: AttendeeOrder = {
         id: order.id,
         attendeeId: order.attendeeId,
         eventId: order.eventId,
         eventTitle: eventTitle ? eventTitle.title : "Not Found",
-        // @ts-ignore
+        // @ts-expect-error : items can be anything
         items: order.items,
         createdAt: order.createdAt.toISOString(),
       };
@@ -53,7 +50,6 @@ export async function GET(req: NextRequest) {
       select: { username: true, balance: true },
     });
 
-
     const orders = await prisma.order.findMany({
       where: { attendeeId: attendeeId },
       select: {
@@ -67,7 +63,7 @@ export async function GET(req: NextRequest) {
 
     const newOrders = await getNewOrders(orders);
 
-    let profile: Profile = {
+    const profile: Profile = {
       id: attendeeId,
       username: attendeeDetails!.username,
       balance: Number(attendeeDetails!.balance),
