@@ -1,10 +1,6 @@
 import AdminHeader from "@/components/AdminHeader";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       <AdminHeader></AdminHeader>

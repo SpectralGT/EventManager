@@ -3,12 +3,12 @@
 // pages/admin.tsx
 import { dataProvider } from "ra-data-simple-prisma";
 import { Admin, Resource } from 'react-admin';
-import { AttendeeList, AttendeeEdit, AttendeeCreate } from '../components/admin/Attendee';
-import { EventList, EventEdit, EventCreate } from '../components/admin/Event';
-import { OrderList, OrderEdit, OrderCreate } from '../components/admin/Order';
-import { AdminList, AdminEdit, AdminCreate } from '../components/admin/Admin';
-import { OperatorList, OperatorEdit, OperatorCreate } from '../components/admin/Operator';
-import LogoutButton from "./LogoutButton"
+import { AttendeeList, AttendeeEdit, AttendeeCreate } from './components/Attendee';
+import { EventList, EventEdit, EventCreate } from './components/Event';
+import { OrderList, OrderEdit, OrderCreate } from './components/Order';
+import { AdminList, AdminEdit, AdminCreate } from './components/Admin';
+import { OperatorList, OperatorEdit, OperatorCreate } from './components/Operator';
+import LogoutButton from "@/components/LogoutButton";
 
 
 export default function AdminPanel() {
