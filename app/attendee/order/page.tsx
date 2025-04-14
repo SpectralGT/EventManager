@@ -21,12 +21,12 @@ export default function Home() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Username : <span className="text-primary">{profile?.username}</span></h1>
-      <h1 className="text-2xl font-bold mb-4">Balance : <span className="text-primary">{profile?.balance}</span></h1>
+      {/* <h1 className="text-2xl font-bold mb-4">Username : <span className="text-primary">{profile?.username}</span></h1> */}
+      {/* <h1 className="text-2xl font-bold mb-4">Balance : <span className="text-primary">{profile?.balance}</span></h1> */}
 
       {/* <Separator /> */}
 
-      {/* <h1 className="text-2xl font-bold mb-4 mt-5 text-center">Orders</h1>
+      <h1 className="text-2xl font-bold mb-4 mt-5 text-center">Orders</h1>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {profile?.orders ? (
           profile?.orders.map((order) => (
@@ -44,7 +44,7 @@ export default function Home() {
         ) : (
           <div>Loading ...</div>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }
