@@ -16,7 +16,7 @@ export default function Order() {
   const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
-    fetch(`/api/attendee/order/${id}`) // assumes API route returns profile
+    fetch(`/api/attendee/order/${id}`) // assumes API route returns order
       .then((res) => res.json())
       .then((data) => {
         setOrder(data);
@@ -57,6 +57,7 @@ export default function Order() {
                 <TableHead className="">Item</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Qty</TableHead>
+                <TableHead>Served</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
               </TableRow>
             </TableHeader>
@@ -67,21 +68,9 @@ export default function Order() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
+                  <TableCell>{item.served}{" / "}{item.quantity}</TableCell>
                   <TableCell className="text-right">{item.price * item.quantity}</TableCell>
                 </TableRow>
-
-                // <Card className="h-full">
-                //   <CardContent className="p-4">
-                //     <h2 className="text-xl font-semibold mb-1">{item.name}</h2>
-                //     <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                //       <strong>QTY : </strong> {item.quantity}
-                //     </p>
-
-                //     <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                //       <strong>QTY : </strong> {item.}
-                //     </p>
-                //   </CardContent>
-                // </Card>
               ))}
             </TableBody>
           </Table>

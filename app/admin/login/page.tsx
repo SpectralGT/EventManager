@@ -1,7 +1,6 @@
-// src/app/admin/login/page.tsx
-"use client"; // This component uses client-side interactivity
+"use client";
 
-import { useState, FormEvent, useEffect, Suspense } from "react";
+import { useState, FormEvent, useEffect} from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation"; // Use 'next/navigation' for App Router
 import { Button } from "@/components/ui/button";
