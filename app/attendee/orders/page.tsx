@@ -30,7 +30,7 @@ export default function Home() {
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {profile?.orders ? (
           profile?.orders.map((order) => (
-            <Link href={`/attendee/order/${order.id}`} key={order.id} className="block hover:shadow-lg transition-shadow rounded-xl">
+            <Link href={`/attendee/orders/${order.id}`} key={order.id} className="block hover:shadow-lg transition-shadow rounded-xl">
               <Card className="h-full">
                 <CardContent className="p-4">
                   <h2 className="text-xl font-semibold mb-1">{order.eventTitle}</h2>

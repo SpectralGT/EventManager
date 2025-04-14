@@ -26,6 +26,10 @@ export default function AttendeeHeader() {
               Profile
             </Link>
             
+            <Link href="/attendee/orders" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              Orders
+            </Link>
+
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
               <LogoutButton></LogoutButton>
             </Link>
@@ -48,6 +52,15 @@ export default function AttendeeHeader() {
         >
           Profile
         </Link>
+
+        <Link
+          href="/attendee/orders"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
+          prefetch={false}
+        >
+          Orders
+        </Link>
+
         <Link
           href="#"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium"
