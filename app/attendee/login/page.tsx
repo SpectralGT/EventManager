@@ -2,12 +2,15 @@
 'use client'; // This component uses client-side interactivity
 
 import { useState, FormEvent, useEffect } from 'react';
-import { signIn } from 'next-auth/react';
+import { signIn} from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation'; // Use 'next/navigation' for App Router
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent} from "@/components/ui/card";
+
+
+
 
 export default function AttendeeLoginPage() {
   const [username, setUsername] = useState('');
@@ -56,7 +59,11 @@ export default function AttendeeLoginPage() {
       // Login successful! Redirect to the Attendee-specific dashboard or desired page
       console.log('Attendee login successful, redirecting...');
       // Redirect to the intended page or a default dashboard
-      const callbackUrl = searchParams.get('callbackUrl') || '/attendee/profile';
+
+      let callbackUrl = '/attendee/profile';
+      if (searchParams.get('redirect')){
+        callbackUrl = `/event/${searchParams.get('redirect')}`;
+      }
       router.push(callbackUrl);
       router.refresh(); // Refresh server components potentially affected by login state
     } else {

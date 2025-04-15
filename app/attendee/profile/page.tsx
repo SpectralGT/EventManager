@@ -1,9 +1,9 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator"
+// import { Card, CardContent } from "@/components/ui/card";
+// import { Separator } from "@/components/ui/separator"
 import { Profile } from "@/lib/types";
-import Link from "next/link";
+// import Link from "next/link";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [profile, setProfile] = useState<Profile>();

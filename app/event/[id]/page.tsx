@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-import {Item } from "@/lib/types";
+import { Item } from "@/lib/types";
 import { Ticket } from "lucide-react";
+
+import { useSession } from "next-auth/react";
+// import Link from "next/link";
 
 interface Ticket {
   name: string;
@@ -36,31 +39,64 @@ export default function EventDetailPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  useEffect(() => {
-    fetch(`/api/event/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!Array.isArray(data.tickets)) return <p className="p-6">Error loading tickets</p>;
-        
-        setEvent(data);
+  const {status } = useSession();
 
-        const tickets = data.tickets;
-        const newItems: Item[] = [];
-        tickets?.forEach((e:Item) => {
-          const newItem: Item = {
-            name: e.name,
-            quantity: 0,
-            served: 0,
-            price: e.price,
-            serveStartTime: e.serveStartTime,
-            serveEndTime: e.serveEndTime,
-          };
-          newItems.push(newItem);
-          setItems(newItems);
+  useEffect(() => {
+    
+        
+        
+
+        
+        
+          fetch(`/api/event/${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (!Array.isArray(data.tickets)) return <p className="p-6">Error loading tickets</p>;
+    
+            setEvent(data);
+    
+            const tickets = data.tickets;
+            const newItems: Item[] = [];
+            tickets?.forEach((e: Item) => {
+              const newItem: Item = {
+                name: e.name,
+                quantity: 0,
+                served: 0,
+                price: e.price,
+                serveStartTime: e.serveStartTime,
+                serveEndTime: e.serveEndTime,
+              };
+              newItems.push(newItem);
+              setItems(newItems);
+            });
+    
+
+
+            const savedItems = localStorage.getItem("selectedItems");
+            if (savedItems) {
+              try {
+                const savedItemsJSON = JSON.parse(savedItems);
+                console.log(savedItemsJSON)
+                if(savedItemsJSON && savedItemsJSON.eventID == id){
+
+                  let total = 0;
+                  // @ts-expect-error : item will be of type  Item
+                  savedItemsJSON.items.forEach((e) => (total += e.quantity * e.price));
+                  setTotalPrice(total);
+
+                  setItems(savedItemsJSON.items);
+                  setDialogOpen(true);
+                }
+              } catch (e) {
+                console.error("NO saved items", e)
+              }
+            }
+
         });
 
-        console.log(items);
-      });
+        
+
+
   }, [id]);
 
   if (!event) return <p className="p-6">Loading...</p>;
@@ -84,10 +120,16 @@ export default function EventDetailPage() {
     }
   };
 
+const handleUnloggedPay = async ()=>{
+  localStorage.removeItem("selectedItems"); // optional
+  localStorage.setItem("selectedItems", JSON.stringify({eventID:event.id,items:items}));
+  redirect(`/attendee/login?redirect=${id}`);
+}
+
   const changeItems = (name: string, quantity: number, increament: number) => {
     const newItems = items;
     newItems.forEach((e) => {
-      if (e.name == name && (e.quantity+increament)>=0) {
+      if (e.name == name && e.quantity + increament >= 0) {
         e.quantity = quantity + increament;
       }
     });
@@ -103,10 +145,16 @@ export default function EventDetailPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <Card>
         <CardContent className="p-4">
-          <img src={event.imgURL} alt={event.title} className="w-full object-cover rounded-lg mb-4" />
+          <img
+            src={event.imgURL}
+            alt={event.title}
+            className="w-full object-cover rounded-lg mb-4"
+          />
           <h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
-          <div className="text-muted-foreground mb-4 mt-4 description" dangerouslySetInnerHTML={{ __html: `<div> ${event.description} </div>` }}></div>
-          
+          <div
+            className="text-muted-foreground mb-4 mt-4 description"
+            dangerouslySetInnerHTML={{ __html: `<div> ${event.description} </div>` }}></div>
+
           <p>
             <strong>Start:</strong> {new Date(event.startDate).toLocaleString()}
           </p>
@@ -120,21 +168,41 @@ export default function EventDetailPage() {
               // <div key={item.name} className="flex items-center gap-4">
               //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
 
-                <div key={item.name} className="flex w-full max-w-sm items-center space-x-2">
+              <div
+                key={item.name}
+                className="flex w-full max-w-sm items-center space-x-2">
                 <Label className="min-w-[100px] capitalize">
                   {item.name} - ₹{item.price}
                 </Label>
-                  <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, -1)}>-</Button>
-                  <Input type="number" min={0} defaultValue={0} className="w-24" value={item.quantity} />
-                  <Button className="font-extrabold" onClick={() => changeItems(item.name, item.quantity, 1)}>+</Button>
-                </div>
+                <Button
+                  className="font-extrabold"
+                  onClick={() => changeItems(item.name, item.quantity, -1)}>
+                  -
+                </Button>
+                <Input
+                  type="number"
+                  min={0}
+                  // defaultValue={0}
+                  className="w-24"
+                  value={item.quantity}
+                  onChange={() => changeItems(item.name, item.quantity, 0)}
+                />
+                <Button
+                  className="font-extrabold"
+                  onClick={() => changeItems(item.name, item.quantity, 1)}>
+                  +
+                </Button>
+              </div>
               // </div>
             ))}
           </div>
 
           <div className="mt-6">
             <p className="font-extrabold">Total Price: ₹{totalPrice}</p>
-            <Button disabled={totalPrice === 0} className="mt-2" onClick={() => setDialogOpen(true)}>
+            <Button
+              disabled={totalPrice === 0}
+              className="mt-2"
+              onClick={() => setDialogOpen(true)}>
               Buy Tickets
             </Button>
           </div>
@@ -142,7 +210,9 @@ export default function EventDetailPage() {
       </Card>
 
       {/* Confirmation Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Confirm Your Order</DialogTitle>
@@ -152,10 +222,18 @@ export default function EventDetailPage() {
             <p className="font-semibold mt-2">Total: ₹{totalPrice}</p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handlePay}>Confirm & Pay</Button>
+            
+            {
+              (status === "authenticated")
+                ? <Button onClick={handlePay}>Confirm</Button>
+                : <Button onClick={handleUnloggedPay}>Login and Confirm</Button>
+            }
+
           </DialogFooter>
         </DialogContent>
       </Dialog>
