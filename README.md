@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventManager
+![GitHub repo size](https://img.shields.io/github/repo-size/SpectralGT/EventManager)
+![GitHub last commit](https://img.shields.io/github/last-commit/SpectralGT/EventManager)
+![License](https://img.shields.io/github/license/SpectralGT/EventManager)
 
-## Getting Started
 
-First, run the development server:
+A modern event management web application built with Next.js, Prisma, and Tailwind CSS. EventManager enables users to create, manage, and explore events seamlessly.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+- **Event Creation & Management**: Easily create and manage events with user-friendly forms.
+- **Responsive Design**: Optimized for all devices using Tailwind CSS.
+- **Database Integration**: Utilizes Prisma ORM for efficient database operations.
+- **Modern Stack**: Built with Next.js 13+, leveraging the App Router and TypeScript.
+- **Deployment Ready**: Configured for deployment on platforms like Vercel.
+
+## 🛠 Tech Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/) 13+, [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Database**: [Prisma ORM](https://www.prisma.io/)
+- **Deployment**: [Vercel](https://vercel.com/)
+
+## 📦 Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/SpectralGT/EventManager.git
+   cd EventManager
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables:**
+
+   Create a `.env` file in the root directory and add the following:
+
+   ```env
+   DATABASE_URL="your_database_connection_string"
+   ```
+
+   Replace `"your_database_connection_string"` with your actual database connection string.
+
+4. **Run the development server:**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+## 🗂 Project Structure
+
+```
+EventManager/
+├── app/                 # Next.js App Router pages and layouts
+├── components/          # Reusable UI components
+├── lib/                 # Utility functions and helpers
+├── prisma/              # Prisma schema and migrations
+├── public/              # Static assets
+├── styles/              # Global styles (if any)
+├── .env                 # Environment variables
+├── next.config.ts       # Next.js configuration
+├── package.json         # Project metadata and scripts
+└── tsconfig.json        # TypeScript configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧪 Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `npm run dev` or `yarn dev`: Starts the development server.
+- `npm run build` or `yarn build`: Builds the application for production.
+- `npm run start` or `yarn start`: Starts the production server.
+- `npm run lint` or `yarn lint`: Runs ESLint for code quality checks.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛡️ License
 
-## Learn More
+This project is licensed under the [MIT License](LICENSE).
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📬 Contact
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For questions or feedback, please open an issue on the [GitHub repository](https://github.com/SpectralGT/EventManager/issues).
