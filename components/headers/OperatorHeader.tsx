@@ -1,7 +1,7 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import LogoutButton from "./LogoutButton"
+import LogoutButton from "@/components/LogoutButton"
 
 export default function Header() {
   return (

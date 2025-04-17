@@ -69,7 +69,7 @@ export default function EventDetailPage() {
 
             const savedItems = localStorage.getItem("selectedItems");
             if (savedItems) {
-              try {2
+              try {
                 const savedItemsJSON = JSON.parse(savedItems);
                 console.log(savedItemsJSON)
                 if(savedItemsJSON && savedItemsJSON.eventID == id){
