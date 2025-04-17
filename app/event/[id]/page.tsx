@@ -43,11 +43,6 @@ export default function EventDetailPage() {
 
   useEffect(() => {
     
-        
-        
-
-        
-        
           fetch(`/api/event/${id}`)
           .then((res) => res.json())
           .then((data) => {
@@ -74,7 +69,7 @@ export default function EventDetailPage() {
 
             const savedItems = localStorage.getItem("selectedItems");
             if (savedItems) {
-              try {
+              try {2
                 const savedItemsJSON = JSON.parse(savedItems);
                 console.log(savedItemsJSON)
                 if(savedItemsJSON && savedItemsJSON.eventID == id){

@@ -1,4 +1,4 @@
-import AttendeeHeader from "@/components/AttendeeHeader";
+import AttendeeHeader from "@/components/headers/AttendeeHeader";
 
 export default function RootLayout({
   children,

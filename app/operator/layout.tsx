@@ -1,4 +1,4 @@
-import OperatorHeader from "@/components/OperatorHeader";
+import OperatorHeader from "@/components/headers/OperatorHeader";
 
 export default function RootLayout({
   children,
