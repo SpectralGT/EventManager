@@ -39,17 +39,23 @@ async function getNewOrders(
   return newOrders;
 }
 
+
+//Getting Profile data
 export async function GET(req: NextRequest) {
   try {
+
     // const token = req.nextauth.token;
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
+    //Getting Username and Balance of a Attendee by Id
     const attendeeDetails = await prisma.attendee.findUnique({
       where: { id: attendeeId },
       select: { username: true, balance: true },
     });
 
+
+    //Getting the orders of that Attendee
     const orders = await prisma.order.findMany({
       where: { attendeeId: attendeeId },
       select: {
@@ -61,8 +67,10 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    //Getting the new Orders object that was the addition of Event Title
     const newOrders = await getNewOrders(orders);
 
+    //Create a Profile Object
     const profile: Profile = {
       id: attendeeId,
       username: attendeeDetails!.username,
@@ -70,8 +78,11 @@ export async function GET(req: NextRequest) {
       orders: newOrders,
     };
 
+    //Setting the orders property again
     profile.orders = newOrders;
 
+
+    //Returning the Profile
     return NextResponse.json(profile);
   } catch (error) {
     console.log(error);
