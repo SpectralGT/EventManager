@@ -4,51 +4,17 @@ import prisma from "@/lib/prisma";
 import { OrderByID } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 
-// async function getNewOrders(
-//   orders: {
-//     id: string;
-//     attendeeId: string;
-//     eventId: string;
-//     items: Prisma.JsonValue;
-//     createdAt: Date;
-//   }[]
-// ) {
-
-//   const newOrders: AttendeeOrder[] = [];
-//   await Promise.all(
-//     orders.map(async (order) => {
-//       const eventTitle = await prisma.event.findUnique({
-//         where: { id: order.eventId },
-//         select: { title: true },
-//       });
-
-//       const newOrder:AttendeeOrder = {
-//         id: order.id,
-//         attendeeId: order.attendeeId,
-//         eventId: order.eventId,
-//         eventTitle: eventTitle ? eventTitle.title : "Not Found",
-//         // @ts-ignore
-//         items: order.items,
-//         createdAt: order.createdAt.toISOString(),
-//       };
-
-//       newOrders.push(newOrder);
-//     })
-//   );
-
-//   return newOrders;
-// }
-
-
+// Getting Order by Id
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
   try {
+    //Getting id param from the URL
     const id = (await params).id;
 
-    console.log();
-    // const token = req.nextauth.token;
+    
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
+    // getting order from database using prisma
     const order = await prisma.order.findUnique({
       where: { id: id, attendeeId: attendeeId },
       select: {
@@ -60,6 +26,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       },
     });
 
+    // if order is not found
     if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
     const eventTitle = await prisma.event.findUnique({
@@ -67,6 +34,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       select: { title: true },
     });
 
+    //creating a new order object with the addition of Event title
     const newOrder: OrderByID = {
       id: order.id,
       attendeeId: order.attendeeId,
@@ -77,6 +45,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       items: order.items,
     };
 
+    // returning the new Order object
     return NextResponse.json(newOrder);
   } catch (error) {
     console.log(error);
