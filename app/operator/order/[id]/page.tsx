@@ -8,14 +8,21 @@ import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 
 export default function OrderServePage() {
+
+  //Getting the Order Id from URL
   const { id } = useParams();
+
+  //Setting States
   const [order, setOrder] = useState<AttendeeOrder>();
   const [items, setItems] = useState<Item[]>([]);
   const [newItems, setNewItems] = useState<Item[]>([]);
+
   // A ref to hold arrays of refs per item
   const checkboxRefs = useRef<Array<Array<HTMLButtonElement | null>>>([]);
 
   useEffect(() => {
+
+    //Getting Order Details and Setting States
     fetch(`/api/operator/order/${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -28,6 +35,8 @@ export default function OrderServePage() {
       });
   }, [id]);
 
+
+  //Requesting to Update the Order
   const postItems = async () => {
     const res = await fetch(`/api/operator/order/${id}`, {
       method: "PATCH",
@@ -47,6 +56,7 @@ export default function OrderServePage() {
     }
   };
 
+  //Updating the serve count for a Item in Order
   const updateServedCount = async (itemIndex: number) => {
     const checkboxes = checkboxRefs.current[itemIndex];
     const checkedCount = checkboxes.filter((cb) => cb?.getAttribute("data-state") === "checked").length;
