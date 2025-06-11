@@ -51,6 +51,8 @@ A modern event management web application built with Next.js, Prisma, and Tailwi
 4. **Run the development server:**
 
    ```bash
+   npx prisma generate
+   npx prisma db seed
    npm run dev
    # or
    yarn dev

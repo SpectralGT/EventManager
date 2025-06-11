@@ -24,7 +24,7 @@ const mockOrder = {
 describe("Order Component", () => {
   beforeEach(() => {
     (useParams as jest.Mock).mockReturnValue({ id: "order123" });
-    (fetch as jest.Mock).mockResolvedValue({
+    (fetch as jest.Mock).mockResolvedValue({`
       json: jest.fn().mockResolvedValue(mockOrder),
     });
   });
