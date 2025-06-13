@@ -1,10 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_PASSWORD: example
-    ports:
-      - "5432:5432"
   app:
     env_file: ".env"
     build: 
@@ -17,9 +11,40 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./src
-          target: /app/src
+          path: ./app
+          target: /app/app
           ignore:
             - node_modules/
         - action : rebuild
           path : package.json
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=prisma
+    ports:
+      - "5432:5432"
+    networks:
+      - prisma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: postgres -c listen_addresses='*'
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  prisma-network:
+
+volumes:
+  postgres_data:
