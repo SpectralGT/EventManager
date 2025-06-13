@@ -5,5 +5,13 @@ COPY package*.json ./
 RUN npm install --force
 
 COPY . .
-EXPOSE 3000
-CMD npm run dev
+
+# COPY .env .env
+# COPY prisma ./prisma
+
+
+# RUN npm run db:deploy 
+
+# EXPOSE 3000
+
+CMD ["sh", "-c", "npm run db:deploy && npm run dev"]

@@ -1,33 +1,17 @@
+version: '3.7'
+
 services:
-  app:
-    env_file: ".env"
-    build: 
-      context: .
-    image: nextjs-dev
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV : development
-    develop:
-      watch:
-        - action: sync
-          path: ./app
-          target: /app/app
-          ignore:
-            - node_modules/
-        - action : rebuild
-          path : package.json
-    depends_on:
-      - postgres
-  postgres:
+  postgres_db:
     image: postgres:15
+    hostname: postgres_db
+    container_name: postgres_db
     restart: always
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=prisma
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: prisma
     ports:
-      - "5432:5432"
+      - '5432:5432'
     networks:
       - prisma-network
     healthcheck:
@@ -35,16 +19,39 @@ services:
       interval: 5s
       timeout: 2s
       retries: 20
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    command: postgres -c listen_addresses='*'
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
 
+  server:
+    build: 
+      context: .  
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true  # Keeps the container running for debugging
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    env_file:
+      - .env.prod
+    networks:
+      - prisma-network
+  prisma-studio:
+    image: node:lts-alpine3.17
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: npx prisma studio --port 5555 --browser none
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env.prod
+    networks:
+      - prisma-network
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+      server:
+        condition: service_started
 networks:
   prisma-network:
-
-volumes:
-  postgres_data:
+    name: prisma-network
