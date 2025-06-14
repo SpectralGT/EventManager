@@ -107,6 +107,7 @@ export const config = {
 
     // Include specific API routes that need protection (if not covered by above regex)
      '/api/admin/:path*',
+     '/',
      '/api/attendee/:path*', // Add if you have protected attendee API routes
      '/api/operator/:path*', // Add if you have protected operator API routes
   ],
