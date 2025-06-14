@@ -38,7 +38,7 @@ export const EventList = () => (
       <TextField source="description" />
       <DateField source="startDate" />
       <DateField source="endDate" />
-      <ArrayField source="tickets">
+      <ArrayField source="items">
         <Datagrid bulkActionButtons={false}>
           <TextField source="name" />
           <NumberField source="price" />
@@ -64,7 +64,7 @@ export const EventEdit = () => (
       <DateInput source="startDate" />
       <DateInput source="endDate" />
 
-      <ArrayInput source="tickets">
+      <ArrayInput source="items">
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />
@@ -85,7 +85,7 @@ export const EventCreate = () => (
       <RichTextInput source="description" />
       <DateTimeInput source="startDate" />
       <DateTimeInput source="endDate"  />
-      <ArrayInput source="tickets">
+      <ArrayInput source="items">
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />

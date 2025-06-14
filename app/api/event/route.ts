@@ -15,7 +15,7 @@ export async function GET() {
         description: true,
         startDate: true,
         endDate: true,
-        // ❌ don't include `tickets` or `Order`
+        // ❌ don't include `items` or `Order`
       },
     });
 

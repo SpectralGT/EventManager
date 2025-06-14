@@ -38,7 +38,7 @@ CREATE TABLE "events" (
     "description" TEXT NOT NULL,
     "startDate" TEXT NOT NULL,
     "endDate" TEXT NOT NULL,
-    "tickets" JSONB NOT NULL,
+    "items" JSONB NOT NULL,
 
     CONSTRAINT "events_pkey" PRIMARY KEY ("id")
 );

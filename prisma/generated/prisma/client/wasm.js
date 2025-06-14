@@ -123,23 +123,24 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.AdminScalarFieldEnum = {
   id: 'id',
   username: 'username',
+  email: 'email',
   password: 'password'
 };
 
 exports.Prisma.AttendeeScalarFieldEnum = {
   id: 'id',
   username: 'username',
-  name: 'name',
+  email: 'email',
   password: 'password',
   isFamily: 'isFamily',
   balance: 'balance',
-  debt: 'debt'
+  subscriptionChargePayed: 'subscriptionChargePayed'
 };
 
 exports.Prisma.OperatorScalarFieldEnum = {
   id: 'id',
   username: 'username',
-  name: 'name',
+  email: 'email',
   password: 'password'
 };
 
@@ -150,14 +151,19 @@ exports.Prisma.EventScalarFieldEnum = {
   description: 'description',
   startDate: 'startDate',
   endDate: 'endDate',
-  tickets: 'tickets'
+  items: 'items'
 };
 
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
   attendeeId: 'attendeeId',
   eventId: 'eventId',
-  items: 'items',
+  memberItems: 'memberItems',
+  guestName: 'guestName',
+  guestIsFamily: 'guestIsFamily',
+  guestAdultCount: 'guestAdultCount',
+  guestChildCount: 'guestChildCount',
+  guestItems: 'guestItems',
   createdAt: 'createdAt'
 };
 
@@ -173,11 +179,6 @@ exports.Prisma.JsonNullValueInput = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
 };
 
 exports.Prisma.JsonNullValueFilter = {

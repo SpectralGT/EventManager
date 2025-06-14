@@ -29,7 +29,7 @@ interface Event {
 	imgURL: string;
 	startDate: string;
 	endDate: string;
-	tickets: Ticket[];
+	items: Ticket[];
 }
 
 export default function EventDetailPage() {
@@ -50,14 +50,14 @@ export default function EventDetailPage() {
 		fetch(`/api/event/${id}`)
 			.then((res) => res.json())
 			.then((data) => {
-				if (!Array.isArray(data.tickets)) return <p className="p-6">Error loading tickets</p>;
+				if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
 
 				setEvent(data);
 
         //Setting Items state for Order Object
-				const tickets = data.tickets;
+				const items = data.items;
 				const newItems: Item[] = [];
-				tickets?.forEach((e: Item) => {
+				items?.forEach((e: Item) => {
 					const newItem: Item = {
 						name: e.name,
 						quantity: 0,
@@ -122,7 +122,7 @@ export default function EventDetailPage() {
 		redirect(`/attendee/login?redirect=${id}`);
 	};
 
-  //Updating the Items State when the user selects Tickets
+  //Updating the Items State when the user selects items
 	const changeItems = (name: string, quantity: number, increament: number) => {
 		
     const newItems = items;
@@ -161,7 +161,7 @@ export default function EventDetailPage() {
 					</p>
 
 					<div className="mt-6 space-y-4">
-						<h2 className="text-xl font-semibold">Select Tickets</h2>
+						<h2 className="text-xl font-semibold">Select items</h2>
 						{items.map((item) => (
 							// <div key={item.name} className="flex items-center gap-4">
 							//   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
@@ -201,7 +201,7 @@ export default function EventDetailPage() {
 							disabled={totalPrice === 0}
 							className="mt-2"
 							onClick={() => setDialogOpen(true)}>
-							Buy Tickets
+							Buy items
 						</Button>
 					</div>
 				</CardContent>

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./generated/prisma/client";
 const prisma = new PrismaClient();
 async function main() {
   const admin = await prisma.admin.upsert({
@@ -7,6 +7,7 @@ async function main() {
     create: {
       username: "admin",
       password: "admin",
+      email: "admin@gmail.com",
     },
   });
   const attendee = await prisma.attendee.upsert({
@@ -14,8 +15,8 @@ async function main() {
     update: {},
     create: {
       username: "attendee",
-      name: "Atharv",
       password: "attendee",
+      email: "attendee@gmail.com",
     },
   });
 
@@ -24,8 +25,8 @@ async function main() {
     update: {},
     create: {
       username: "operator",
-      name: "Atharv",
       password: "operator",
+      email: "operator@gmail.com",
     },
   });
 

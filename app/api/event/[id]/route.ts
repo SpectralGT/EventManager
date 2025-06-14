@@ -20,7 +20,7 @@ export async function GET(req: NextRequest,{ params }: { params: Promise<{ id: s
         imgURL: true,
         startDate: true,
         endDate: true,
-        tickets: true,
+        items: true,
       },
     });
 
