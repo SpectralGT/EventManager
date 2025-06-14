@@ -24,13 +24,28 @@ services:
     build: 
       context: .  
       dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
     ports:
       - '3000:3000'
     stdin_open: true
     tty: true  # Keeps the container running for debugging
+    restart: always
+    command: npm run dev
     depends_on:
       postgres_db:
         condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: dev
+          ignore:
+           - node_modules/
+        - action: rebuild
+          path: package.json
     env_file:
       - .env.prod
     networks:

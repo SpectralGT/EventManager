@@ -29,7 +29,7 @@ function middleware(req: NextRequestWithAuth) {
       return NextResponse.redirect(new URL('/operator/login', req.url));
     }
     else{
-      // return NextResponse.redirect(new URL('/login', req.url));
+      return NextResponse.redirect(new URL('/attendee/login', req.url));
     }
     
     // Allow access to public pages or potentially redirect other protected pages
