@@ -26,6 +26,7 @@ model Attendee {
   id       String  @id @default(cuid())
   username String  @unique // Use username for login
   name     String?
+  email    String
   password String // Store hashed passwords only!
   // Add any other attendee-specific fields here
 
