@@ -17,22 +17,21 @@ datasource db {
 model Admin {
   id       String @id @default(cuid())
   username String @unique // Use username for login
+  email    String
   password String // Store hashed passwords only!
-
   @@map("admins")
 }
 
 model Attendee {
   id       String  @id @default(cuid())
   username String  @unique // Use username for login
-  name     String?
   email    String
   password String // Store hashed passwords only!
   // Add any other attendee-specific fields here
 
   isFamily Boolean @default(false)
   balance  Int     @default(1000)
-  debt     Int     @default(-1000)
+  subscriptionChargePayed Boolean @default(false)
 
   Orders Order[]
 
@@ -42,7 +41,7 @@ model Attendee {
 model Operator {
   id       String  @id @default(cuid())
   username String  @unique // Use username for login
-  name     String?
+  email    String
   password String // Store hashed passwords only!
 
   // Add any other operator-specific fields here
@@ -59,7 +58,10 @@ model Event {
   startDate String
   endDate   String
 
-  tickets Json
+  items Json
+  // items are array of days
+  // days are array of FoodItems
+  // FoodItems are array of price like member price, guest price for single, guest price for family
   Order   Order[]
 
   @@map("events")
@@ -74,8 +76,17 @@ model Order {
   event   Event  @relation(fields: [eventId], references: [id])
   eventId String
 
-  items Json
+  memberItems Json
+  // items are array of days
+  // days are array of FoodItems
+  // FoodItems are array of price and amount of items
 
+  guestName String
+  guestIsFamily Boolean @default(false)
+  guestAdultCount Int
+  guestChildCount Int
+  guestItems Json
+  
   createdAt DateTime @default(now())
 
   @@map("orders")
