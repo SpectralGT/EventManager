@@ -5,8 +5,10 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "generated/prisma/client"
+  provider      = "prisma-client-js"
+  output        = "generated/prisma/client"
+  // previewFeatures = ["queryCompiler", "driverAdapters"]
+  binaryTargets = ["linux-musl-openssl-3.0.x"]
 }
 
 datasource db {

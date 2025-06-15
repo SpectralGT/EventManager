@@ -5,6 +5,7 @@ export const AdminList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="username" />
+      <TextInput source="email" type="email" />
       <EditButton />
     </Datagrid>
   </List>
@@ -18,6 +19,7 @@ export const AdminEdit = () => {
       <SimpleForm>
         <TextInput source="username" validate={unique()} />
         <PasswordInput source="password" />
+        <TextInput source="email" type="email" />
       </SimpleForm>
     </Edit>
   );
@@ -30,6 +32,7 @@ export const AdminCreate = () => {
       <SimpleForm>
         <TextInput source="username" validate={unique()} />
         <PasswordInput source="password" />
+        <TextInput source="email" type="email" />
       </SimpleForm>
     </Create>
   );

@@ -179,7 +179,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/run/media/asingh/New Volume/event_manager/prisma/generated/prisma/client",
+      "value": "/run/media/asingh/New Volume1/event_manager/prisma/generated/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -188,12 +188,11 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "rhel-openssl-3.0.x",
-        "native": true
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/run/media/asingh/New Volume/event_manager/prisma/schema.prisma",
+    "sourceFilePath": "/run/media/asingh/New Volume1/event_manager/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -207,6 +206,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -215,8 +215,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"generated/prisma/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Admin {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n\n  @@map(\"admins\")\n}\n\nmodel Attendee {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n  // Add any other attendee-specific fields here\n\n  isFamily                Boolean @default(false)\n  balance                 Int     @default(1000)\n  subscriptionChargePayed Boolean @default(false)\n\n  Orders Order[]\n\n  @@map(\"attendees\")\n}\n\nmodel Operator {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n\n  // Add any other operator-specific fields here\n  @@map(\"operators\")\n}\n\nmodel Event {\n  id String @id @default(cuid())\n\n  imgURL      String\n  title       String\n  description String\n\n  startDate String\n  endDate   String\n\n  items Json\n  // items are array of days\n  // days are array of FoodItems\n  // FoodItems are array of price like member price, guest price for single, guest price for family\n  Order Order[]\n\n  @@map(\"events\")\n}\n\nmodel Order {\n  id String @id @default(cuid())\n\n  Attendee   Attendee @relation(fields: [attendeeId], references: [id])\n  attendeeId String\n\n  event   Event  @relation(fields: [eventId], references: [id])\n  eventId String\n\n  memberItems Json\n  // items are array of days\n  // days are array of FoodItems\n  // FoodItems are array of price and amount of items\n\n  guestName       String\n  guestIsFamily   Boolean @default(false)\n  guestAdultCount Int\n  guestChildCount Int\n  guestItems      Json\n\n  createdAt DateTime @default(now())\n\n  @@map(\"orders\")\n}\n",
-  "inlineSchemaHash": "feee0198bd55967142585987b10f0cf232a3b2624f6271c747784b4d5c9a9933",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"generated/prisma/client\"\n  // previewFeatures = [\"queryCompiler\", \"driverAdapters\"]\n  binaryTargets = [\"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Admin {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n\n  @@map(\"admins\")\n}\n\nmodel Attendee {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n  // Add any other attendee-specific fields here\n\n  isFamily                Boolean @default(false)\n  balance                 Int     @default(1000)\n  subscriptionChargePayed Boolean @default(false)\n\n  Orders Order[]\n\n  @@map(\"attendees\")\n}\n\nmodel Operator {\n  id       String @id @default(cuid())\n  username String @unique // Use username for login\n  email    String\n  password String // Store hashed passwords only!\n\n  // Add any other operator-specific fields here\n  @@map(\"operators\")\n}\n\nmodel Event {\n  id String @id @default(cuid())\n\n  imgURL      String\n  title       String\n  description String\n\n  startDate String\n  endDate   String\n\n  items Json\n  // items are array of days\n  // days are array of FoodItems\n  // FoodItems are array of price like member price, guest price for single, guest price for family\n  Order Order[]\n\n  @@map(\"events\")\n}\n\nmodel Order {\n  id String @id @default(cuid())\n\n  Attendee   Attendee @relation(fields: [attendeeId], references: [id])\n  attendeeId String\n\n  event   Event  @relation(fields: [eventId], references: [id])\n  eventId String\n\n  memberItems Json\n  // items are array of days\n  // days are array of FoodItems\n  // FoodItems are array of price and amount of items\n\n  guestName       String\n  guestIsFamily   Boolean @default(false)\n  guestAdultCount Int\n  guestChildCount Int\n  guestItems      Json\n\n  createdAt DateTime @default(now())\n\n  @@map(\"orders\")\n}\n",
+  "inlineSchemaHash": "e478841377946c52485c877b4d69ed5d77150836946dc34dc000cad7c372da73",
   "copyEngine": true
 }
 
@@ -255,8 +255,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
-path.join(process.cwd(), "prisma/generated/prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
+path.join(process.cwd(), "prisma/generated/prisma/client/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "prisma/generated/prisma/client/schema.prisma")
