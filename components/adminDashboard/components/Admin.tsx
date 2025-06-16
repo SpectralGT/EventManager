@@ -5,7 +5,7 @@ export const AdminList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="username" />
-      <TextInput source="email" type="email" />
+      <TextField source="email"/>
       <EditButton />
     </Datagrid>
   </List>

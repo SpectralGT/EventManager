@@ -20,8 +20,8 @@ export const AttendeeList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
-      <TextInput source="email" type="email" />
       <TextField source="username" />
+      <TextField source="email"/>
       <BooleanField source="isFamily" />
       <TextField source="balance" />
       <TextField source="debt" />

@@ -5,7 +5,7 @@ export const OperatorList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="username" />
-      <TextField source="name" />
+      <TextField source="email"/>
       <EditButton />
     </Datagrid>
   </List>
@@ -18,7 +18,7 @@ export const OperatorEdit = () => {
     <Edit>
       <SimpleForm>
         <TextInput source="username" validate={unique()} />
-        <TextInput source="name" />
+        <TextInput source="email" type="email" />
         <PasswordInput source="password" />
       </SimpleForm>
     </Edit>
@@ -32,7 +32,7 @@ export const OperatorCreate = () => {
     <Create>
       <SimpleForm>
         <TextInput source="username" validate={unique()} />
-        <TextInput source="name" />
+        <TextInput source="email" type="email" />
         <PasswordInput source="password" />
       </SimpleForm>
     </Create>
