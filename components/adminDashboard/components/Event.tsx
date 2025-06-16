@@ -42,7 +42,8 @@ export const EventList = () => (
         <Datagrid bulkActionButtons={false}>
           <TextField source="name" />
           <NumberField source="price" />
-          <NumberField source="quantity" />
+          <NumberField source="priceGuestSingle" />
+          <NumberField source="priceGuestFamily" />
           <DateField source="serveStartTime" />
           <DateField source="serveEndTime" />
         </Datagrid>
@@ -68,7 +69,8 @@ export const EventEdit = () => (
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />
-          <NumberInput source="quantity" />
+          <NumberField source="priceGuestSingle" />
+          <NumberField source="priceGuestFamily" />
           <TimeInput source="serveStartTime"/>
           <TimeInput source="serveEndTime"/>
         </SimpleFormIterator>
@@ -88,8 +90,9 @@ export const EventCreate = () => (
       <ArrayInput source="items">
         <SimpleFormIterator inline>
           <TextInput source="name" />
-          <NumberInput source="price" />
-          <NumberInput source="quantity" />
+          <NumberField source="price" />
+          <NumberField source="priceGuestSingle" />
+          <NumberInput source="priceGuestFamily" />
           <TimeInput source="serveStartTime"/>
           <TimeInput source="serveEndTime"/>
         </SimpleFormIterator>
