@@ -69,8 +69,8 @@ export const EventEdit = () => (
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />
-          <NumberField source="priceGuestSingle" />
-          <NumberField source="priceGuestFamily" />
+          <NumberInput source="priceGuestSingle" />
+          <NumberInput source="priceGuestFamily" />
           <TimeInput source="serveStartTime"/>
           <TimeInput source="serveEndTime"/>
         </SimpleFormIterator>
@@ -90,8 +90,8 @@ export const EventCreate = () => (
       <ArrayInput source="items">
         <SimpleFormIterator inline>
           <TextInput source="name" />
-          <NumberField source="price" />
-          <NumberField source="priceGuestSingle" />
+          <NumberInput source="price" />
+          <NumberInput source="priceGuestSingle" />
           <NumberInput source="priceGuestFamily" />
           <TimeInput source="serveStartTime"/>
           <TimeInput source="serveEndTime"/>
