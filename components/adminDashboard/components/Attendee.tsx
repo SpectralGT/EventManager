@@ -20,8 +20,8 @@ export const AttendeeList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
+      <TextInput source="email" type="email" />
       <TextField source="username" />
-      <TextField source="name" />
       <BooleanField source="isFamily" />
       <TextField source="balance" />
       <TextField source="debt" />
@@ -42,7 +42,7 @@ export const AttendeeEdit = () => {
   <Edit>
     <SimpleForm>
       <TextInput source="username" validate={unique()}  />
-      <TextInput source="name" />
+      <TextInput source="email" type="email" />
       <PasswordInput source="password" />
       <BooleanInput source="isFamily" />
       <NumberInput source="balance" defaultValue={1000}/>
@@ -57,7 +57,7 @@ return(
   <Create>
     <SimpleForm>
       <TextInput source="username" validate={unique()}/>
-      <TextInput source="name" />
+      <TextInput source="email" type="email" />
       <PasswordInput source="password" />
       <BooleanInput source="isFamily" />
       <NumberInput source="balance" defaultValue={1000}/>
