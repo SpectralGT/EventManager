@@ -16,7 +16,8 @@ import {
   NumberField,
   DateField,
   DateTimeInput,
-  TimeInput
+  TimeInput,
+  required
 } from "react-admin";
 
 import {RichTextInput} from 'ra-input-rich-text';
@@ -59,20 +60,20 @@ export const EventList = () => (
 export const EventEdit = () => (
   <Edit>
     <SimpleForm>
-      <TextInput source="imgURL" />
-      <TextInput source="title" />
-      <RichTextInput source="description" />
-      <DateInput source="startDate" />
-      <DateInput source="endDate" />
+      <TextInput source="imgURL" validate={required()}/>
+      <TextInput source="title" validate={required()}/>
+      <RichTextInput source="description" validate={required()}/>
+      <DateInput source="startDate" validate={required()}/>
+      <DateInput source="endDate" validate={required()}/>
 
-      <ArrayInput source="items">
+      <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
-          <TextInput source="name" />
-          <NumberInput source="price" />
-          <NumberInput source="priceGuestSingle" />
-          <NumberInput source="priceGuestFamily" />
-          <TimeInput source="serveStartTime"/>
-          <TimeInput source="serveEndTime"/>
+          <TextInput source="name" validate={required()}/>
+          <NumberInput source="price" validate={required()}/>
+          <NumberInput source="priceGuestSingle" validate={required()}/>
+          <NumberInput source="priceGuestFamily" validate={required()}/>
+          <TimeInput source="serveStartTime" validate={required()}/>
+          <TimeInput source="serveEndTime" validate={required()}/>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
@@ -82,19 +83,19 @@ export const EventEdit = () => (
 export const EventCreate = () => (
   <Create>
     <SimpleForm>
-      <TextInput source="imgURL" />
-      <TextInput source="title" />
-      <RichTextInput source="description" />
-      <DateTimeInput source="startDate" />
-      <DateTimeInput source="endDate"  />
-      <ArrayInput source="items">
+      <TextInput source="imgURL" validate={required()}/>
+      <TextInput source="title" validate={required()}/>
+      <RichTextInput source="description" validate={required()}/>
+      <DateTimeInput source="startDate" validate={required()}/>
+      <DateTimeInput source="endDate"  validate={required()}/>
+      <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
-          <TextInput source="name" />
-          <NumberInput source="price" />
-          <NumberInput source="priceGuestSingle" />
-          <NumberInput source="priceGuestFamily" />
-          <TimeInput source="serveStartTime"/>
-          <TimeInput source="serveEndTime"/>
+          <TextInput source="name" validate={required()}/>
+          <NumberInput source="price" validate={required()}/>
+          <NumberInput source="priceGuestSingle" validate={required()}/>
+          <NumberInput source="priceGuestFamily" validate={required()}/>
+          <TimeInput source="serveStartTime" validate={required()}/>
+          <TimeInput source="serveEndTime" validate={required()}/>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 import { Item } from "@/lib/types";
-import { Ticket } from "lucide-react";
+// import { Ticket } from "lucide-react";
 
 import { useSession } from "next-auth/react";
 // import Link from "next/link";
@@ -143,11 +143,11 @@ export default function EventDetailPage() {
 		<div className="p-6 max-w-3xl mx-auto">
 			<Card>
 				<CardContent className="p-4">
-					<img
+					{/* <img
 						src={event.imgURL}
 						alt={event.title}
 						className="w-full object-cover rounded-lg mb-4"
-					/>
+					/> */}
 					<h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
 					<div
 						className="text-muted-foreground mb-4 mt-4 description"
