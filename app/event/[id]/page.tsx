@@ -17,6 +17,8 @@ import { useSession } from "next-auth/react";
 interface Ticket {
 	name: string;
 	price: number;
+	priceGuestSingle: number;
+	priceGuestFamily: number;
 	quantity: number;
 	serveStartTime: string;
 	serveEndTime: string;
@@ -39,6 +41,12 @@ export default function EventDetailPage() {
 	//setting States
 	const [event, setEvent] = useState<Event | null>(null);
 	const [items, setItems] = useState<Item[]>([]);
+	const [guestName, setGuestName] = useState<String>('');
+	const [guestIsFamily, setGuestIsFamily] = useState<boolean>(false);
+	const [guestAdultCount, setGuestAdultCount] = useState<number>(0);
+	const [guestChildCount, setGuestChildCount] = useState<number>(0);
+	const [guestItems, setGuestItems] = useState<Item[]>([]);
+
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [totalPrice, setTotalPrice] = useState(0);
 
@@ -51,13 +59,12 @@ export default function EventDetailPage() {
 			.then((res) => res.json())
 			.then((data) => {
 				if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
-
 				setEvent(data);
 
-        //Setting Items state for Order Object
+        		//Setting Items state for Order Object
 				const items = data.items;
 				const newItems: Item[] = [];
-				items?.forEach((e: Item) => {
+				items?.forEach((e: Ticket) => {
 					const newItem: Item = {
 						name: e.name,
 						quantity: 0,
@@ -70,23 +77,46 @@ export default function EventDetailPage() {
 					setItems(newItems);
 				});
 
-        //Getting Local Storage Items after Redirecting
+
+				const newGuestItems: Item[] = [];
+				items?.forEach((e: Ticket) => {
+					const newItem: Item = {
+						name: e.name,
+						quantity: 0,
+						served: 0,
+						price: e.priceGuestSingle,
+						serveStartTime: e.serveStartTime,
+						serveEndTime: e.serveEndTime,
+					};
+					newItems.push(newItem);
+					setItems(newItems);
+				});
+
+        		//Getting Local Storage Items after Redirecting
 				const savedItems = localStorage.getItem("selectedItems");
 				if (savedItems) {
 					try {
 						const savedItemsJSON = JSON.parse(savedItems);
-						console.log(savedItemsJSON);
 						if (savedItemsJSON && savedItemsJSON.eventID == id) {
+
 							let total = 0;
 							// @ts-expect-error : item will be of type  Item
 							savedItemsJSON.items.forEach((e) => (total += e.quantity * e.price));
+							// @ts-expect-error : item will be of type  Item
+							savedItemsJSON.guestItems.forEach((e) => (total += e.quantity * e.price));
+
 							setTotalPrice(total);
 
 							setItems(savedItemsJSON.items);
+							setGuestName(savedItemsJSON.guestName);
+							setGuestIsFamily(savedItemsJSON.guestIsFamily);
+							setGuestAdultCount(savedItemsJSON.guestAdultCount);
+							setGuestChildCount(savedItemsJSON.guestChildCount);
+							setGuestItems(savedItemsJSON.guestItems);
 							setDialogOpen(true);
 						}
 					} catch (e) {
-						console.error("NO saved items", e);
+						console.error("No saved items", e);
 					}
 				}
 			});
@@ -103,6 +133,11 @@ export default function EventDetailPage() {
 			},
 			body: JSON.stringify({
 				items: items,
+				guestName: guestName,
+				guestIsFamily: guestIsFamily,
+				guestAdultCount: guestAdultCount,
+				guestChildCount: guestChildCount,
+				guestItems: guestItems
 			}),
 		});
 
@@ -118,7 +153,7 @@ export default function EventDetailPage() {
   //Handle pay function when user is not logged in
 	const handleUnloggedPay = async () => {
 		localStorage.removeItem("selectedItems");
-		localStorage.setItem("selectedItems", JSON.stringify({ eventID: event.id, items: items }));
+		localStorage.setItem("selectedItems", JSON.stringify({ eventID: event.id, items: items, guestName: guestName, guestIsFamily: guestIsFamily, guestAdultCount: guestAdultCount, guestChildCount: guestChildCount, guestItems: guestItems}));
 		redirect(`/attendee/login?redirect=${id}`);
 	};
 
