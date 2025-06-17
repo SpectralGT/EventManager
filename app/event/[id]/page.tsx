@@ -18,6 +18,7 @@ import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
 
 import { useSession } from "next-auth/react";
+import { Checkbox } from "@/components/ui/checkbox";
 // import Link from "next/link";
 
 interface Ticket {
@@ -95,8 +96,8 @@ export default function EventDetailPage() {
             serveStartTime: e.serveStartTime,
             serveEndTime: e.serveEndTime,
           };
-          newItems.push(newItem);
-          setItems(newItems);
+          newGuestItems.push(newItem);
+          setGuestItems(newGuestItems);
         });
 
         //Getting Local Storage Items after Redirecting
@@ -215,7 +216,7 @@ export default function EventDetailPage() {
     setGuestItems(newItems);
   };
 
-  const changedGuestIsFamily = (isFamily: boolean) => {
+  const changeGuestIsFamily = (isFamily: boolean) => {
     const newItems = guestItems;
     let guestTotal = 0;
 
@@ -228,10 +229,11 @@ export default function EventDetailPage() {
     }
 
     newItems.forEach((e) => (guestTotal += e.quantity * e.price));
-
-	setGuestIsFamily(isFamily);
+    setGuestIsFamily(isFamily);
     setTotalGuestPrice(guestTotal);
     setGuestItems(newItems);
+
+    console.log(guestName);
   };
 
   return (
@@ -259,7 +261,7 @@ export default function EventDetailPage() {
           </p>
 
           <div className="mt-6 space-y-4">
-            <h2 className="text-xl font-semibold">Select items</h2>
+            <h2 className="text-xl font-semibold">Member Booking</h2>
             {items.map((item) => (
               // <div key={item.name} className="flex items-center gap-4">
               //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
@@ -288,6 +290,80 @@ export default function EventDetailPage() {
                 <Button
                   className="font-extrabold"
                   onClick={() => changeItems(item.name, item.quantity, 1)}
+                >
+                  +
+                </Button>
+              </div>
+              // </div>
+            ))}
+
+            <h2 className="text-xl font-semibold">Guest Booking</h2>
+
+            <Label htmlFor="email">Guest Name</Label>
+            <Input type="text" value={String(guestName)} onChange={(e)=>setGuestName(e.target.value)}></Input>
+
+
+            <div className="flex items-center gap-3">
+              <Checkbox
+                onCheckedChange={(checked: boolean) => {
+                  changeGuestIsFamily(checked);
+                }}
+              ></Checkbox>
+              <Label>Is Guest Family</Label>
+            </div>
+
+            <Label htmlFor="email">Adult Count</Label>
+            <Input
+              type="number"
+              min={0}
+              // defaultValue={0}
+              className="w-24"
+              value={guestAdultCount}
+              onChange={(e) => setGuestAdultCount(Number(e.target.value))}
+            />
+
+            {guestIsFamily && (
+              <>
+                <Label htmlFor="email">Child Count</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  // defaultValue={0}
+                  className="w-24"
+                  value={guestChildCount}
+                  onChange={(e) => setGuestChildCount(Number(e.target.value))}
+                />
+              </>
+            )}
+
+            {guestItems.map((item) => (
+              // <div key={item.name} className="flex items-center gap-4">
+              //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+
+              <div
+                key={item.name}
+                className="flex w-full max-w-sm items-center space-x-2"
+              >
+                <Label className="min-w-[100px] capitalize">
+                  {item.name} - ₹{item.price}
+                </Label>
+                <Button
+                  className="font-extrabold"
+                  onClick={() => changeGuestItems(item.name, item.quantity, -1)}
+                >
+                  -
+                </Button>
+                <Input
+                  type="number"
+                  min={0}
+                  // defaultValue={0}
+                  className="w-24"
+                  value={item.quantity}
+                  onChange={() => changeGuestItems(item.name, item.quantity, 0)}
+                />
+                <Button
+                  className="font-extrabold"
+                  onClick={() => changeGuestItems(item.name, item.quantity, 1)}
                 >
                   +
                 </Button>
