@@ -7,13 +7,15 @@ import { Item, OrderByID } from "@/lib/types";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import QRCode from "react-qr-code";
+import { useQRCode } from 'next-qrcode';
 
 export default function Order() {
   const { id } = useParams();
 
   const [order, setOrder] = useState<OrderByID | null>(null);
   const [total, setTotal] = useState<number>(0);
+
+  const { Canvas } = useQRCode();
 
   useEffect(() => {
     fetch(`/api/attendee/order/${id}`) // assumes API route returns order
@@ -36,7 +38,22 @@ export default function Order() {
   return (
     <div className="p-6">
       <div className="p-6 bg-white">
-        <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} />
+        {/* <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} /> */}
+        
+        <Canvas
+      text={`${order.id}`}
+      options={{
+        errorCorrectionLevel: 'M',
+        margin: 3,
+        scale: 4,
+        width: 200,
+        color: {
+          dark: '#010599FF',
+          light: '#FFBF60FF',
+        },
+      }}
+    />
+      
       </div>
 
       <h1 className="text-2xl font-bold mt-10">
