@@ -1,13 +1,20 @@
 "use client";
 
 import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { Item, OrderByID } from "@/lib/types";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { useQRCode } from 'next-qrcode';
+import { useQRCode } from "next-qrcode";
 
 export default function Order() {
   const { id } = useParams();
@@ -15,7 +22,7 @@ export default function Order() {
   const [order, setOrder] = useState<OrderByID | null>(null);
   const [total, setTotal] = useState<number>(0);
 
-  const { Canvas } = useQRCode();
+  const { SVG } = useQRCode();
 
   useEffect(() => {
     fetch(`/api/attendee/order/${id}`) // assumes API route returns order
@@ -25,7 +32,7 @@ export default function Order() {
 
         if (data && data.items) {
           let sum = 0;
-          data.items.forEach((item:Item) => {
+          data.items.forEach((item: Item) => {
             sum += item.quantity * item.price;
           });
           setTotal(sum);
@@ -37,23 +44,23 @@ export default function Order() {
 
   return (
     <div className="p-6">
-      <div className="p-6 bg-white">
+      <div className="bg-white">
         {/* <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} /> */}
-        
-        <Canvas
-      text={`${order.id}`}
-      options={{
-        errorCorrectionLevel: 'M',
-        margin: 3,
-        scale: 4,
-        width: 200,
-        color: {
-          dark: '#010599FF',
-          light: '#FFBF60FF',
-        },
-      }}
-    />
-      
+        {/* Canvas styles are in the global stylesheet */}
+        <SVG 
+          text={`${order.id}`}
+          options={{
+            errorCorrectionLevel: "M",
+            // margin: 4,
+            // scale: 4,
+            // width: 256,
+            
+            color: {
+              dark: "#000000",
+              light: "#FFFFFF",
+            },
+          }}
+        />
       </div>
 
       <h1 className="text-2xl font-bold mt-10">
@@ -85,8 +92,14 @@ export default function Order() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
-                  <TableCell>{item.served}{" / "}{item.quantity}</TableCell>
-                  <TableCell className="text-right">{item.price * item.quantity}</TableCell>
+                  <TableCell>
+                    {item.served}
+                    {" / "}
+                    {item.quantity}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {item.price * item.quantity}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
