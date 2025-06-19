@@ -104,7 +104,7 @@ export async function POST(
       guestIsFamily: guestIsFamily,
       guestAdultCount: guestAdultCount,
       guestChildCount: guestChildCount,
-      geustItems: guestItems,
+      guestItems: guestItems,
     };
 
     console.log(newOrder);

@@ -21,8 +21,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         id: true,
         attendeeId: true,
         eventId: true,
-        memberItems: true,
         createdAt: true,
+        memberItems: true,
+        isGuestOrder: true,
+        guestName: true,
+        guestIsFamily:true,
+        guestAdultCount: true,
+        guestChildCount: true,
+        guestItems:true
       },
     });
 
@@ -42,7 +48,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       eventTitle: eventTitle ? eventTitle.title : "null",
       createdAt: order.createdAt.toDateString(),
       // @ts-expect-error : items can be anything
-      items: order.items,
+      memberItems: order.memberItems,
+      isGuestOrder: order.isGuestOrder,
+      guestName: order.guestName,
+      guestIsFamily: order.guestIsFamily,
+      guestAdultCount: order.guestAdultCount,
+      guestChildCount: order.guestChildCount,
+      // @ts-expect-error : items can be anything
+      guestItems: order.guestItems
     };
 
     // returning the new Order object

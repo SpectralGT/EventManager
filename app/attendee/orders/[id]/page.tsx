@@ -30,9 +30,9 @@ export default function Order() {
       .then((data) => {
         setOrder(data);
 
-        if (data && data.items) {
+        if (data && data.memberItems) {
           let sum = 0;
-          data.items.forEach((item: Item) => {
+          data.memberItems.forEach((item: Item) => {
             sum += item.quantity * item.price;
           });
           setTotal(sum);
@@ -47,14 +47,14 @@ export default function Order() {
       <div className="bg-white">
         {/* <QRCode size={256} style={{ height: "auto", maxWidth: "100%", width: "100%" }} value={`${order.id}`} viewBox={`0 0 256 256`} /> */}
         {/* Canvas styles are in the global stylesheet */}
-        <SVG 
+        <SVG
           text={`${order.id}`}
           options={{
             errorCorrectionLevel: "M",
             // margin: 4,
             // scale: 4,
             // width: 256,
-            
+
             color: {
               dark: "#000000",
               light: "#FFFFFF",
@@ -74,7 +74,7 @@ export default function Order() {
 
       <h1 className="text-2xl font-bold mb-4 mt-5 text-center">Items</h1>
       <div className="flex flex-col gap-6">
-        {order.items ? (
+        {order.memberItems ? (
           <Table>
             <TableHeader>
               <TableRow className="text-lg">
@@ -87,7 +87,7 @@ export default function Order() {
             </TableHeader>
 
             <TableBody>
-              {order.items.map((item) => (
+              {order.memberItems.map((item) => (
                 <TableRow key={item.name}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.price}</TableCell>
@@ -108,6 +108,65 @@ export default function Order() {
           <div> No Items </div>
         )}
       </div>
+
+      { order.isGuestOrder && <>
+      <Separator />
+      
+        <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
+          Guest Booking
+        </h1>
+
+        <h1 className="text-2xl font-bold mb-4">
+          Guest Name : <span className="text-primary">{order.guestName}</span>
+        </h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Guest Adult Count :{" "}
+          <span className="text-primary">{order.guestAdultCount}</span>
+        </h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Guest Child Count :{" "}
+          <span className="text-primary">{order.guestChildCount}</span>
+        </h1>
+
+        <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
+          Guest Items
+        </h1>
+        <div className="flex flex-col gap-6">
+          {order.guestItems ? (
+            <Table>
+              <TableHeader>
+                <TableRow className="text-lg">
+                  <TableHead className="">Item</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Qty</TableHead>
+                  <TableHead>Served</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {order.guestItems.map((item) => (
+                  <TableRow key={item.name}>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.price}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>
+                      {item.served}
+                      {" / "}
+                      {item.quantity}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {item.price * item.quantity}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div> No Items </div>
+          )}
+        </div>
+      </>}
     </div>
   );
 }
