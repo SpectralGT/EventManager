@@ -10,7 +10,7 @@ async function getNewOrders(
     id: string;
     attendeeId: string;
     eventId: string;
-    items: Prisma.JsonValue;
+    memberItems: Prisma.JsonValue;
     createdAt: Date;
   }[]
 ) {
@@ -62,7 +62,7 @@ export async function GET(req: NextRequest) {
         id: true,
         attendeeId: true,
         eventId: true,
-        items: true,
+        memberItems: true,
         createdAt: true,
       },
     });

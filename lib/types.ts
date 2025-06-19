@@ -17,7 +17,12 @@ export interface Item{
 export interface Order{
   attendeeId : string;
   eventId : string;
-  items : Item[];
+  memberItems : Item[];
+  guestName : string;
+  guestIsFamily: boolean;
+  guestAdultCount: number;
+  guestChildCount: number;
+  geustItems : Item[];
 }
 
 export interface OrderByID{
@@ -35,7 +40,7 @@ export interface AttendeeOrder{
   attendeeId : string;
   eventId : string;
   eventTitle : string;
-  items : Item[];
+  memberItems : Item[];
   createdAt : string;
 }
 

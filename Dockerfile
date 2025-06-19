@@ -1,8 +1,11 @@
-FROM node:24-alpine
+FROM node:24-slim
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+COPY package.json .
+COPY package-lock.json .
+
+# RUN npm config set registry https://registry.npmjs.org/
+RUN yarn install
 
 COPY . .
 
@@ -14,4 +17,4 @@ COPY . .
 
 # EXPOSE 3000
 
-CMD ["sh", "-c", "npm run db:deploy && npm run dev"]
+CMD ["yarn", "run", "dev"]

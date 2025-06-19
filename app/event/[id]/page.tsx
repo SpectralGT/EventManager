@@ -14,11 +14,13 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+
 import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
 
 import { useSession } from "next-auth/react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { set } from "date-fns";
 // import Link from "next/link";
 
 interface Ticket {
@@ -140,13 +142,23 @@ export default function EventDetailPage() {
 
   //Handle pay when user is loged in and clicks on Confirm Button
   const handlePay = async () => {
+
+    if(!guestIsFamily) setGuestChildCount(0);
+
+    console.log({memberItems: items,
+        guestName: guestName,
+        guestIsFamily: guestIsFamily,
+        guestAdultCount: guestAdultCount,
+        guestChildCount: guestChildCount,
+        guestItems: guestItems,});
+
     const res = await fetch(`/api/event/${event.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        items: items,
+        memberItems: items,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,
@@ -232,8 +244,6 @@ export default function EventDetailPage() {
     setGuestIsFamily(isFamily);
     setTotalGuestPrice(guestTotal);
     setGuestItems(newItems);
-
-    console.log(guestName);
   };
 
   return (
@@ -245,6 +255,7 @@ export default function EventDetailPage() {
 						alt={event.title}
 						className="w-full object-cover rounded-lg mb-4"
 					/> */}
+
           <h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
           <div
             className="text-muted-foreground mb-4 mt-4 description"

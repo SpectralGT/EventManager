@@ -21,7 +21,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         id: true,
         attendeeId: true,
         eventId: true,
-        items: true,
+        memberItems: true,
         createdAt: true,
       },
     });

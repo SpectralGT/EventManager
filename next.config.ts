@@ -13,10 +13,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: false,
   },
 
- webpack: (config) => {
-    config.resolve.alias['@radix-ui/react-select'] = path.resolve(__dirname, 'node_modules/@radix-ui/react-accordion');
-    return config;
-  },
+  compilerOptions: {
+    moduleResolution: "Bundler",
+    module: "ESNext",
+  }
 
 };
 

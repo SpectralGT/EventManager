@@ -5,9 +5,10 @@ import { NextRequestWithAuth } from "next-auth/middleware";
 import { Item, Order } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 
-
-
-export async function GET(req: NextRequest,{ params }: { params: Promise<{ id: string }>}) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const id = (await params).id;
 
   try {
@@ -30,11 +31,17 @@ export async function GET(req: NextRequest,{ params }: { params: Promise<{ id: s
 
     return NextResponse.json(event);
   } catch {
-    return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch event" },
+      { status: 500 }
+    );
   }
 }
 
-export async function POST(req: NextRequestWithAuth, { params }: { params: Promise<{ id: string }>}) {
+export async function POST(
+  req: NextRequestWithAuth,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const param = await params;
     const body = await req.json();
@@ -43,18 +50,25 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: Promi
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
-    const items: Item[] = body.items;
+    const memberItems: Item[] = body.memberItems;
+    const guestName: string = body.guestName;
+    const guestIsFamily: boolean = body.guestIsFamily;
+    const guestAdultCount: number = body.guestAdultCount;
+    let guestChildCount: number = body.guestChildCount;
+    const guestItems: Item[] = body.guestItems;
 
-    items.forEach((e) => (e.served = 0));
 
+    if(!guestIsFamily){guestChildCount = 0};
+
+    memberItems.forEach((e) => (e.served = 0));
+    guestItems.forEach((e) => (e.served = 0));
     let total = 0;
 
-    items.forEach(item=>{
-      total+=item.quantity*item.price;
-    })
+    memberItems.forEach((item) => {
+      total += item.quantity * item.price;
+    });
 
-
-    if (!items) {
+    if (!memberItems) {
       return NextResponse.json({ error: "Missing items" }, { status: 400 });
     }
 
@@ -63,8 +77,7 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: Promi
     });
 
     if (!event) {
-      console.log('event');
-      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
     const attendee = await prisma.attendee.findUnique({
@@ -72,9 +85,10 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: Promi
     });
 
     if (!attendee) {
-      console.log('event2');
-
-      return NextResponse.json({ error: 'Attendee not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: "Attendee not found" },
+        { status: 404 }
+      );
     }
 
     const id = param.id;
@@ -82,7 +96,12 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: Promi
     const newOrder: Order = {
       attendeeId: attendeeId,
       eventId: id,
-      items: items,
+      memberItems: memberItems,
+      guestName: guestName,
+      guestIsFamily: guestIsFamily,
+      guestAdultCount: guestAdultCount,
+      guestChildCount: guestChildCount,
+      geustItems: guestItems,
     };
 
     console.log(newOrder);
@@ -90,25 +109,34 @@ export async function POST(req: NextRequestWithAuth, { params }: { params: Promi
     // Save order
     await prisma.order.create({
       data: {
-    attendeeId:attendeeId,
-    eventId:id,
-    // @ts-expect-error : items can be anythin
-    items:items
-      }
+        attendeeId: attendeeId,
+        eventId: id,
+        // @ts-expect-error : items can be anythin
+        memberItems: memberItems,
+        guestName: guestName,
+        guestIsFamily: guestIsFamily,
+        guestAdultCount: guestAdultCount,
+        guestChildCount: guestChildCount,
+        // @ts-expect-error : items can be anythin
+        guestItems: guestItems,
+      },
     });
 
-
     await prisma.attendee.update({
-      where:{id:attendeeId},
-      data:{
-        balance:{
-          decrement:total,
-        }
-      }
-    })
+      where: { id: attendeeId },
+      data: {
+        balance: {
+          decrement: total,
+        },
+      },
+    });
 
     return NextResponse.json(newOrder);
-  } catch{
-    return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
+  } catch(error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to create order" },
+      { status: 500 }
+    );
   }
 }
