@@ -159,6 +159,7 @@ exports.Prisma.OrderScalarFieldEnum = {
   attendeeId: 'attendeeId',
   eventId: 'eventId',
   memberItems: 'memberItems',
+  isGuestOrder: 'isGuestOrder',
   guestName: 'guestName',
   guestIsFamily: 'guestIsFamily',
   guestAdultCount: 'guestAdultCount',

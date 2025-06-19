@@ -18,6 +18,7 @@ export interface Order{
   attendeeId : string;
   eventId : string;
   memberItems : Item[];
+  isGuestOrder : boolean;
   guestName : string;
   guestIsFamily: boolean;
   guestAdultCount: number;

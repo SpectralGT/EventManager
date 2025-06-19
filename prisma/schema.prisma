@@ -82,6 +82,7 @@ model Order {
   // days are array of FoodItems
   // FoodItems are array of price and amount of items
 
+  isGuestOrder Boolean @default(false)
   guestName String
   guestIsFamily Boolean @default(false)
   guestAdultCount Int

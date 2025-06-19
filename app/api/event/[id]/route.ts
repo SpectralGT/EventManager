@@ -50,15 +50,17 @@ export async function POST(
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
-    const memberItems: Item[] = body.memberItems;
-    const guestName: string = body.guestName;
-    const guestIsFamily: boolean = body.guestIsFamily;
-    const guestAdultCount: number = body.guestAdultCount;
+    let memberItems: Item[] = body.memberItems;
+    let isGuestOrder: boolean = body.isGuestOrder;
+    let guestName: string = body.guestName;
+    let guestIsFamily: boolean = body.guestIsFamily;
+    let guestAdultCount: number = body.guestAdultCount;
     let guestChildCount: number = body.guestChildCount;
-    const guestItems: Item[] = body.guestItems;
+    let guestItems: Item[] = body.guestItems;
 
 
     if(!guestIsFamily){guestChildCount = 0};
+    if(!isGuestOrder){guestName='';guestIsFamily=false;guestAdultCount=0;guestChildCount=0;guestItems=[]};
 
     memberItems.forEach((e) => (e.served = 0));
     guestItems.forEach((e) => (e.served = 0));
@@ -97,6 +99,7 @@ export async function POST(
       attendeeId: attendeeId,
       eventId: id,
       memberItems: memberItems,
+      isGuestOrder: isGuestOrder,
       guestName: guestName,
       guestIsFamily: guestIsFamily,
       guestAdultCount: guestAdultCount,
@@ -113,6 +116,7 @@ export async function POST(
         eventId: id,
         // @ts-expect-error : items can be anythin
         memberItems: memberItems,
+        isGuestOrder: isGuestOrder,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,

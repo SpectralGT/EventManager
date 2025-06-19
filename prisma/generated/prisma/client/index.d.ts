@@ -5506,6 +5506,7 @@ export namespace Prisma {
     id: string | null
     attendeeId: string | null
     eventId: string | null
+    isGuestOrder: boolean | null
     guestName: string | null
     guestIsFamily: boolean | null
     guestAdultCount: number | null
@@ -5517,6 +5518,7 @@ export namespace Prisma {
     id: string | null
     attendeeId: string | null
     eventId: string | null
+    isGuestOrder: boolean | null
     guestName: string | null
     guestIsFamily: boolean | null
     guestAdultCount: number | null
@@ -5529,6 +5531,7 @@ export namespace Prisma {
     attendeeId: number
     eventId: number
     memberItems: number
+    isGuestOrder: number
     guestName: number
     guestIsFamily: number
     guestAdultCount: number
@@ -5553,6 +5556,7 @@ export namespace Prisma {
     id?: true
     attendeeId?: true
     eventId?: true
+    isGuestOrder?: true
     guestName?: true
     guestIsFamily?: true
     guestAdultCount?: true
@@ -5564,6 +5568,7 @@ export namespace Prisma {
     id?: true
     attendeeId?: true
     eventId?: true
+    isGuestOrder?: true
     guestName?: true
     guestIsFamily?: true
     guestAdultCount?: true
@@ -5576,6 +5581,7 @@ export namespace Prisma {
     attendeeId?: true
     eventId?: true
     memberItems?: true
+    isGuestOrder?: true
     guestName?: true
     guestIsFamily?: true
     guestAdultCount?: true
@@ -5676,6 +5682,7 @@ export namespace Prisma {
     attendeeId: string
     eventId: string
     memberItems: JsonValue
+    isGuestOrder: boolean
     guestName: string
     guestIsFamily: boolean
     guestAdultCount: number
@@ -5708,6 +5715,7 @@ export namespace Prisma {
     attendeeId?: boolean
     eventId?: boolean
     memberItems?: boolean
+    isGuestOrder?: boolean
     guestName?: boolean
     guestIsFamily?: boolean
     guestAdultCount?: boolean
@@ -5723,6 +5731,7 @@ export namespace Prisma {
     attendeeId?: boolean
     eventId?: boolean
     memberItems?: boolean
+    isGuestOrder?: boolean
     guestName?: boolean
     guestIsFamily?: boolean
     guestAdultCount?: boolean
@@ -5738,6 +5747,7 @@ export namespace Prisma {
     attendeeId?: boolean
     eventId?: boolean
     memberItems?: boolean
+    isGuestOrder?: boolean
     guestName?: boolean
     guestIsFamily?: boolean
     guestAdultCount?: boolean
@@ -5753,6 +5763,7 @@ export namespace Prisma {
     attendeeId?: boolean
     eventId?: boolean
     memberItems?: boolean
+    isGuestOrder?: boolean
     guestName?: boolean
     guestIsFamily?: boolean
     guestAdultCount?: boolean
@@ -5761,7 +5772,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "attendeeId" | "eventId" | "memberItems" | "guestName" | "guestIsFamily" | "guestAdultCount" | "guestChildCount" | "guestItems" | "createdAt", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "attendeeId" | "eventId" | "memberItems" | "isGuestOrder" | "guestName" | "guestIsFamily" | "guestAdultCount" | "guestChildCount" | "guestItems" | "createdAt", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Attendee?: boolean | AttendeeDefaultArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -5786,6 +5797,7 @@ export namespace Prisma {
       attendeeId: string
       eventId: string
       memberItems: Prisma.JsonValue
+      isGuestOrder: boolean
       guestName: string
       guestIsFamily: boolean
       guestAdultCount: number
@@ -6221,6 +6233,7 @@ export namespace Prisma {
     readonly attendeeId: FieldRef<"Order", 'String'>
     readonly eventId: FieldRef<"Order", 'String'>
     readonly memberItems: FieldRef<"Order", 'Json'>
+    readonly isGuestOrder: FieldRef<"Order", 'Boolean'>
     readonly guestName: FieldRef<"Order", 'String'>
     readonly guestIsFamily: FieldRef<"Order", 'Boolean'>
     readonly guestAdultCount: FieldRef<"Order", 'Int'>
@@ -6706,6 +6719,7 @@ export namespace Prisma {
     attendeeId: 'attendeeId',
     eventId: 'eventId',
     memberItems: 'memberItems',
+    isGuestOrder: 'isGuestOrder',
     guestName: 'guestName',
     guestIsFamily: 'guestIsFamily',
     guestAdultCount: 'guestAdultCount',
@@ -7068,6 +7082,7 @@ export namespace Prisma {
     attendeeId?: StringFilter<"Order"> | string
     eventId?: StringFilter<"Order"> | string
     memberItems?: JsonFilter<"Order">
+    isGuestOrder?: BoolFilter<"Order"> | boolean
     guestName?: StringFilter<"Order"> | string
     guestIsFamily?: BoolFilter<"Order"> | boolean
     guestAdultCount?: IntFilter<"Order"> | number
@@ -7083,6 +7098,7 @@ export namespace Prisma {
     attendeeId?: SortOrder
     eventId?: SortOrder
     memberItems?: SortOrder
+    isGuestOrder?: SortOrder
     guestName?: SortOrder
     guestIsFamily?: SortOrder
     guestAdultCount?: SortOrder
@@ -7101,6 +7117,7 @@ export namespace Prisma {
     attendeeId?: StringFilter<"Order"> | string
     eventId?: StringFilter<"Order"> | string
     memberItems?: JsonFilter<"Order">
+    isGuestOrder?: BoolFilter<"Order"> | boolean
     guestName?: StringFilter<"Order"> | string
     guestIsFamily?: BoolFilter<"Order"> | boolean
     guestAdultCount?: IntFilter<"Order"> | number
@@ -7116,6 +7133,7 @@ export namespace Prisma {
     attendeeId?: SortOrder
     eventId?: SortOrder
     memberItems?: SortOrder
+    isGuestOrder?: SortOrder
     guestName?: SortOrder
     guestIsFamily?: SortOrder
     guestAdultCount?: SortOrder
@@ -7137,6 +7155,7 @@ export namespace Prisma {
     attendeeId?: StringWithAggregatesFilter<"Order"> | string
     eventId?: StringWithAggregatesFilter<"Order"> | string
     memberItems?: JsonWithAggregatesFilter<"Order">
+    isGuestOrder?: BoolWithAggregatesFilter<"Order"> | boolean
     guestName?: StringWithAggregatesFilter<"Order"> | string
     guestIsFamily?: BoolWithAggregatesFilter<"Order"> | boolean
     guestAdultCount?: IntWithAggregatesFilter<"Order"> | number
@@ -7394,6 +7413,7 @@ export namespace Prisma {
   export type OrderCreateInput = {
     id?: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -7409,6 +7429,7 @@ export namespace Prisma {
     attendeeId: string
     eventId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -7420,6 +7441,7 @@ export namespace Prisma {
   export type OrderUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -7435,6 +7457,7 @@ export namespace Prisma {
     attendeeId?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -7448,6 +7471,7 @@ export namespace Prisma {
     attendeeId: string
     eventId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -7459,6 +7483,7 @@ export namespace Prisma {
   export type OrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -7472,6 +7497,7 @@ export namespace Prisma {
     attendeeId?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -7746,6 +7772,7 @@ export namespace Prisma {
     attendeeId?: SortOrder
     eventId?: SortOrder
     memberItems?: SortOrder
+    isGuestOrder?: SortOrder
     guestName?: SortOrder
     guestIsFamily?: SortOrder
     guestAdultCount?: SortOrder
@@ -7763,6 +7790,7 @@ export namespace Prisma {
     id?: SortOrder
     attendeeId?: SortOrder
     eventId?: SortOrder
+    isGuestOrder?: SortOrder
     guestName?: SortOrder
     guestIsFamily?: SortOrder
     guestAdultCount?: SortOrder
@@ -7774,6 +7802,7 @@ export namespace Prisma {
     id?: SortOrder
     attendeeId?: SortOrder
     eventId?: SortOrder
+    isGuestOrder?: SortOrder
     guestName?: SortOrder
     guestIsFamily?: SortOrder
     guestAdultCount?: SortOrder
@@ -8065,6 +8094,7 @@ export namespace Prisma {
   export type OrderCreateWithoutAttendeeInput = {
     id?: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8078,6 +8108,7 @@ export namespace Prisma {
     id?: string
     eventId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8120,6 +8151,7 @@ export namespace Prisma {
     attendeeId?: StringFilter<"Order"> | string
     eventId?: StringFilter<"Order"> | string
     memberItems?: JsonFilter<"Order">
+    isGuestOrder?: BoolFilter<"Order"> | boolean
     guestName?: StringFilter<"Order"> | string
     guestIsFamily?: BoolFilter<"Order"> | boolean
     guestAdultCount?: IntFilter<"Order"> | number
@@ -8131,6 +8163,7 @@ export namespace Prisma {
   export type OrderCreateWithoutEventInput = {
     id?: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8144,6 +8177,7 @@ export namespace Prisma {
     id?: string
     attendeeId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8294,6 +8328,7 @@ export namespace Prisma {
     id?: string
     eventId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8305,6 +8340,7 @@ export namespace Prisma {
   export type OrderUpdateWithoutAttendeeInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -8318,6 +8354,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -8330,6 +8367,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     eventId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -8342,6 +8380,7 @@ export namespace Prisma {
     id?: string
     attendeeId: string
     memberItems: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: boolean
     guestName: string
     guestIsFamily?: boolean
     guestAdultCount: number
@@ -8353,6 +8392,7 @@ export namespace Prisma {
   export type OrderUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -8366,6 +8406,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     attendeeId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number
@@ -8378,6 +8419,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     attendeeId?: StringFieldUpdateOperationsInput | string
     memberItems?: JsonNullValueInput | InputJsonValue
+    isGuestOrder?: BoolFieldUpdateOperationsInput | boolean
     guestName?: StringFieldUpdateOperationsInput | string
     guestIsFamily?: BoolFieldUpdateOperationsInput | boolean
     guestAdultCount?: IntFieldUpdateOperationsInput | number

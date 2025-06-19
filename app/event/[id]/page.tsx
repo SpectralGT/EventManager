@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
@@ -50,6 +50,7 @@ export default function EventDetailPage() {
   //setting States
   const [event, setEvent] = useState<Event | null>(null);
   const [items, setItems] = useState<Item[]>([]);
+  const [isGuestOrder, setIsGuestOrder] = useState<boolean>(false);
   const [guestName, setGuestName] = useState<String>("");
   const [guestIsFamily, setGuestIsFamily] = useState<boolean>(false);
   const [guestAdultCount, setGuestAdultCount] = useState<number>(0);
@@ -123,7 +124,8 @@ export default function EventDetailPage() {
               setTotalPrice(total);
               setTotalGuestPrice(guestTotal);
 
-              setItems(savedItemsJSON.items);
+              setItems(savedItemsJSON.memberItems);
+              setIsGuestOrder(savedItemsJSON.isGuestOrder);
               setGuestName(savedItemsJSON.guestName);
               setGuestIsFamily(savedItemsJSON.guestIsFamily);
               setGuestAdultCount(savedItemsJSON.guestAdultCount);
@@ -142,15 +144,22 @@ export default function EventDetailPage() {
 
   //Handle pay when user is loged in and clicks on Confirm Button
   const handlePay = async () => {
-
-    if(!guestIsFamily) setGuestChildCount(0);
-
-    console.log({memberItems: items,
-        guestName: guestName,
-        guestIsFamily: guestIsFamily,
-        guestAdultCount: guestAdultCount,
-        guestChildCount: guestChildCount,
-        guestItems: guestItems,});
+    if (!guestIsFamily) setGuestChildCount(0);
+    if (!isGuestOrder) {
+      setGuestName("");
+      setGuestIsFamily(false);
+      setGuestAdultCount(0), setGuestChildCount(0);
+      setGuestItems([]);
+    }
+    console.log({
+      memberItems: items,
+      isGuestOrder: isGuestOrder,
+      guestName: guestName,
+      guestIsFamily: guestIsFamily,
+      guestAdultCount: guestAdultCount,
+      guestChildCount: guestChildCount,
+      guestItems: guestItems,
+    });
 
     const res = await fetch(`/api/event/${event.id}`, {
       method: "POST",
@@ -159,6 +168,7 @@ export default function EventDetailPage() {
       },
       body: JSON.stringify({
         memberItems: items,
+        isGuestOrder: isGuestOrder,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,
@@ -182,7 +192,7 @@ export default function EventDetailPage() {
       "selectedItems",
       JSON.stringify({
         eventID: event.id,
-        items: items,
+        memberItems: items,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,
@@ -256,143 +266,198 @@ export default function EventDetailPage() {
 						className="w-full object-cover rounded-lg mb-4"
 					/> */}
 
-          <h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
-          <div
-            className="text-muted-foreground mb-4 mt-4 description"
-            dangerouslySetInnerHTML={{
-              __html: `<div> ${event.description} </div>`,
-            }}
-          ></div>
-
-          <p>
-            <strong>Start:</strong> {new Date(event.startDate).toLocaleString()}
-          </p>
-          <p>
-            <strong>End:</strong> {new Date(event.endDate).toLocaleString()}
-          </p>
-
-          <div className="mt-6 space-y-4">
-            <h2 className="text-xl font-semibold">Member Booking</h2>
-            {items.map((item) => (
-              // <div key={item.name} className="flex items-center gap-4">
-              //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
-
+          <Tabs defaultValue="info" className="w-[400px]">
+            <TabsList>
+              <TabsTrigger value="info">Info</TabsTrigger>
+              <TabsTrigger value="booking">Booking</TabsTrigger>
+            </TabsList>
+            <TabsContent value="info">
+              <h1 className="text-center text-4xl font-bold mb-2">
+                {event.title}
+              </h1>
               <div
-                key={item.name}
-                className="flex w-full max-w-sm items-center space-x-2"
-              >
-                <Label className="min-w-[100px] capitalize">
-                  {item.name} - ₹{item.price}
-                </Label>
-                <Button
-                  className="font-extrabold"
-                  onClick={() => changeItems(item.name, item.quantity, -1)}
-                >
-                  -
-                </Button>
-                <Input
-                  type="number"
-                  min={0}
-                  // defaultValue={0}
-                  className="w-24"
-                  value={item.quantity}
-                  onChange={() => changeItems(item.name, item.quantity, 0)}
-                />
-                <Button
-                  className="font-extrabold"
-                  onClick={() => changeItems(item.name, item.quantity, 1)}
-                >
-                  +
-                </Button>
-              </div>
-              // </div>
-            ))}
-
-            <h2 className="text-xl font-semibold">Guest Booking</h2>
-
-            <Label htmlFor="email">Guest Name</Label>
-            <Input type="text" value={String(guestName)} onChange={(e)=>setGuestName(e.target.value)}></Input>
-
-
-            <div className="flex items-center gap-3">
-              <Checkbox
-                onCheckedChange={(checked: boolean) => {
-                  changeGuestIsFamily(checked);
+                className="text-muted-foreground mb-4 mt-4 description"
+                dangerouslySetInnerHTML={{
+                  __html: `<div> ${event.description} </div>`,
                 }}
-              ></Checkbox>
-              <Label>Is Guest Family</Label>
-            </div>
+              ></div>
 
-            <Label htmlFor="email">Adult Count</Label>
-            <Input
-              type="number"
-              min={0}
-              // defaultValue={0}
-              className="w-24"
-              value={guestAdultCount}
-              onChange={(e) => setGuestAdultCount(Number(e.target.value))}
-            />
+              <p>
+                <strong>Start:</strong>{" "}
+                {new Date(event.startDate).toLocaleString()}
+              </p>
+              <p>
+                <strong>End:</strong> {new Date(event.endDate).toLocaleString()}
+              </p>
+            </TabsContent>
+            <TabsContent value="booking">
+              <div className="mt-6 space-y-4">
+                <Tabs defaultValue="memberBooking" className="w-[400px]">
+                  <TabsList>
+                    <TabsTrigger value="memberBooking">Member</TabsTrigger>
+                    {isGuestOrder && (
+                      <TabsTrigger value="guestBooking">Guest</TabsTrigger>
+                    )}
+                  </TabsList>
+                  <TabsContent value="memberBooking">
+                    <div className="mt-6 space-y-4">
+                      <h2 className="text-xl font-semibold">Member Booking</h2>
+                      {items.map((item) => (
+                        // <div key={item.name} className="flex items-center gap-4">
+                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
 
-            {guestIsFamily && (
-              <>
-                <Label htmlFor="email">Child Count</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  // defaultValue={0}
-                  className="w-24"
-                  value={guestChildCount}
-                  onChange={(e) => setGuestChildCount(Number(e.target.value))}
-                />
-              </>
-            )}
+                        <div
+                          key={item.name}
+                          className="flex w-full max-w-sm items-center space-x-2"
+                        >
+                          <Label className="min-w-[100px] capitalize">
+                            {item.name} - ₹{item.price}
+                          </Label>
+                          <Button
+                            className="font-extrabold"
+                            onClick={() =>
+                              changeItems(item.name, item.quantity, -1)
+                            }
+                          >
+                            -
+                          </Button>
+                          <Input
+                            type="number"
+                            min={0}
+                            // defaultValue={0}
+                            className="w-24"
+                            value={item.quantity}
+                            onChange={() =>
+                              changeItems(item.name, item.quantity, 0)
+                            }
+                          />
+                          <Button
+                            className="font-extrabold"
+                            onClick={() =>
+                              changeItems(item.name, item.quantity, 1)
+                            }
+                          >
+                            +
+                          </Button>
+                        </div>
+                        // </div>
+                      ))}
 
-            {guestItems.map((item) => (
-              // <div key={item.name} className="flex items-center gap-4">
-              //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          onCheckedChange={(checked: boolean) => {
+                            setIsGuestOrder(checked);
+                          }}
+                        ></Checkbox>
+                        <Label>Guest Booking</Label>
+                      </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="guestBooking">
+                    <div className="mt-6 space-y-4">
+                      <h2 className="text-xl font-semibold">Guest Booking</h2>
 
-              <div
-                key={item.name}
-                className="flex w-full max-w-sm items-center space-x-2"
-              >
-                <Label className="min-w-[100px] capitalize">
-                  {item.name} - ₹{item.price}
-                </Label>
+                      <Label htmlFor="email">Guest Name</Label>
+                      <Input
+                        type="text"
+                        value={String(guestName)}
+                        onChange={(e) => setGuestName(e.target.value)}
+                      ></Input>
+
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          onCheckedChange={(checked: boolean) => {
+                            changeGuestIsFamily(checked);
+                          }}
+                        ></Checkbox>
+                        <Label>Is Guest Family</Label>
+                      </div>
+
+                      <Label htmlFor="email">Adult Count</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        // defaultValue={0}
+                        className="w-24"
+                        value={guestAdultCount}
+                        onChange={(e) =>
+                          setGuestAdultCount(Number(e.target.value))
+                        }
+                      />
+
+                      {guestIsFamily && (
+                        <>
+                          <Label htmlFor="email">Child Count</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            // defaultValue={0}
+                            className="w-24"
+                            value={guestChildCount}
+                            onChange={(e) =>
+                              setGuestChildCount(Number(e.target.value))
+                            }
+                          />
+                        </>
+                      )}
+
+                      {guestItems.map((item) => (
+                        // <div key={item.name} className="flex items-center gap-4">
+                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+
+                        <div
+                          key={item.name}
+                          className="flex w-full max-w-sm items-center space-x-2"
+                        >
+                          <Label className="min-w-[100px] capitalize">
+                            {item.name} - ₹{item.price}
+                          </Label>
+                          <Button
+                            className="font-extrabold"
+                            onClick={() =>
+                              changeGuestItems(item.name, item.quantity, -1)
+                            }
+                          >
+                            -
+                          </Button>
+                          <Input
+                            type="number"
+                            min={0}
+                            // defaultValue={0}
+                            className="w-24"
+                            value={item.quantity}
+                            onChange={() =>
+                              changeGuestItems(item.name, item.quantity, 0)
+                            }
+                          />
+                          <Button
+                            className="font-extrabold"
+                            onClick={() =>
+                              changeGuestItems(item.name, item.quantity, 1)
+                            }
+                          >
+                            +
+                          </Button>
+                        </div>
+                        // </div>
+                      ))}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              <div className="mt-6">
+                <p className="font-extrabold">Total Price: ₹{totalPrice}</p>
                 <Button
-                  className="font-extrabold"
-                  onClick={() => changeGuestItems(item.name, item.quantity, -1)}
+                  disabled={totalPrice === 0}
+                  className="mt-2"
+                  onClick={() => setDialogOpen(true)}
                 >
-                  -
-                </Button>
-                <Input
-                  type="number"
-                  min={0}
-                  // defaultValue={0}
-                  className="w-24"
-                  value={item.quantity}
-                  onChange={() => changeGuestItems(item.name, item.quantity, 0)}
-                />
-                <Button
-                  className="font-extrabold"
-                  onClick={() => changeGuestItems(item.name, item.quantity, 1)}
-                >
-                  +
+                  Buy items
                 </Button>
               </div>
-              // </div>
-            ))}
-          </div>
-
-          <div className="mt-6">
-            <p className="font-extrabold">Total Price: ₹{totalPrice}</p>
-            <Button
-              disabled={totalPrice === 0}
-              className="mt-2"
-              onClick={() => setDialogOpen(true)}
-            >
-              Buy items
-            </Button>
-          </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
 
