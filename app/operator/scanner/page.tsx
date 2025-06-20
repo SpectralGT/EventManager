@@ -13,8 +13,6 @@ export default function OrderServePage() {
   return (
     <div className="p-6">
      <Scanner onScan={(result) => handleScan(result[0].rawValue)} />
-
-
     </div>
   )
 }

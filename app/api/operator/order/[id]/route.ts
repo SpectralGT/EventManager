@@ -12,7 +12,8 @@ export async function GET(_req: NextRequest,{ params }: { params: Promise<{ id: 
         id: true,
         attendeeId: true,
         eventId: true,
-        items: true,
+        memberItems: true,
+        guestItems: true,
         createdAt: true,
       },
     });
@@ -30,13 +31,14 @@ export async function PATCH(req: NextRequest,{ params }: { params: Promise<{ id:
       const param = await params;
       const id = param.id;
       const body = await req.json();
-      const items = body.items;
+      const memberItems = body.memberItems;
+      const guestItems = body.guestItems;
 
-      if (!Array.isArray(items)) return NextResponse.json({ error: "No items in Ordeer Patch" }, { status: 500 });
+      if (!Array.isArray(memberItems)) return NextResponse.json({ error: "No items in Ordeer Patch" }, { status: 500 });
 
       const newOrder = await prisma.order.update({
         where: { id: id as string },
-        data: { items: items },
+        data: { memberItems: memberItems, guestItems:guestItems },
       });
 
       return NextResponse.json(newOrder);
