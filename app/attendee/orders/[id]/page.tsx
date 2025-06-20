@@ -31,7 +31,8 @@ export default function Order() {
       .then((res) => res.json())
       .then((data) => {
         setOrder(data);
-
+        console.log(data.createdAt);
+        console.log(new Date())
         if (data && data.memberItems) {
           let sum = 0;
           data.memberItems.forEach((item: Item) => {
@@ -171,12 +172,16 @@ export default function Order() {
           </div>
         </>
       )}
+      {new Date() <
+        new Date(
+          new Date(order.createdAt).getTime() + (1 * 24 * 60 * 60 * 1000)
+        ) && (
+          
+        <Link href={`/attendee/orders/edit/${id}`}>
 
-      <Link href={`/attendee/orders/edit/${id}`}>
-        <Button className="text-black mt-10">
-          Edit Booking
-        </Button>
-      </Link>
+          <Button className="text-black mt-10">Edit Booking</Button>
+        </Link>
+      )}
     </div>
   );
 }
