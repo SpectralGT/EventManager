@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-import { OrderByID } from "@/lib/types";
+import { OrderByID,Item,Order } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
+
+import { NextRequestWithAuth } from "next-auth/middleware";
 
 // Getting Order by Id
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
@@ -63,5 +65,95 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });
+  }
+}
+
+export async function PATCH(
+  req: NextRequestWithAuth,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    console.log('called');
+    const param = await params;
+    const body = await req.json();
+
+    // const token = req.nextauth.token;
+    const token = await getToken({ req });
+    const attendeeId = token ? token.id : "null";
+
+    let memberItems: Item[] = body.memberItems;
+    let isGuestOrder: boolean = body.isGuestOrder;
+    let guestName: string = body.guestName;
+    let guestIsFamily: boolean = body.guestIsFamily;
+    let guestAdultCount: number = body.guestAdultCount;
+    let guestChildCount: number = body.guestChildCount;
+    let guestItems: Item[] = body.guestItems;
+
+
+    if(!guestIsFamily){guestChildCount = 0};
+    if(!isGuestOrder){guestName='';guestIsFamily=false;guestAdultCount=0;guestChildCount=0;guestItems=[]};
+
+    memberItems.forEach((e) => (e.served = 0));
+    guestItems.forEach((e) => (e.served = 0));
+    let total = 0;
+
+    memberItems.forEach((item) => {
+      total += item.quantity * item.price;
+    });
+
+    if (!memberItems) {
+      return NextResponse.json({ error: "Missing items" }, { status: 400 });
+    }
+
+
+    const attendee = await prisma.attendee.findUnique({
+      where: { id: attendeeId },
+    });
+
+    if (!attendee) {
+      console.log('attendee erorr');
+      return NextResponse.json(
+        { error: "Attendee not found" },
+        { status: 404 }
+      );
+    }
+
+    const id = param.id;
+
+
+    // Save order
+    await prisma.order.update({
+      where:{
+        id : id
+      },
+      data: {
+        // @ts-expect-error : items can be anythin
+        memberItems: memberItems,
+        isGuestOrder: isGuestOrder,
+        guestName: guestName,
+        guestIsFamily: guestIsFamily,
+        guestAdultCount: guestAdultCount,
+        guestChildCount: guestChildCount,
+        // @ts-expect-error : items can be anythin
+        guestItems: guestItems,
+      },
+    });
+
+    await prisma.attendee.update({
+      where: { id: attendeeId },
+      data: {
+        balance: {
+          decrement: total,
+        },
+      },
+    });
+
+    return NextResponse.json({message:"updated"});
+  } catch(error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "Failed to create order" },
+      { status: 500 }
+    );
   }
 }
