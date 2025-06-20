@@ -15,6 +15,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useQRCode } from "next-qrcode";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Order() {
   const { id } = useParams();
@@ -109,64 +111,72 @@ export default function Order() {
         )}
       </div>
 
-      { order.isGuestOrder && <>
-      <Separator />
-      
-        <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
-          Guest Booking
-        </h1>
+      {order.isGuestOrder && (
+        <>
+          <Separator />
 
-        <h1 className="text-2xl font-bold mb-4">
-          Guest Name : <span className="text-primary">{order.guestName}</span>
-        </h1>
-        <h1 className="text-2xl font-bold mb-4">
-          Guest Adult Count :{" "}
-          <span className="text-primary">{order.guestAdultCount}</span>
-        </h1>
-        <h1 className="text-2xl font-bold mb-4">
-          Guest Child Count :{" "}
-          <span className="text-primary">{order.guestChildCount}</span>
-        </h1>
+          <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
+            Guest Booking
+          </h1>
 
-        <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
-          Guest Items
-        </h1>
-        <div className="flex flex-col gap-6">
-          {order.guestItems ? (
-            <Table>
-              <TableHeader>
-                <TableRow className="text-lg">
-                  <TableHead className="">Item</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Qty</TableHead>
-                  <TableHead>Served</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
+          <h1 className="text-2xl font-bold mb-4">
+            Guest Name : <span className="text-primary">{order.guestName}</span>
+          </h1>
+          <h1 className="text-2xl font-bold mb-4">
+            Guest Adult Count :{" "}
+            <span className="text-primary">{order.guestAdultCount}</span>
+          </h1>
+          <h1 className="text-2xl font-bold mb-4">
+            Guest Child Count :{" "}
+            <span className="text-primary">{order.guestChildCount}</span>
+          </h1>
 
-              <TableBody>
-                {order.guestItems.map((item) => (
-                  <TableRow key={item.name}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.price}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>
-                      {item.served}
-                      {" / "}
-                      {item.quantity}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {item.price * item.quantity}
-                    </TableCell>
+          <h1 className="text-2xl font-bold mb-4 mt-5 text-center">
+            Guest Items
+          </h1>
+          <div className="flex flex-col gap-6">
+            {order.guestItems ? (
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-lg">
+                    <TableHead className="">Item</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Qty</TableHead>
+                    <TableHead>Served</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div> No Items </div>
-          )}
-        </div>
-      </>}
+                </TableHeader>
+
+                <TableBody>
+                  {order.guestItems.map((item) => (
+                    <TableRow key={item.name}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.price}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>
+                        {item.served}
+                        {" / "}
+                        {item.quantity}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item.price * item.quantity}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div> No Items </div>
+            )}
+          </div>
+        </>
+      )}
+
+      <Link href={`/attendee/orders/edit/${id}`}>
+        <Button className="text-black mt-10">
+          Edit Booking
+        </Button>
+      </Link>
     </div>
   );
 }
