@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-import { OrderByID,Item,Order } from "@/lib/types";
+import { OrderByID, Item, Order } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 
 import { NextRequestWithAuth } from "next-auth/middleware";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 // Getting Order by Id
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     //Getting id param from the URL
     const id = (await params).id;
 
-    
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
@@ -27,15 +30,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         memberItems: true,
         isGuestOrder: true,
         guestName: true,
-        guestIsFamily:true,
+        guestIsFamily: true,
         guestAdultCount: true,
         guestChildCount: true,
-        guestItems:true
+        guestItems: true,
       },
     });
 
     // if order is not found
-    if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    if (!order)
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
     const eventTitle = await prisma.event.findUnique({
       where: { id: order.eventId },
@@ -57,14 +61,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       guestAdultCount: order.guestAdultCount,
       guestChildCount: order.guestChildCount,
       // @ts-expect-error : items can be anything
-      guestItems: order.guestItems
+      guestItems: order.guestItems,
     };
 
     // returning the new Order object
     return NextResponse.json(newOrder);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: "Failed to fetch event" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch event" },
+      { status: 500 }
+    );
   }
 }
 
@@ -73,9 +80,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log('called');
     const param = await params;
     const body = await req.json();
+    const id = param.id;
 
     // const token = req.nextauth.token;
     const token = await getToken({ req });
@@ -89,9 +96,33 @@ export async function PATCH(
     let guestChildCount: number = body.guestChildCount;
     let guestItems: Item[] = body.guestItems;
 
+    const oldOrder = await prisma.order.findUnique({
+      where: { id: id },
+      select: { memberItems: true },
+    });
 
-    if(!guestIsFamily){guestChildCount = 0};
-    if(!isGuestOrder){guestName='';guestIsFamily=false;guestAdultCount=0;guestChildCount=0;guestItems=[]};
+    if (!oldOrder) {
+      return NextResponse.json({ error: "No old Order" }, { status: 400 });
+    }
+
+    const oldItems = oldOrder.memberItems as unknown as Item[];
+
+    let oldTotal = 0;
+
+    oldItems.forEach((item) => {
+      oldTotal += item.quantity * item.price;
+    });
+
+    if (!guestIsFamily) {
+      guestChildCount = 0;
+    }
+    if (!isGuestOrder) {
+      guestName = "";
+      guestIsFamily = false;
+      guestAdultCount = 0;
+      guestChildCount = 0;
+      guestItems = [];
+    }
 
     memberItems.forEach((e) => (e.served = 0));
     guestItems.forEach((e) => (e.served = 0));
@@ -105,26 +136,22 @@ export async function PATCH(
       return NextResponse.json({ error: "Missing items" }, { status: 400 });
     }
 
-
     const attendee = await prisma.attendee.findUnique({
       where: { id: attendeeId },
     });
 
     if (!attendee) {
-      console.log('attendee erorr');
+      console.log("attendee erorr");
       return NextResponse.json(
         { error: "Attendee not found" },
         { status: 404 }
       );
     }
 
-    const id = param.id;
-
-
     // Save order
     await prisma.order.update({
-      where:{
-        id : id
+      where: {
+        id: id,
       },
       data: {
         // @ts-expect-error : items can be anythin
@@ -139,6 +166,18 @@ export async function PATCH(
       },
     });
 
+    console.log(oldTotal);
+    console.log(total);
+
+    await prisma.attendee.update({
+      where: { id: attendeeId },
+      data: {
+        balance: {
+          increment: oldTotal,
+        },
+      },
+    });
+
     await prisma.attendee.update({
       where: { id: attendeeId },
       data: {
@@ -148,8 +187,8 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json({message:"updated"});
-  } catch(error) {
+    return NextResponse.json({ message: "updated" });
+  } catch (error) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to create order" },
