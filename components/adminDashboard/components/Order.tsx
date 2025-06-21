@@ -17,6 +17,8 @@ import {
   NumberField,
   DateField,
   ReferenceField,
+  BooleanField,
+  BooleanInput,
 } from "react-admin";
 
 // const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
@@ -40,7 +42,24 @@ export const OrderList = () => (
         <TextField source="username" />
       </ReferenceField>
 
-      <ArrayField source="items">
+      <ArrayField source="memberItems">
+        <Datagrid bulkActionButtons={false}>
+          <TextField source="name" />
+          <NumberField source="price" />
+          <NumberField source="quantity" />
+          <NumberField source="served" />
+          <DateField source="serveStartTime" />
+          <DateField source="serveEndTime" />
+        </Datagrid>
+      </ArrayField>
+
+      <BooleanField source="isGuestOrder" />
+      <TextField source="guestName" />
+      <BooleanField source="isGuestFamily" />
+      <NumberField source="guestAdultCount" />
+      <NumberField source="guestChildCount" />
+
+      <ArrayField source="guestItems">
         <Datagrid bulkActionButtons={false}>
           <TextField source="name" />
           <NumberField source="price" />
@@ -77,6 +96,23 @@ export const OrderEdit = () => (
           <TimeInput source="serveEndTime" />
         </SimpleFormIterator>
       </ArrayInput>
+
+      <BooleanInput source="isGuestOrder" />
+      <TextInput source="guestName" />
+      <BooleanInput source="isGuestFamily" />
+      <NumberInput source="guestAdultCount" />
+      <NumberInput source="guestChildCount" />
+
+      <ArrayInput source="guestItems">
+        <SimpleFormIterator inline>
+          <TextInput source="name" />
+          <NumberInput source="price" />
+          <NumberInput source="quantity" />
+          <NumberInput source="served" />
+          <TimeInput source="serveStartTime" />
+          <TimeInput source="serveEndTime" />
+        </SimpleFormIterator>
+      </ArrayInput>
     </SimpleForm>
   </Edit>
 );
@@ -94,7 +130,24 @@ export const OrderCreate = () => (
         <SelectInput optionText="username" />
       </ReferenceInput>
 
-      <ArrayInput source="items">
+      <ArrayInput source="memberItems">
+        <SimpleFormIterator inline>
+          <TextInput source="name" />
+          <NumberInput source="price" />
+          <NumberInput source="quantity" />
+          <NumberInput source="served" />
+          <TimeInput source="serveStartTime" />
+          <TimeInput source="serveEndTime" />
+        </SimpleFormIterator>
+      </ArrayInput>
+
+      <BooleanInput source="isGuestOrder" />
+      <TextInput source="guestName" />
+      <BooleanInput source="isGuestFamily" />
+      <NumberInput source="guestAdultCount" />
+      <NumberInput source="guestChildCount" />
+
+      <ArrayInput source="guestItems">
         <SimpleFormIterator inline>
           <TextInput source="name" />
           <NumberInput source="price" />
