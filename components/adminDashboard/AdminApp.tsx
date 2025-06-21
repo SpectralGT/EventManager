@@ -6,6 +6,7 @@ import { Admin, Resource } from 'react-admin';
 import { AttendeeList, AttendeeEdit, AttendeeCreate } from './components/Attendee';
 import { EventList, EventEdit, EventCreate } from './components/Event';
 import { OrderList, OrderEdit, OrderCreate } from './components/Order';
+import { GuestList, GuestEdit, GuestCreate } from './components/Guest';
 import { AdminList, AdminEdit, AdminCreate } from './components/Admin';
 import { OperatorList, OperatorEdit, OperatorCreate } from './components/Operator';
 import LogoutButton from "@/components/LogoutButton";
@@ -18,6 +19,7 @@ export default function AdminPanel() {
       <Resource name="attendee" list={AttendeeList} edit={AttendeeEdit} create={AttendeeCreate} />
       <Resource name="event" list={EventList} edit={EventEdit} create={EventCreate} />
       <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />
+      <Resource name="order" options={{label:"Guest"}} list={GuestList} edit={GuestEdit} />
       <Resource name="admin" list={AdminList} edit={AdminEdit} create={AdminCreate} />
       <Resource name="operator" list={OperatorList} edit={OperatorEdit} create={OperatorCreate} />
     </Admin>

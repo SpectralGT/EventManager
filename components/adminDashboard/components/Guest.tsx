@@ -21,45 +21,17 @@ import {
   BooleanInput,
 } from "react-admin";
 
-import { Button, ExportButton, TopToolbar } from "react-admin";
-import { downloadCSV } from "react-admin";
-import jsonExport from "jsonexport";
+// const jsonFormat = (value: any) => JSON.stringify(value, null, 2);
+// const jsonParse = (value: string) => {
+//   try {
+//     return JSON.parse(value);
+//   } catch (e) {
+//     return [];
+//   }
+// };
 
-const exportGuest = (orders: any) => {
-  // @ts-ignore
-  const orderForExport = orders.map((order) => {
-    const { memberItems, isGuestOrder, ...orderForExport } = order; // omit memberItems and isGuestOrder
-    return orderForExport;
-  });
-  jsonExport(
-    orderForExport,
-    {
-      headers: [
-        "id",
-        "attendeeId",
-        "eventId",
-        "guestName",
-        "guestIsFamily",
-        "guestAdultCount",
-        "guestChildCount",
-        "guestItems",
-      ], // order fields in the export
-    },
-    (err, csv) => {
-      downloadCSV(csv, "guestOrders"); // download as 'posts.csv` file
-    }
-  );
-};
-
-const OrderListActions = () => (
-  <TopToolbar>
-    <ExportButton exporter={exportGuest}></ExportButton>
-    <ExportButton />
-  </TopToolbar>
-);
-
-export const OrderList = () => (
-  <List actions={<OrderListActions />}>
+export const GuestList = () => (
+  <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
 
@@ -70,18 +42,6 @@ export const OrderList = () => (
         <TextField source="username" />
       </ReferenceField>
 
-      <ArrayField source="memberItems">
-        <Datagrid bulkActionButtons={false}>
-          <TextField source="name" />
-          <NumberField source="price" />
-          <NumberField source="quantity" />
-          <NumberField source="served" />
-          <DateField source="serveStartTime" />
-          <DateField source="serveEndTime" />
-        </Datagrid>
-      </ArrayField>
-
-      <BooleanField source="isGuestOrder" />
       <TextField source="guestName" />
       <BooleanField source="isGuestFamily" />
       <NumberField source="guestAdultCount" />
@@ -103,30 +63,22 @@ export const OrderList = () => (
   </List>
 );
 
-export const OrderEdit = () => (
+export const GuestEdit = () => (
   <Edit>
     <SimpleForm>
       <ReferenceInput source="eventId" reference="event" label="Event">
         <SelectInput optionText="title" />
       </ReferenceInput>
+
       <ReferenceInput source="attendeeId" reference="attendee" label="Attendee">
         <SelectInput optionText="username" />
       </ReferenceInput>
-      <ArrayInput source="items">
-        <SimpleFormIterator inline>
-          <TextInput source="name" />
-          <NumberInput source="price" />
-          <NumberInput source="quantity" />
-          <NumberInput source="served" />
-          <TimeInput source="serveStartTime" />
-          <TimeInput source="serveEndTime" />
-        </SimpleFormIterator>
-      </ArrayInput>
-      <BooleanInput source="isGuestOrder" />
+
       <TextInput source="guestName" />
       <BooleanInput source="isGuestFamily" />
       <NumberInput source="guestAdultCount" />
       <NumberInput source="guestChildCount" />
+
       <ArrayInput source="guestItems">
         <SimpleFormIterator inline>
           <TextInput source="name" />
@@ -137,12 +89,11 @@ export const OrderEdit = () => (
           <TimeInput source="serveEndTime" />
         </SimpleFormIterator>
       </ArrayInput>
-      c
     </SimpleForm>
   </Edit>
 );
 
-export const OrderCreate = () => (
+export const GuestCreate = () => (
   <Create>
     <SimpleForm>
       {/* <TextInput source="items" label="Items (JSON)" multiline parse={jsonParse} format={jsonFormat} /> */}
@@ -155,18 +106,6 @@ export const OrderCreate = () => (
         <SelectInput optionText="username" />
       </ReferenceInput>
 
-      <ArrayInput source="memberItems">
-        <SimpleFormIterator inline>
-          <TextInput source="name" />
-          <NumberInput source="price" />
-          <NumberInput source="quantity" />
-          <NumberInput source="served" />
-          <TimeInput source="serveStartTime" />
-          <TimeInput source="serveEndTime" />
-        </SimpleFormIterator>
-      </ArrayInput>
-
-      <BooleanInput source="isGuestOrder" />
       <TextInput source="guestName" />
       <BooleanInput source="isGuestFamily" />
       <NumberInput source="guestAdultCount" />
