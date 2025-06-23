@@ -51,7 +51,7 @@ export default function EventDetailPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [isGuestOrder, setIsGuestOrder] = useState<boolean>(false);
-  const [guestName, setGuestName] = useState<String>("");
+  const [guestName, setGuestName] = useState<string>("");
   const [guestIsFamily, setGuestIsFamily] = useState<boolean>(false);
   const [guestAdultCount, setGuestAdultCount] = useState<number>(0);
   const [guestChildCount, setGuestChildCount] = useState<number>(0);
@@ -148,7 +148,8 @@ export default function EventDetailPage() {
     if (!isGuestOrder) {
       setGuestName("");
       setGuestIsFamily(false);
-      setGuestAdultCount(0), setGuestChildCount(0);
+      setGuestAdultCount(0);
+      setGuestChildCount(0);
       setGuestItems([]);
     }
     console.log({

@@ -175,7 +175,8 @@ export default function EventDetailPage() {
     if (!isGuestOrder) {
       setGuestName("");
       setGuestIsFamily(false);
-      setGuestAdultCount(0), setGuestChildCount(0);
+      setGuestAdultCount(0);
+      setGuestChildCount(0);
       setGuestItems([]);
     }
     console.log({
