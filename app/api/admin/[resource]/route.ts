@@ -1,5 +1,6 @@
 // -- Example for Next App router --
 // /app/api/[resource]/route.ts <= catch all resource requests
+"use client";
 
 import { defaultHandler } from "ra-data-simple-prisma";
 import prisma from "@/lib/prisma";
