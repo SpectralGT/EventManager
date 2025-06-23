@@ -3,13 +3,12 @@
 "use client";
 
 import { defaultHandler } from "ra-data-simple-prisma";
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-
-
+import prisma from "@/lib/prisma";
 
 const handler = async (req: Request) => {
   const body = await req.json();
+  // @ts-ignore
   const result = await defaultHandler(body, prisma);
   return NextResponse.json(result);
 };
