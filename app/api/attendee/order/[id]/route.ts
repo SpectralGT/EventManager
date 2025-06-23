@@ -88,8 +88,8 @@ export async function PATCH(
     const token = await getToken({ req });
     const attendeeId = token ? token.id : "null";
 
-    let memberItems: Item[] = body.memberItems;
-    let isGuestOrder: boolean = body.isGuestOrder;
+    const memberItems: Item[] = body.memberItems;
+    const isGuestOrder: boolean = body.isGuestOrder;
     let guestName: string = body.guestName;
     let guestIsFamily: boolean = body.guestIsFamily;
     let guestAdultCount: number = body.guestAdultCount;
