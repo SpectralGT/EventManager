@@ -24,9 +24,9 @@ import {
 import { Button, ExportButton, TopToolbar } from "react-admin";
 import { downloadCSV } from "react-admin";
 import jsonExport from "jsonexport";
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const exportGuest = (orders: any) => {
-  // @ts-ignore
+  // @ts-expect-error : order can be anything
   const orderForExport = orders.map((order) => {
     const { memberItems, isGuestOrder, ...orderForExport } = order; // omit memberItems and isGuestOrder
     return orderForExport;
