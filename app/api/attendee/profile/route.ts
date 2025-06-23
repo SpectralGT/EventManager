@@ -4,13 +4,14 @@ import prisma from "@/lib/prisma";
 import { AttendeeOrder, Profile } from "@/lib/types";
 import { getToken } from "next-auth/jwt";
 import { Prisma } from "@prisma/client";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 async function getNewOrders(
   orders: {
     id: string;
     attendeeId: string;
     eventId: string;
-    memberItems: Prisma.JsonValue;
+    memberItems: JsonValue;
     createdAt: Date;
   }[]
 ) {
