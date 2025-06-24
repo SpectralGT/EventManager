@@ -13,7 +13,7 @@ import {
   ReferenceManyField,
   PasswordInput,
   useUnique,
-  NumberInput
+  NumberInput,
 } from "react-admin";
 
 export const AttendeeList = () => (
@@ -21,10 +21,10 @@ export const AttendeeList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <TextField source="username" />
-      <TextField source="email"/>
+      <TextField source="email" />
       <BooleanField source="isFamily" />
       <TextField source="balance" />
-      <TextField source="debt" />
+      <BooleanField source="subscriptionChargePayed" />
       <ReferenceManyField label="Orders" reference="order" target="attendeeId">
         <Datagrid rowClick="edit">
           <ChipField source="id" />
@@ -38,30 +38,32 @@ export const AttendeeList = () => (
 export const AttendeeEdit = () => {
   const unique = useUnique();
 
-  return(
-  <Edit>
-    <SimpleForm>
-      <TextInput source="username" validate={unique()}  />
-      <TextInput source="email" type="email" />
-      <PasswordInput source="password" />
-      <BooleanInput source="isFamily" />
-      <NumberInput source="balance" defaultValue={1000}/>
-      <NumberInput source="debt" defaultValue={-1000}/>
-    </SimpleForm>
-  </Edit>)
+  return (
+    <Edit>
+      <SimpleForm>
+        <TextInput source="username" validate={unique()} />
+        <TextInput source="email" type="email" />
+        <PasswordInput source="password" />
+        <BooleanInput source="isFamily" />
+        <NumberInput source="balance" defaultValue={1000} />
+        <BooleanInput source="subscriptionChargePayed" defaultValue={false} />
+      </SimpleForm>
+    </Edit>
+  );
 };
 
 export const AttendeeCreate = () => {
   const unique = useUnique();
-return(
-  <Create>
-    <SimpleForm>
-      <TextInput source="username" validate={unique()}/>
-      <TextInput source="email" type="email" />
-      <PasswordInput source="password" />
-      <BooleanInput source="isFamily" />
-      <NumberInput source="balance" defaultValue={1000}/>
-      <NumberInput source="debt" defaultValue={-1000}/>
-    </SimpleForm>
-  </Create>)
+  return (
+    <Create>
+      <SimpleForm>
+        <TextInput source="username" validate={unique()} />
+        <TextInput source="email" type="email" />
+        <PasswordInput source="password" />
+        <BooleanInput source="isFamily" />
+        <NumberInput source="balance" defaultValue={1000} />
+        <BooleanInput source="subscriptionChargePayed" defaultValue={false} />
+      </SimpleForm>
+    </Create>
+  );
 };
