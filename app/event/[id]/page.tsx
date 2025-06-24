@@ -312,7 +312,7 @@ export default function EventDetailPage() {
                           className="flex w-full max-w-sm items-center space-x-2"
                         >
                           <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {item.price}
+                            {item.name} - AED {' '} {item.price}
                           </Label>
                           <Button
                             className="font-extrabold"
@@ -411,7 +411,7 @@ export default function EventDetailPage() {
                           className="flex w-full max-w-sm items-center space-x-2"
                         >
                           <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {item.price}
+                            {item.name} - AED {' '} {item.price}
                           </Label>
                           <Button
                             className="font-extrabold"
@@ -448,7 +448,7 @@ export default function EventDetailPage() {
               </div>
 
               <div className="mt-6">
-                <p className="font-extrabold">Total Price: AED {totalPrice}</p>
+                <p className="font-extrabold">Total Price: AED {' '} {totalPrice}</p>
                 <Button
                   disabled={totalPrice === 0}
                   className="mt-2"
@@ -484,8 +484,8 @@ export default function EventDetailPage() {
                 }  = ₹${item.price * item.quantity}`}</p>
               ) : null
             )}
-            <p className="font-semibold mt-2">Total - Member : AED {totalPrice}</p>
-            <p className="font-semibold mt-2">Total - Guest  : AED {totalGuestPrice}</p>
+            <p className="font-semibold mt-2">Total - Member : AED {' '} {totalPrice}</p>
+            <p className="font-semibold mt-2">Total - Guest  : AED {' '} {totalGuestPrice}</p>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
