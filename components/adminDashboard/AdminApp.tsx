@@ -19,7 +19,7 @@ export default function AdminPanel() {
       <Resource name="attendee" list={AttendeeList} edit={AttendeeEdit} create={AttendeeCreate} />
       <Resource name="event" list={EventList} edit={EventEdit} create={EventCreate} />
       <Resource name="order" list={OrderList} edit={OrderEdit} create={OrderCreate} />
-      <Resource name="order" options={{label:"Guest"}} list={GuestList} edit={GuestEdit} />
+      {/* <Resource name="order" options={{label:"Guest"}} list={GuestList} edit={GuestEdit} /> */}
       <Resource name="admin" list={AdminList} edit={AdminEdit} create={AdminCreate} />
       <Resource name="operator" list={OperatorList} edit={OperatorEdit} create={OperatorCreate} />
     </Admin>
