@@ -17,7 +17,7 @@ export const OperatorEdit = () => {
   return (
     <Edit>
       <SimpleForm>
-        <TextInput source="username" validate={unique()} />
+        <TextInput source="username"/>
         <TextInput source="email" type="email" />
         <PasswordInput source="password" />
       </SimpleForm>
