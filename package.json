@@ -9,8 +9,8 @@
     "start:migrate:prod": "node server.js",
     "lint": "next lint",
     "docker:dev": "npm run dev",
-    "docker:compose:dev": "docker-compose down && docker compose up -d --build",
-    "docker:compose:prod": "docker-compose down && docker compose -f docker-compose.prod.yml up -d --build"
+    "docker:compose:dev": "sudo docker compose down && docker compose up -d --build",
+    "docker:compose:prod": "docker compose down && docker compose -f docker-compose.prod.yml up -d --build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
