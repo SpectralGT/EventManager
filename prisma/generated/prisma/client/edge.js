@@ -179,7 +179,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/run/media/asingh/New Volume/event_manager/prisma/generated/prisma/client",
+      "value": "/mnt/d_drive/event_manager/prisma/generated/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -188,12 +188,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "rhel-openssl-3.0.x",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/run/media/asingh/New Volume/event_manager/prisma/schema.prisma",
+    "sourceFilePath": "/mnt/d_drive/event_manager/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

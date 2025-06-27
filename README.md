@@ -59,7 +59,7 @@ A modern event management web application built with Next.js, Prisma, and Tailwi
 
    Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-5. **Run Docker**
+5. **OR Run Docker**
 
    ```bash
    sudo docker compose -f compose.yaml up --build
