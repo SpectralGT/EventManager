@@ -3,7 +3,6 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/SpectralGT/EventManager)
 ![License](https://img.shields.io/github/license/SpectralGT/EventManager)
 
-
 A modern event management web application built with Next.js, Prisma, and Tailwind CSS. EventManager enables users to create, manage, and explore events seamlessly.
 
 ## 🚀 Features
