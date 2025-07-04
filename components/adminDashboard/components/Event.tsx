@@ -17,10 +17,10 @@ import {
   DateField,
   DateTimeInput,
   TimeInput,
-  required
+  required,
 } from "react-admin";
 
-import {RichTextInput} from 'ra-input-rich-text';
+import { RichTextInput } from "ra-input-rich-text";
 
 // const jsonFo4rmat = (value: any) => JSON.stringify(value, null, 2);
 // const jsonParse = (value: string) => {
@@ -41,12 +41,16 @@ export const EventList = () => (
       <DateField source="endDate" />
       <ArrayField source="items">
         <Datagrid bulkActionButtons={false}>
-          <TextField source="name" />
-          <NumberField source="price" />
-          <NumberField source="priceGuestSingle" />
-          <NumberField source="priceGuestFamily" />
-          <DateField source="serveStartTime" />
-          <DateField source="serveEndTime" />
+          <ArrayField source="days">
+            <Datagrid bulkActionButtons={false}>
+              <TextField source="name" />
+              <NumberField source="price" />
+              <NumberField source="priceGuestSingle" />
+              <NumberField source="priceGuestFamily" />
+              <DateField source="serveStartTime" />
+              <DateField source="serveEndTime" />
+            </Datagrid>
+          </ArrayField>
         </Datagrid>
       </ArrayField>
 
@@ -60,20 +64,23 @@ export const EventList = () => (
 export const EventEdit = () => (
   <Edit>
     <SimpleForm>
-      <TextInput source="imgURL" validate={required()}/>
-      <TextInput source="title" validate={required()}/>
-      <RichTextInput source="description" validate={required()}/>
-      <DateInput source="startDate" validate={required()}/>
-      <DateInput source="endDate" validate={required()}/>
-
+      <TextInput source="imgURL" validate={required()} />
+      <TextInput source="title" validate={required()} />
+      <RichTextInput source="description" validate={required()} />
+      <DateInput source="startDate" validate={required()} />
+      <DateInput source="endDate" validate={required()} />
       <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
-          <TextInput source="name" validate={required()}/>
-          <NumberInput source="price" validate={required()}/>
-          <NumberInput source="priceGuestSingle" validate={required()}/>
-          <NumberInput source="priceGuestFamily" validate={required()}/>
-          <TimeInput source="serveStartTime" validate={required()}/>
-          <TimeInput source="serveEndTime" validate={required()}/>
+          <ArrayInput source="days" validate={required()}>
+            <SimpleFormIterator inline>
+              <TextInput source="name" validate={required()} />
+              <NumberInput source="price" validate={required()} />
+              <NumberInput source="priceGuestSingle" validate={required()} />
+              <NumberInput source="priceGuestFamily" validate={required()} />
+              <TimeInput source="serveStartTime" validate={required()} />
+              <TimeInput source="serveEndTime" validate={required()} />
+            </SimpleFormIterator>
+          </ArrayInput>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
@@ -83,19 +90,23 @@ export const EventEdit = () => (
 export const EventCreate = () => (
   <Create>
     <SimpleForm>
-      <TextInput source="imgURL" validate={required()}/>
-      <TextInput source="title" validate={required()}/>
-      <RichTextInput source="description" validate={required()}/>
-      <DateTimeInput source="startDate" validate={required()}/>
-      <DateTimeInput source="endDate"  validate={required()}/>
+      <TextInput source="imgURL" validate={required()} />
+      <TextInput source="title" validate={required()} />
+      <RichTextInput source="description" validate={required()} />
+      <DateTimeInput source="startDate" validate={required()} />
+      <DateTimeInput source="endDate" validate={required()} />
       <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
-          <TextInput source="name" validate={required()}/>
-          <NumberInput source="price" validate={required()}/>
-          <NumberInput source="priceGuestSingle" validate={required()}/>
-          <NumberInput source="priceGuestFamily" validate={required()}/>
-          <TimeInput source="serveStartTime" validate={required()}/>
-          <TimeInput source="serveEndTime" validate={required()}/>
+          <ArrayInput source="days" validate={required()}>
+            <SimpleFormIterator inline>
+              <TextInput source="name" validate={required()} />
+              <NumberInput source="price" validate={required()} />
+              <NumberInput source="priceGuestSingle" validate={required()} />
+              <NumberInput source="priceGuestFamily" validate={required()} />
+              <TimeInput source="serveStartTime" validate={required()} />
+              <TimeInput source="serveEndTime" validate={required()} />
+            </SimpleFormIterator>
+          </ArrayInput>
         </SimpleFormIterator>
       </ArrayInput>
     </SimpleForm>
