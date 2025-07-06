@@ -73,6 +73,8 @@ export const EventEdit = () => (
       <DateInput source="endDate" validate={required()} />
       <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
+          <TextInput source="description" validate={required()} />
+
           <ArrayInput source="days" validate={required()}>
             <SimpleFormIterator inline>
               <TextInput source="name" validate={required()} />
@@ -100,6 +102,7 @@ export const EventCreate = () => (
       <DateTimeInput source="endDate" validate={required()} />
       <ArrayInput source="items" validate={required()}>
         <SimpleFormIterator inline>
+          <TextInput source="description" validate={required()} />
           <ArrayInput source="days" validate={required()}>
             <SimpleFormIterator inline>
               <TextInput source="name" validate={required()} />
