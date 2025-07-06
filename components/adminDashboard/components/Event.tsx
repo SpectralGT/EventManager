@@ -76,11 +76,12 @@ export const EventEdit = () => (
           <ArrayInput source="days" validate={required()}>
             <SimpleFormIterator inline>
               <TextInput source="name" validate={required()} />
-              <NumberInput source="price" validate={required()} />
-              <NumberInput source="priceGuestSingle" validate={required()} />
-              <NumberInput source="priceGuestFamily" validate={required()} />
-              <TimeInput source="serveStartTime" validate={required()} />
-              <TimeInput source="serveEndTime" validate={required()} />
+              <NumberInput source="singleMemberPrice" validate={required()} />
+              <NumberInput source="familyMemberPrice" validate={required()} />
+              <NumberInput source="kidsMemberPrice" validate={required()} />
+              <NumberInput source="singleGuestPrice" validate={required()} />
+              <NumberInput source="familyGuestPrice" validate={required()} />
+              <NumberInput source="kidsGuestPrice" validate={required()} />
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleFormIterator>
