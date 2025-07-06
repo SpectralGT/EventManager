@@ -39,9 +39,9 @@ export const EventList = () => (
       <TextField source="description" />
       <DateField source="startDate" />
       <DateField source="endDate" />
-      <ArrayField source="items">
+      <ArrayField source="days">
         <Datagrid bulkActionButtons={false}>
-          <ArrayField source="days">
+          <ArrayField source="items">
             <TextField source="description" />
             <Datagrid bulkActionButtons={false}>
               <TextField source="name" />
@@ -71,11 +71,10 @@ export const EventEdit = () => (
       <RichTextInput source="description" validate={required()} />
       <DateInput source="startDate" validate={required()} />
       <DateInput source="endDate" validate={required()} />
-      <ArrayInput source="items" validate={required()}>
-        <SimpleFormIterator inline>
+      <ArrayInput source="days" validate={required()}>
+        <SimpleFormIterator>
           <TextInput source="description" validate={required()} />
-
-          <ArrayInput source="days" validate={required()}>
+          <ArrayInput source="inline" validate={required()}>
             <SimpleFormIterator inline>
               <TextInput source="name" validate={required()} />
               <NumberInput source="singleMemberPrice" validate={required()} />
@@ -100,10 +99,10 @@ export const EventCreate = () => (
       <RichTextInput source="description" validate={required()} />
       <DateTimeInput source="startDate" validate={required()} />
       <DateTimeInput source="endDate" validate={required()} />
-      <ArrayInput source="items" validate={required()}>
-        <SimpleFormIterator inline>
+      <ArrayInput source="days" validate={required()}>
+        <SimpleFormIterator>
           <TextInput source="description" validate={required()} />
-          <ArrayInput source="days" validate={required()}>
+          <ArrayInput source="items" validate={required()}>
             <SimpleFormIterator inline>
               <TextInput source="name" validate={required()} />
               <NumberInput source="singleMemberPrice" validate={required()} />
