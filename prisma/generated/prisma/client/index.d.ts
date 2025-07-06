@@ -4423,7 +4423,7 @@ export namespace Prisma {
     description: number
     startDate: number
     endDate: number
-    items: number
+    days: number
     _all: number
   }
 
@@ -4453,7 +4453,7 @@ export namespace Prisma {
     description?: true
     startDate?: true
     endDate?: true
-    items?: true
+    days?: true
     _all?: true
   }
 
@@ -4536,7 +4536,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonValue
+    days: JsonValue
     _count: EventCountAggregateOutputType | null
     _min: EventMinAggregateOutputType | null
     _max: EventMaxAggregateOutputType | null
@@ -4563,7 +4563,7 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
-    items?: boolean
+    days?: boolean
     Order?: boolean | Event$OrderArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
@@ -4575,7 +4575,7 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
-    items?: boolean
+    days?: boolean
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4585,7 +4585,7 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
-    items?: boolean
+    days?: boolean
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -4595,10 +4595,10 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
-    items?: boolean
+    days?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "imgURL" | "title" | "description" | "startDate" | "endDate" | "items", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "imgURL" | "title" | "description" | "startDate" | "endDate" | "days", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Order?: boolean | Event$OrderArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -4618,7 +4618,7 @@ export namespace Prisma {
       description: string
       startDate: string
       endDate: string
-      items: Prisma.JsonValue
+      days: Prisma.JsonValue
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -5049,7 +5049,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Event", 'String'>
     readonly startDate: FieldRef<"Event", 'String'>
     readonly endDate: FieldRef<"Event", 'String'>
-    readonly items: FieldRef<"Event", 'Json'>
+    readonly days: FieldRef<"Event", 'Json'>
   }
     
 
@@ -6708,7 +6708,7 @@ export namespace Prisma {
     description: 'description',
     startDate: 'startDate',
     endDate: 'endDate',
-    items: 'items'
+    days: 'days'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -7019,7 +7019,7 @@ export namespace Prisma {
     description?: StringFilter<"Event"> | string
     startDate?: StringFilter<"Event"> | string
     endDate?: StringFilter<"Event"> | string
-    items?: JsonFilter<"Event">
+    days?: JsonFilter<"Event">
     Order?: OrderListRelationFilter
   }
 
@@ -7030,7 +7030,7 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    items?: SortOrder
+    days?: SortOrder
     Order?: OrderOrderByRelationAggregateInput
   }
 
@@ -7044,7 +7044,7 @@ export namespace Prisma {
     description?: StringFilter<"Event"> | string
     startDate?: StringFilter<"Event"> | string
     endDate?: StringFilter<"Event"> | string
-    items?: JsonFilter<"Event">
+    days?: JsonFilter<"Event">
     Order?: OrderListRelationFilter
   }, "id">
 
@@ -7055,7 +7055,7 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    items?: SortOrder
+    days?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
     _min?: EventMinOrderByAggregateInput
@@ -7071,7 +7071,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Event"> | string
     startDate?: StringWithAggregatesFilter<"Event"> | string
     endDate?: StringWithAggregatesFilter<"Event"> | string
-    items?: JsonWithAggregatesFilter<"Event">
+    days?: JsonWithAggregatesFilter<"Event">
   }
 
   export type OrderWhereInput = {
@@ -7343,7 +7343,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonNullValueInput | InputJsonValue
+    days: JsonNullValueInput | InputJsonValue
     Order?: OrderCreateNestedManyWithoutEventInput
   }
 
@@ -7354,7 +7354,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonNullValueInput | InputJsonValue
+    days: JsonNullValueInput | InputJsonValue
     Order?: OrderUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -7365,7 +7365,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
     Order?: OrderUpdateManyWithoutEventNestedInput
   }
 
@@ -7376,7 +7376,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
     Order?: OrderUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -7387,7 +7387,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonNullValueInput | InputJsonValue
+    days: JsonNullValueInput | InputJsonValue
   }
 
   export type EventUpdateManyMutationInput = {
@@ -7397,7 +7397,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
   }
 
   export type EventUncheckedUpdateManyInput = {
@@ -7407,7 +7407,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
   }
 
   export type OrderCreateInput = {
@@ -7699,7 +7699,7 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
-    items?: SortOrder
+    days?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
@@ -8244,7 +8244,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonNullValueInput | InputJsonValue
+    days: JsonNullValueInput | InputJsonValue
   }
 
   export type EventUncheckedCreateWithoutOrderInput = {
@@ -8254,7 +8254,7 @@ export namespace Prisma {
     description: string
     startDate: string
     endDate: string
-    items: JsonNullValueInput | InputJsonValue
+    days: JsonNullValueInput | InputJsonValue
   }
 
   export type EventCreateOrConnectWithoutOrderInput = {
@@ -8311,7 +8311,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
   }
 
   export type EventUncheckedUpdateWithoutOrderInput = {
@@ -8321,7 +8321,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     startDate?: StringFieldUpdateOperationsInput | string
     endDate?: StringFieldUpdateOperationsInput | string
-    items?: JsonNullValueInput | InputJsonValue
+    days?: JsonNullValueInput | InputJsonValue
   }
 
   export type OrderCreateManyAttendeeInput = {

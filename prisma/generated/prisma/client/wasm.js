@@ -151,7 +151,7 @@ exports.Prisma.EventScalarFieldEnum = {
   description: 'description',
   startDate: 'startDate',
   endDate: 'endDate',
-  items: 'items'
+  days: 'days'
 };
 
 exports.Prisma.OrderScalarFieldEnum = {

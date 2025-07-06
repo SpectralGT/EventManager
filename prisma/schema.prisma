@@ -59,7 +59,7 @@ model Event {
   startDate String
   endDate   String
 
-  items Json
+  days Json
   // items are array of days
   // days are array of FoodItems
   // FoodItems are array of price like member price, guest price for single, guest price for family
