@@ -42,13 +42,15 @@ export const EventList = () => (
       <ArrayField source="items">
         <Datagrid bulkActionButtons={false}>
           <ArrayField source="days">
+              <TextField source="description" />
             <Datagrid bulkActionButtons={false}>
               <TextField source="name" />
-              <NumberField source="price" />
-              <NumberField source="priceGuestSingle" />
-              <NumberField source="priceGuestFamily" />
-              <DateField source="serveStartTime" />
-              <DateField source="serveEndTime" />
+              <NumberField source="singleMemberPrice" />
+              <NumberField source="familyMemberPrice" />
+              <NumberField source="kidsMemberPrice" />
+              <NumberField source="singleGuestPrice" />
+              <NumberField source="familyGuestPrice" />
+              <NumberField source="kidsGuestPrice" />
             </Datagrid>
           </ArrayField>
         </Datagrid>
