@@ -637,8 +637,8 @@ export default function EventDetailPage() {
                 }  = ₹${item.price * item.quantity}`}</p>
               ) : null
             )}
-            <p className="font-semibold mt-2">Guest Item</p>
-            {items.map((item) =>
+            { isGuestOrder &&<p className="font-semibold mt-2">Guest Item</p>}
+            {guestItems.map((item) =>
               item.quantity > 0 ? (
                 <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${
                   item.quantity
