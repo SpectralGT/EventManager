@@ -1,4 +1,4 @@
-'use client'
+'use server'
 
 import { defaultHandler } from "ra-data-simple-prisma";
 import { NextResponse } from "next/server";
