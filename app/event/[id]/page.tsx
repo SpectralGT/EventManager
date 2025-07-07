@@ -14,7 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 
 import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
@@ -88,7 +88,7 @@ export default function EventDetailPage() {
         days.forEach((day: Day, index: number) => {
           day.items?.forEach((e: Ticket) => {
             const newItem: Item = {
-              name: `Day ${index + 1}: ${e.name} Single`,
+              name: `Day ${index + 1}: ${e.name} (Single)`,
               quantity: 0,
               served: 0,
               price: e.singleMemberPrice,
@@ -102,7 +102,7 @@ export default function EventDetailPage() {
         days.forEach((day: Day, index: number) => {
           day.items?.forEach((e: Ticket) => {
             const newItem: Item = {
-              name: `Day ${index + 1}: ${e.name} Single`,
+              name: `Day ${index + 1}: ${e.name} (Single)`,
               quantity: 0,
               served: 0,
               price: e.singleMemberPrice,
@@ -249,6 +249,7 @@ export default function EventDetailPage() {
   };
 
   const changeIsFamily = (isFamily: boolean) => {
+    setIsFamily(isFamily);
     if (isFamily) {
       const newItems: Item[] = [];
       event.days.forEach((day: Day, index: number) => {
@@ -291,6 +292,7 @@ export default function EventDetailPage() {
   };
 
   const changeGuestIsFamily = (isFamily: boolean) => {
+    setGuestIsFamily(isFamily);
     if (isFamily) {
       const newGuestItems: Item[] = [];
       event.days.forEach((day: Day, index: number) => {
@@ -397,49 +399,53 @@ export default function EventDetailPage() {
                         <Label>Guest Booking</Label>
                       </div>
 
-<Separator/>
+                      <Separator />
 
-                      {items.map((item,index) => (
+                      {items.map((item, index) => (
                         // <div key={item.name} className="flex items-center gap-4">
                         //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+                        <>
+                          <div
+                            key={item.name}
+                            className="flex w-full justify-between space-x-2"
+                          >
+                            <Label className="min-w-[100px] capitalize">
+                              {item.name} - AED {item.price}
+                            </Label>
 
-                        <div
-                          key={item.name}
-                          className="flex w-full justify-between space-x-2"
-                        >
-                          <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {item.price}
-                          </Label>
-
-                          <div className="flex items-center1 space-x-2">
-                            <Button
-                              className="font-extrabold"
-                              onClick={() =>
-                                changeItems(item.name, item.quantity, -1)
-                              }
-                            >
-                              -
-                            </Button>
-                            <Input
-                              type="number"
-                              min={0}
-                              // defaultValue={0}
-                              className="w-24"
-                              value={item.quantity}
-                              onChange={() =>
-                                changeItems(item.name, item.quantity, 0)
-                              }
-                            />
-                            <Button
-                              className="font-extrabold"
-                              onClick={() =>
-                                changeItems(item.name, item.quantity, 1)
-                              }
-                            >
-                              +
-                            </Button>
+                            <div className="flex items-center1 space-x-2">
+                              <Button
+                                className="font-extrabold"
+                                onClick={() =>
+                                  changeItems(item.name, item.quantity, -1)
+                                }
+                              >
+                                -
+                              </Button>
+                              <Input
+                                type="number"
+                                min={0}
+                                // defaultValue={0}
+                                className="w-24"
+                                value={item.quantity}
+                                onChange={() =>
+                                  changeItems(item.name, item.quantity, 0)
+                                }
+                              />
+                              <Button
+                                className="font-extrabold"
+                                onClick={() =>
+                                  changeItems(item.name, item.quantity, 1)
+                                }
+                              >
+                                +
+                              </Button>
+                            </div>
                           </div>
-                        </div>
+                          {isFamily && !((index+1) % ((event.days[0].items.length)*2)) && <Separator></Separator>}
+                          {!isFamily && !((index+1) % ((event.days[0].items.length))) && <Separator></Separator>}
+
+                        </>
                         // </div>
                       ))}
                     </div>
@@ -492,10 +498,10 @@ export default function EventDetailPage() {
                         </>
                       )}
 
-                      {guestItems.map((item) => (
+                      {guestItems.map((item,index) => (
                         // <div key={item.name} className="flex items-center gap-4">
                         //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
-
+<>
                         <div
                           key={item.name}
                           className="flex w-full justify-between space-x-2"
@@ -533,7 +539,12 @@ export default function EventDetailPage() {
                             </Button>
                           </div>
                         </div>
-                        // </div>
+                      {/* </div> */}
+
+                        {guestIsFamily && !((index+1) % ((event.days[0].items.length)*2)) && <Separator></Separator>}
+                          {!guestIsFamily && !((index+1) % ((event.days[0].items.length))) && <Separator></Separator>}
+
+                        </>
                       ))}
                     </div>
                   </TabsContent>
