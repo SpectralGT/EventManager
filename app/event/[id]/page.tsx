@@ -16,6 +16,16 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
 
@@ -335,7 +345,7 @@ export default function EventDetailPage() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 mx-auto">
       <Card>
         <CardContent className="p-4">
           {/* <img
@@ -367,6 +377,41 @@ export default function EventDetailPage() {
               <p>
                 <strong>End:</strong> {new Date(event.endDate).toLocaleString()}
               </p>
+
+              {event.days.map((day) => (
+                <>
+                <Separator className="mt-10"/>
+                  <h2 className="text-xl mt-5 font-semibold">
+                    {day.description}
+                  </h2>
+
+                  <Table>
+                    <TableHeader>
+                      <TableHead>Item</TableHead>
+                      <TableHead>Member Price (Single)</TableHead>
+                      <TableHead>Member Price (Family)</TableHead>
+                      <TableHead>Member Price (Kids)</TableHead>
+                      <TableHead>Guest Price (Single)</TableHead>
+                      <TableHead>Guest Price (Family)</TableHead>
+                      <TableHead>Guest Price (Kids)</TableHead>
+                    </TableHeader>
+
+                    <TableBody>
+                        {day.items.map(item=>(
+                          <TableRow>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>{item.singleMemberPrice}</TableCell>
+                            <TableCell>{item.familyMemberPrice}</TableCell>
+                            <TableCell>{item.kidsMemberPrice}</TableCell>
+                            <TableCell>{item.singleGuestPrice}</TableCell>
+                            <TableCell>{item.familyGuestPrice}</TableCell>
+                            <TableCell>{item.kidsGuestPrice}</TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </>
+              ))}
             </TabsContent>
             <TabsContent value="booking">
               <div className="mt-6 space-y-4">
@@ -442,9 +487,15 @@ export default function EventDetailPage() {
                               </Button>
                             </div>
                           </div>
-                          {isFamily && !((index+1) % ((event.days[0].items.length)*2)) && <Separator></Separator>}
-                          {!isFamily && !((index+1) % ((event.days[0].items.length))) && <Separator></Separator>}
-
+                          {isFamily &&
+                            !(
+                              (index + 1) %
+                              (event.days[0].items.length * 2)
+                            ) && <Separator></Separator>}
+                          {!isFamily &&
+                            !((index + 1) % event.days[0].items.length) && (
+                              <Separator></Separator>
+                            )}
                         </>
                         // </div>
                       ))}
@@ -498,52 +549,58 @@ export default function EventDetailPage() {
                         </>
                       )}
 
-                      {guestItems.map((item,index) => (
+                      {guestItems.map((item, index) => (
                         // <div key={item.name} className="flex items-center gap-4">
                         //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
-<>
-                        <div
-                          key={item.name}
-                          className="flex w-full justify-between space-x-2"
-                        >
-                          <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {item.price}
-                          </Label>
+                        <>
+                          <div
+                            key={item.name}
+                            className="flex w-full justify-between space-x-2"
+                          >
+                            <Label className="min-w-[100px] capitalize">
+                              {item.name} - AED {item.price}
+                            </Label>
 
-                          <div className="flex items-center1 space-x-2">
-                            <Button
-                              className="font-extrabold"
-                              onClick={() =>
-                                changeGuestItems(item.name, item.quantity, -1)
-                              }
-                            >
-                              -
-                            </Button>
-                            <Input
-                              type="number"
-                              min={0}
-                              // defaultValue={0}
-                              className="w-24"
-                              value={item.quantity}
-                              onChange={() =>
-                                changeGuestItems(item.name, item.quantity, 0)
-                              }
-                            />
-                            <Button
-                              className="font-extrabold"
-                              onClick={() =>
-                                changeGuestItems(item.name, item.quantity, 1)
-                              }
-                            >
-                              +
-                            </Button>
+                            <div className="flex items-center1 space-x-2">
+                              <Button
+                                className="font-extrabold"
+                                onClick={() =>
+                                  changeGuestItems(item.name, item.quantity, -1)
+                                }
+                              >
+                                -
+                              </Button>
+                              <Input
+                                type="number"
+                                min={0}
+                                // defaultValue={0}
+                                className="w-24"
+                                value={item.quantity}
+                                onChange={() =>
+                                  changeGuestItems(item.name, item.quantity, 0)
+                                }
+                              />
+                              <Button
+                                className="font-extrabold"
+                                onClick={() =>
+                                  changeGuestItems(item.name, item.quantity, 1)
+                                }
+                              >
+                                +
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      {/* </div> */}
+                          {/* </div> */}
 
-                        {guestIsFamily && !((index+1) % ((event.days[0].items.length)*2)) && <Separator></Separator>}
-                          {!guestIsFamily && !((index+1) % ((event.days[0].items.length))) && <Separator></Separator>}
-
+                          {guestIsFamily &&
+                            !(
+                              (index + 1) %
+                              (event.days[0].items.length * 2)
+                            ) && <Separator></Separator>}
+                          {!guestIsFamily &&
+                            !((index + 1) % event.days[0].items.length) && (
+                              <Separator></Separator>
+                            )}
                         </>
                       ))}
                     </div>
