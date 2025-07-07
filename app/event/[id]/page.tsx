@@ -35,7 +35,7 @@ import { set } from "date-fns";
 // import Link from "next/link";
 
 interface Day {
-  description: String;
+  description: string;
   items: Ticket[];
 }
 
@@ -413,7 +413,7 @@ export default function EventDetailPage() {
 
                     <TableBody>
                       {day.items.map((item) => (
-                        <TableRow>
+                        <TableRow key={item.name}>
                           <TableCell>{item.name}</TableCell>
                           <TableCell>{item.singleMemberPrice}</TableCell>
                           <TableCell>{item.familyMemberPrice}</TableCell>

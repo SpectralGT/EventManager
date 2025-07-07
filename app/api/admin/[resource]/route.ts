@@ -1,3 +1,5 @@
+'use client'
+
 import { defaultHandler } from "ra-data-simple-prisma";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
