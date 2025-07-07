@@ -76,7 +76,7 @@ model Order {
 
   event   Event  @relation(fields: [eventId], references: [id])
   eventId String
-
+  
   memberItems Json
   // items are array of days
   // days are array of FoodItems

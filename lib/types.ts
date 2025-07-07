@@ -9,8 +9,6 @@ export interface Item {
   price: number;
   quantity: number;
   served: number;
-  serveStartTime: string;
-  serveEndTime: string;
 }
 
 export interface Order {

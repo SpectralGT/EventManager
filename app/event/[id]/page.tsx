@@ -14,6 +14,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator"
 
 import { Item } from "@/lib/types";
 // import { Ticket } from "lucide-react";
@@ -23,14 +24,19 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { set } from "date-fns";
 // import Link from "next/link";
 
+interface Day {
+  description: String;
+  items: Ticket[];
+}
+
 interface Ticket {
   name: string;
-  price: number;
-  priceGuestSingle: number;
-  priceGuestFamily: number;
-  quantity: number;
-  serveStartTime: string;
-  serveEndTime: string;
+  singleMemberPrice: number;
+  familyMemberPrice: number;
+  kidsMemberPrice: number;
+  singleGuestPrice: number;
+  familyGuestPrice: number;
+  kidsGuestPrice: number;
 }
 
 interface Event {
@@ -40,7 +46,7 @@ interface Event {
   imgURL: string;
   startDate: string;
   endDate: string;
-  items: Ticket[];
+  days: Day[];
 }
 
 export default function EventDetailPage() {
@@ -49,6 +55,7 @@ export default function EventDetailPage() {
 
   //setting States
   const [event, setEvent] = useState<Event | null>(null);
+  const [isFamily, setIsFamily] = useState<boolean>(false);
   const [items, setItems] = useState<Item[]>([]);
   const [isGuestOrder, setIsGuestOrder] = useState<boolean>(false);
   const [guestName, setGuestName] = useState<string>("");
@@ -69,38 +76,40 @@ export default function EventDetailPage() {
     fetch(`/api/event/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!Array.isArray(data.items))
+        if (!Array.isArray(data.days))
           return <p className="p-6">Error loading items</p>;
         setEvent(data);
 
         //Setting Items state for Order Object
-        const items = data.items;
+        const days = data.days;
+        console.log(data);
+
         const newItems: Item[] = [];
-        items?.forEach((e: Ticket) => {
-          const newItem: Item = {
-            name: e.name,
-            quantity: 0,
-            served: 0,
-            price: e.price,
-            serveStartTime: e.serveStartTime,
-            serveEndTime: e.serveEndTime,
-          };
-          newItems.push(newItem);
-          setItems(newItems);
+        days.forEach((day: Day, index: number) => {
+          day.items?.forEach((e: Ticket) => {
+            const newItem: Item = {
+              name: `Day ${index + 1}: ${e.name} Single`,
+              quantity: 0,
+              served: 0,
+              price: e.singleMemberPrice,
+            };
+            newItems.push(newItem);
+            setItems(newItems);
+          });
         });
 
         const newGuestItems: Item[] = [];
-        items?.forEach((e: Ticket) => {
-          const newItem: Item = {
-            name: e.name,
-            quantity: 0,
-            served: 0,
-            price: e.priceGuestSingle,
-            serveStartTime: e.serveStartTime,
-            serveEndTime: e.serveEndTime,
-          };
-          newGuestItems.push(newItem);
-          setGuestItems(newGuestItems);
+        days.forEach((day: Day, index: number) => {
+          day.items?.forEach((e: Ticket) => {
+            const newItem: Item = {
+              name: `Day ${index + 1}: ${e.name} Single`,
+              quantity: 0,
+              served: 0,
+              price: e.singleMemberPrice,
+            };
+            newGuestItems.push(newItem);
+            setGuestItems(newGuestItems);
+          });
         });
 
         //Getting Local Storage Items after Redirecting
@@ -239,22 +248,88 @@ export default function EventDetailPage() {
     setGuestItems(newItems);
   };
 
-  const changeGuestIsFamily = (isFamily: boolean) => {
-    const newItems = guestItems;
-    let guestTotal = 0;
+  const changeIsFamily = (isFamily: boolean) => {
+    if (isFamily) {
+      const newItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Family)`,
+            quantity: 0,
+            served: 0,
+            price: e.familyMemberPrice,
+          };
 
-    for (let i = 0; i < event.items.length; i++) {
-      if (!isFamily) {
-        newItems[i].price = event.items[i].priceGuestSingle;
-      } else {
-        newItems[i].price = event.items[i].priceGuestFamily;
-      }
+          const newItemKids: Item = {
+            name: `Day ${index + 1}: ${e.name} (Kids)`,
+            quantity: 0,
+            served: 0,
+            price: e.kidsMemberPrice,
+          };
+
+          newItems.push(newItem);
+          newItems.push(newItemKids);
+        });
+      });
+      setItems(newItems);
+    } else {
+      const newItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Single)`,
+            quantity: 0,
+            served: 0,
+            price: e.singleMemberPrice,
+          };
+
+          newItems.push(newItem);
+        });
+      });
+      setItems(newItems);
     }
+  };
 
-    newItems.forEach((e) => (guestTotal += e.quantity * e.price));
-    setGuestIsFamily(isFamily);
-    setTotalGuestPrice(guestTotal);
-    setGuestItems(newItems);
+  const changeGuestIsFamily = (isFamily: boolean) => {
+    if (isFamily) {
+      const newGuestItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Family)`,
+            quantity: 0,
+            served: 0,
+            price: e.familyGuestPrice,
+          };
+
+          const newItemKids: Item = {
+            name: `Day ${index + 1}: ${e.name} (Kids)`,
+            quantity: 0,
+            served: 0,
+            price: e.kidsGuestPrice,
+          };
+
+          newGuestItems.push(newItem);
+          newGuestItems.push(newItemKids);
+        });
+      });
+      setGuestItems(newGuestItems);
+    } else {
+      const newGuestItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Single)`,
+            quantity: 0,
+            served: 0,
+            price: e.singleGuestPrice,
+          };
+
+          newGuestItems.push(newItem);
+        });
+      });
+      setGuestItems(newGuestItems);
+    }
   };
 
   return (
@@ -267,7 +342,7 @@ export default function EventDetailPage() {
 						className="w-full object-cover rounded-lg mb-4"
 					/> */}
 
-          <Tabs defaultValue="info" className="w-[400px]">
+          <Tabs defaultValue="info" className="">
             <TabsList>
               <TabsTrigger value="info">Info</TabsTrigger>
               <TabsTrigger value="booking">Booking</TabsTrigger>
@@ -293,7 +368,7 @@ export default function EventDetailPage() {
             </TabsContent>
             <TabsContent value="booking">
               <div className="mt-6 space-y-4">
-                <Tabs defaultValue="memberBooking" className="w-[400px]">
+                <Tabs defaultValue="memberBooking" className="">
                   <TabsList>
                     <TabsTrigger value="memberBooking">Member</TabsTrigger>
                     {isGuestOrder && (
@@ -303,46 +378,15 @@ export default function EventDetailPage() {
                   <TabsContent value="memberBooking">
                     <div className="mt-6 space-y-4">
                       <h2 className="text-xl font-semibold">Member Booking</h2>
-                      {items.map((item) => (
-                        // <div key={item.name} className="flex items-center gap-4">
-                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
 
-                        <div
-                          key={item.name}
-                          className="flex w-full max-w-sm items-center space-x-2"
-                        >
-                          <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {' '} {item.price}
-                          </Label>
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeItems(item.name, item.quantity, -1)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={item.quantity}
-                            onChange={() =>
-                              changeItems(item.name, item.quantity, 0)
-                            }
-                          />
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeItems(item.name, item.quantity, 1)
-                            }
-                          >
-                            +
-                          </Button>
-                        </div>
-                        // </div>
-                      ))}
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          onCheckedChange={(checked: boolean) => {
+                            changeIsFamily(checked);
+                          }}
+                        ></Checkbox>
+                        <Label>Is Family</Label>
+                      </div>
 
                       <div className="flex items-center gap-3">
                         <Checkbox
@@ -352,6 +396,52 @@ export default function EventDetailPage() {
                         ></Checkbox>
                         <Label>Guest Booking</Label>
                       </div>
+
+<Separator/>
+
+                      {items.map((item,index) => (
+                        // <div key={item.name} className="flex items-center gap-4">
+                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+
+                        <div
+                          key={item.name}
+                          className="flex w-full justify-between space-x-2"
+                        >
+                          <Label className="min-w-[100px] capitalize">
+                            {item.name} - AED {item.price}
+                          </Label>
+
+                          <div className="flex items-center1 space-x-2">
+                            <Button
+                              className="font-extrabold"
+                              onClick={() =>
+                                changeItems(item.name, item.quantity, -1)
+                              }
+                            >
+                              -
+                            </Button>
+                            <Input
+                              type="number"
+                              min={0}
+                              // defaultValue={0}
+                              className="w-24"
+                              value={item.quantity}
+                              onChange={() =>
+                                changeItems(item.name, item.quantity, 0)
+                              }
+                            />
+                            <Button
+                              className="font-extrabold"
+                              onClick={() =>
+                                changeItems(item.name, item.quantity, 1)
+                              }
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </div>
+                        // </div>
+                      ))}
                     </div>
                   </TabsContent>
                   <TabsContent value="guestBooking">
@@ -408,37 +498,40 @@ export default function EventDetailPage() {
 
                         <div
                           key={item.name}
-                          className="flex w-full max-w-sm items-center space-x-2"
+                          className="flex w-full justify-between space-x-2"
                         >
                           <Label className="min-w-[100px] capitalize">
-                            {item.name} - AED {' '} {item.price}
+                            {item.name} - AED {item.price}
                           </Label>
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeGuestItems(item.name, item.quantity, -1)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={item.quantity}
-                            onChange={() =>
-                              changeGuestItems(item.name, item.quantity, 0)
-                            }
-                          />
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeGuestItems(item.name, item.quantity, 1)
-                            }
-                          >
-                            +
-                          </Button>
+
+                          <div className="flex items-center1 space-x-2">
+                            <Button
+                              className="font-extrabold"
+                              onClick={() =>
+                                changeGuestItems(item.name, item.quantity, -1)
+                              }
+                            >
+                              -
+                            </Button>
+                            <Input
+                              type="number"
+                              min={0}
+                              // defaultValue={0}
+                              className="w-24"
+                              value={item.quantity}
+                              onChange={() =>
+                                changeGuestItems(item.name, item.quantity, 0)
+                              }
+                            />
+                            <Button
+                              className="font-extrabold"
+                              onClick={() =>
+                                changeGuestItems(item.name, item.quantity, 1)
+                              }
+                            >
+                              +
+                            </Button>
+                          </div>
                         </div>
                         // </div>
                       ))}
@@ -448,7 +541,7 @@ export default function EventDetailPage() {
               </div>
 
               <div className="mt-6">
-                <p className="font-extrabold">Total Price: AED {' '} {totalPrice}</p>
+                <p className="font-extrabold">Total Price: AED {totalPrice}</p>
                 <Button
                   disabled={totalPrice === 0}
                   className="mt-2"
@@ -484,8 +577,12 @@ export default function EventDetailPage() {
                 }  = ₹${item.price * item.quantity}`}</p>
               ) : null
             )}
-            <p className="font-semibold mt-2">Total - Member : AED {' '} {totalPrice}</p>
-            <p className="font-semibold mt-2">Total - Guest  : AED {' '} {totalGuestPrice}</p>
+            <p className="font-semibold mt-2">
+              Total - Member : AED {totalPrice}
+            </p>
+            <p className="font-semibold mt-2">
+              Total - Guest : AED {totalGuestPrice}
+            </p>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>

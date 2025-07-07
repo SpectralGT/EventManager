@@ -21,7 +21,7 @@ export async function GET(
         imgURL: true,
         startDate: true,
         endDate: true,
-        items: true,
+        days: true,
       },
     });
 
