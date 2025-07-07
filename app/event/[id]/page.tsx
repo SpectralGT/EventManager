@@ -163,6 +163,20 @@ export default function EventDetailPage() {
 
   //Handle pay when user is loged in and clicks on Confirm Button
   const handlePay = async () => {
+    const newItems: Item[] = [];
+    items.forEach((item) => {
+      if (item.quantity) {
+        newItems.push(item);
+      }
+    });
+
+    let newGuestItems: Item[] = [];
+    guestItems.forEach((item) => {
+      if (item.quantity) {
+        newGuestItems.push(item);
+      }
+    });
+
     if (!guestIsFamily) setGuestChildCount(0);
     if (!isGuestOrder) {
       setGuestName("");
@@ -170,6 +184,7 @@ export default function EventDetailPage() {
       setGuestAdultCount(0);
       setGuestChildCount(0);
       setGuestItems([]);
+      newGuestItems = [];
     }
     console.log({
       memberItems: items,
@@ -187,13 +202,13 @@ export default function EventDetailPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        memberItems: items,
+        memberItems: newItems,
         isGuestOrder: isGuestOrder,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,
         guestChildCount: guestChildCount,
-        guestItems: guestItems,
+        guestItems: newGuestItems,
       }),
     });
 
@@ -380,7 +395,7 @@ export default function EventDetailPage() {
 
               {event.days.map((day) => (
                 <>
-                <Separator className="mt-10"/>
+                  <Separator className="mt-10" />
                   <h2 className="text-xl mt-5 font-semibold">
                     {day.description}
                   </h2>
@@ -397,17 +412,17 @@ export default function EventDetailPage() {
                     </TableHeader>
 
                     <TableBody>
-                        {day.items.map(item=>(
-                          <TableRow>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.singleMemberPrice}</TableCell>
-                            <TableCell>{item.familyMemberPrice}</TableCell>
-                            <TableCell>{item.kidsMemberPrice}</TableCell>
-                            <TableCell>{item.singleGuestPrice}</TableCell>
-                            <TableCell>{item.familyGuestPrice}</TableCell>
-                            <TableCell>{item.kidsGuestPrice}</TableCell>
-                          </TableRow>
-                        ))}
+                      {day.items.map((item) => (
+                        <TableRow>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.singleMemberPrice}</TableCell>
+                          <TableCell>{item.familyMemberPrice}</TableCell>
+                          <TableCell>{item.kidsMemberPrice}</TableCell>
+                          <TableCell>{item.singleGuestPrice}</TableCell>
+                          <TableCell>{item.familyGuestPrice}</TableCell>
+                          <TableCell>{item.kidsGuestPrice}</TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </>
@@ -637,7 +652,7 @@ export default function EventDetailPage() {
                 }  = ₹${item.price * item.quantity}`}</p>
               ) : null
             )}
-            { isGuestOrder &&<p className="font-semibold mt-2">Guest Item</p>}
+            {isGuestOrder && <p className="font-semibold mt-2">Guest Item</p>}
             {guestItems.map((item) =>
               item.quantity > 0 ? (
                 <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${
