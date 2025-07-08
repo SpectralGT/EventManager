@@ -239,11 +239,11 @@ export default function EventDetailPage() {
     setItems(newItems);
   };
 
-  const changeGuestItems = (name: string, quantity: number, increament: number) => {
+  const changeGuestItems = (name: string, quantity: number) => {
     const newItems = guestItems;
     newItems.forEach((e) => {
-      if (e.name == name && e.quantity + increament >= 0) {
-        e.quantity = quantity + increament;
+      if (e.name == name && e.quantity >= 0) {
+        e.quantity = quantity;
       }
     });
 
@@ -435,8 +435,42 @@ export default function EventDetailPage() {
 
                       <Separator />
 
+                      {!isFamily &&
+                        event.days.map((day, index) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead>Member Price (Single)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
+
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.singleMemberPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeItems(`Day ${index + 1}: ${item.name} (Single)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
+
                       {isFamily &&
-                        event.days.map((day,index) => (
+                        event.days.map((day, index) => (
                           <>
                             <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
 
@@ -481,7 +515,6 @@ export default function EventDetailPage() {
                             </Table>
                           </>
                         ))}
-
                     </div>
                   </TabsContent>
                   <TabsContent value="guestBooking">
@@ -510,52 +543,86 @@ export default function EventDetailPage() {
                         onChange={(e) => setGuestAdultCount(Number(e.target.value))}
                       />
 
-                      {guestIsFamily && (
-                        <>
-                          <Label htmlFor="email">Child Count</Label>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={guestChildCount}
-                            onChange={(e) => setGuestChildCount(Number(e.target.value))}
-                          />
-                        </>
-                      )}
+                      {!guestIsFamily &&
+                        event.days.map((day:Day, index:number) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
 
-                      {guestItems.map((item, index) => (
-                        // <div key={item.name} className="flex items-center gap-4">
-                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
-                        <>
-                          <div key={item.name} className="flex w-full justify-between space-x-2">
-                            <Label className="min-w-[100px] capitalize">
-                              {item.name} - AED {item.price}
-                            </Label>
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead>Member Price (Single)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
 
-                            <div className="flex items-center1 space-x-2">
-                              <Button className="font-extrabold" onClick={() => changeGuestItems(item.name, item.quantity, -1)}>
-                                -
-                              </Button>
-                              <Input
-                                type="number"
-                                min={0}
-                                // defaultValue={0}
-                                className="w-24"
-                                value={item.quantity}
-                                onChange={() => changeGuestItems(item.name, item.quantity, 0)}
-                              />
-                              <Button className="font-extrabold" onClick={() => changeGuestItems(item.name, item.quantity, 1)}>
-                                +
-                              </Button>
-                            </div>
-                          </div>
-                          {/* </div> */}
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.singleGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Single)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
 
-                          {guestIsFamily && !((index + 1) % (event.days[0].items.length * 2)) && <Separator></Separator>}
-                          {!guestIsFamily && !((index + 1) % event.days[0].items.length) && <Separator></Separator>}
-                        </>
-                      ))}
+                      {guestIsFamily &&
+                        event.days.map((day, index) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead>Guest Price (Family)</TableHead>
+                                <TableHead>Qty</TableHead>
+                                <TableHead>Guest Price (Kids)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
+
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.familyGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Family)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                    <TableCell>{item.kidsGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Kids)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
                     </div>
                   </TabsContent>
                 </Tabs>
