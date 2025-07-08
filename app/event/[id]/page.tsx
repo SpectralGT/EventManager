@@ -391,12 +391,12 @@ export default function EventDetailPage() {
                       {day.items.map((item) => (
                         <TableRow key={item.name}>
                           <TableCell>{item.name}</TableCell>
-                          <TableCell>{item.singleMemberPrice}</TableCell>
-                          <TableCell>{item.familyMemberPrice}</TableCell>
-                          <TableCell>{item.kidsMemberPrice}</TableCell>
-                          <TableCell>{item.singleGuestPrice}</TableCell>
-                          <TableCell>{item.familyGuestPrice}</TableCell>
-                          <TableCell>{item.kidsGuestPrice}</TableCell>
+                          <TableCell>AED {item.singleMemberPrice}</TableCell>
+                          <TableCell>AED {item.familyMemberPrice}</TableCell>
+                          <TableCell>AED {item.kidsMemberPrice}</TableCell>
+                          <TableCell>AED {item.singleGuestPrice}</TableCell>
+                          <TableCell>AED {item.familyGuestPrice}</TableCell>
+                          <TableCell>AED {item.kidsGuestPrice}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -443,7 +443,7 @@ export default function EventDetailPage() {
                             <Table>
                               <TableHeader>
                                 <TableHead>Item</TableHead>
-                                <TableHead>Member Price (Single)</TableHead>
+                                <TableHead className="w-1">Member Price (Single)</TableHead>
                                 <TableHead>Qty</TableHead>
                               </TableHeader>
 
@@ -451,7 +451,7 @@ export default function EventDetailPage() {
                                 {day.items.map((item) => (
                                   <TableRow key={item.name}>
                                     <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.singleMemberPrice}</TableCell>
+                                    <TableCell>AED {item.singleMemberPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
@@ -477,9 +477,9 @@ export default function EventDetailPage() {
                             <Table>
                               <TableHeader>
                                 <TableHead>Item</TableHead>
-                                <TableHead>Member Price (Family)</TableHead>
+                                <TableHead className="w-1">Member Price (Family)</TableHead>
                                 <TableHead>Qty</TableHead>
-                                <TableHead>Member Price (Kids)</TableHead>
+                                <TableHead className="w-1">Member Price (Kids)</TableHead>
                                 <TableHead>Qty</TableHead>
                               </TableHeader>
 
@@ -487,7 +487,7 @@ export default function EventDetailPage() {
                                 {day.items.map((item) => (
                                   <TableRow key={item.name}>
                                     <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.familyMemberPrice}</TableCell>
+                                    <TableCell>AED {item.familyMemberPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
@@ -498,7 +498,7 @@ export default function EventDetailPage() {
                                         onChange={(e) => changeItems(`Day ${index + 1}: ${item.name} (Family)`, Number(e.target.value))}
                                       />
                                     </TableCell>
-                                    <TableCell>{item.kidsMemberPrice}</TableCell>
+                                    <TableCell>AED {item.kidsMemberPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
@@ -551,7 +551,7 @@ export default function EventDetailPage() {
                             <Table>
                               <TableHeader>
                                 <TableHead>Item</TableHead>
-                                <TableHead>Member Price (Single)</TableHead>
+                                <TableHead className="w-1">Member Price (Single)</TableHead>
                                 <TableHead>Qty</TableHead>
                               </TableHeader>
 
@@ -559,7 +559,7 @@ export default function EventDetailPage() {
                                 {day.items.map((item) => (
                                   <TableRow key={item.name}>
                                     <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.singleGuestPrice}</TableCell>
+                                    <TableCell>AED {item.singleGuestPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
@@ -585,9 +585,9 @@ export default function EventDetailPage() {
                             <Table>
                               <TableHeader>
                                 <TableHead>Item</TableHead>
-                                <TableHead>Guest Price (Family)</TableHead>
+                                <TableHead className="w-1">Guest Price (Family)</TableHead>
                                 <TableHead>Qty</TableHead>
-                                <TableHead>Guest Price (Kids)</TableHead>
+                                <TableHead className="w-1">Guest Price (Kids)</TableHead>
                                 <TableHead>Qty</TableHead>
                               </TableHeader>
 
@@ -595,7 +595,7 @@ export default function EventDetailPage() {
                                 {day.items.map((item) => (
                                   <TableRow key={item.name}>
                                     <TableCell>{item.name}</TableCell>
-                                    <TableCell>{item.familyGuestPrice}</TableCell>
+                                    <TableCell>AED {item.familyGuestPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
@@ -606,7 +606,7 @@ export default function EventDetailPage() {
                                         onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Family)`, Number(e.target.value))}
                                       />
                                     </TableCell>
-                                    <TableCell>{item.kidsGuestPrice}</TableCell>
+                                    <TableCell>AED {item.kidsGuestPrice}</TableCell>
                                     <TableCell>
                                       <Input
                                         type="number"
