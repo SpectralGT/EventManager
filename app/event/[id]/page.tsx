@@ -646,8 +646,9 @@ export default function EventDetailPage() {
             <DialogTitle>Confirm Your Order</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
+            <p className="font-semibold mt-2">Member Items</p>
             {items.map((item) => (item.quantity > 0 ? <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${item.quantity}  = ₹${item.price * item.quantity}`}</p> : null))}
-            {isGuestOrder && <p className="font-semibold mt-2">Guest Item</p>}
+            {isGuestOrder && <p className="font-semibold mt-2">Guest Items</p>}
             {guestItems.map((item) => (item.quantity > 0 ? <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${item.quantity}  = ₹${item.price * item.quantity}`}</p> : null))}
             <p className="font-semibold mt-2">Total - Member : AED {totalPrice}</p>
             <p className="font-semibold mt-2">Total - Guest : AED {totalGuestPrice}</p>
