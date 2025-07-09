@@ -4,13 +4,7 @@ import { redirect, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,16 +15,23 @@ import { Item, OrderByID } from "@/lib/types";
 import { useSession } from "next-auth/react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { set } from "date-fns";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 // import Link from "next/link";
+
+interface Day {
+  description: string;
+  items: Ticket[];
+}
 
 interface Ticket {
   name: string;
-  price: number;
-  priceGuestSingle: number;
-  priceGuestFamily: number;
-  quantity: number;
-  serveStartTime: string;
-  serveEndTime: string;
+  singleMemberPrice: number;
+  familyMemberPrice: number;
+  kidsMemberPrice: number;
+  singleGuestPrice: number;
+  familyGuestPrice: number;
+  kidsGuestPrice: number;
 }
 
 interface Event {
@@ -40,7 +41,7 @@ interface Event {
   imgURL: string;
   startDate: string;
   endDate: string;
-  items: Ticket[];
+  days: Day[];
 }
 
 export default function EventDetailPage() {
@@ -52,6 +53,7 @@ export default function EventDetailPage() {
 
   //setting States
   const [event, setEvent] = useState<Event | null>(null);
+  const [isFamily, setIsFamily] = useState<boolean>(false);
   const [items, setItems] = useState<Item[]>([]);
   const [isGuestOrder, setIsGuestOrder] = useState<boolean>(false);
   const [guestName, setGuestName] = useState<string>("");
@@ -72,8 +74,7 @@ export default function EventDetailPage() {
     fetch(`/api/event/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!Array.isArray(data.items))
-          return <p className="p-6">Error loading items</p>;
+        if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
         setEvent(data);
 
         //Setting Items state for Order Object
@@ -171,6 +172,20 @@ export default function EventDetailPage() {
 
   //Handle pay when user is loged in and clicks on Confirm Button
   const handlePay = async () => {
+    const newItems: Item[] = [];
+    items.forEach((item) => {
+      if (item.quantity) {
+        newItems.push(item);
+      }
+    });
+
+    let newGuestItems: Item[] = [];
+    guestItems.forEach((item) => {
+      if (item.quantity) {
+        newGuestItems.push(item);
+      }
+    });
+
     if (!guestIsFamily) setGuestChildCount(0);
     if (!isGuestOrder) {
       setGuestName("");
@@ -178,6 +193,7 @@ export default function EventDetailPage() {
       setGuestAdultCount(0);
       setGuestChildCount(0);
       setGuestItems([]);
+      newGuestItems = [];
     }
     console.log({
       memberItems: items,
@@ -195,13 +211,13 @@ export default function EventDetailPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        memberItems: items,
+        memberItems: newItems,
         isGuestOrder: isGuestOrder,
         guestName: guestName,
         guestIsFamily: guestIsFamily,
         guestAdultCount: guestAdultCount,
         guestChildCount: guestChildCount,
-        guestItems: guestItems,
+        guestItems: newGuestItems,
       }),
     });
 
@@ -232,11 +248,13 @@ export default function EventDetailPage() {
   };
 
   //Updating the Items State when the user selects items
-  const changeItems = (name: string, quantity: number, increament: number) => {
+
+  //Updating the Items State when the user selects items
+  const changeItems = (name: string, quantity: number) => {
     const newItems = items;
     newItems.forEach((e) => {
-      if (e.name == name && e.quantity + increament >= 0) {
-        e.quantity = quantity + increament;
+      if (e.name == name && e.quantity >= 0) {
+        e.quantity = quantity;
       }
     });
 
@@ -247,15 +265,11 @@ export default function EventDetailPage() {
     setItems(newItems);
   };
 
-  const changeGuestItems = (
-    name: string,
-    quantity: number,
-    increament: number
-  ) => {
+  const changeGuestItems = (name: string, quantity: number) => {
     const newItems = guestItems;
     newItems.forEach((e) => {
-      if (e.name == name && e.quantity + increament >= 0) {
-        e.quantity = quantity + increament;
+      if (e.name == name && e.quantity >= 0) {
+        e.quantity = quantity;
       }
     });
 
@@ -266,43 +280,110 @@ export default function EventDetailPage() {
     setGuestItems(newItems);
   };
 
-  const changeGuestIsFamily = (isFamily: boolean) => {
-    const newItems = guestItems;
-    let guestTotal = 0;
+  const changeIsFamily = (isFamily: boolean) => {
+    setIsFamily(isFamily);
+    if (isFamily) {
+      const newItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Family)`,
+            quantity: 0,
+            served: 0,
+            price: e.familyMemberPrice,
+          };
 
-    for (let i = 0; i < event.items.length; i++) {
-      if (!isFamily) {
-        newItems[i].price = event.items[i].priceGuestSingle;
-      } else {
-        newItems[i].price = event.items[i].priceGuestFamily;
-      }
+          const newItemKids: Item = {
+            name: `Day ${index + 1}: ${e.name} (Kids)`,
+            quantity: 0,
+            served: 0,
+            price: e.kidsMemberPrice,
+          };
+
+          newItems.push(newItem);
+          newItems.push(newItemKids);
+        });
+      });
+      setItems(newItems);
+    } else {
+      const newItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Single)`,
+            quantity: 0,
+            served: 0,
+            price: e.singleMemberPrice,
+          };
+
+          newItems.push(newItem);
+        });
+      });
+      setItems(newItems);
     }
-
-    newItems.forEach((e) => (guestTotal += e.quantity * e.price));
-    setGuestIsFamily(isFamily);
-    setTotalGuestPrice(guestTotal);
-    setGuestItems(newItems);
   };
 
+  const changeGuestIsFamily = (isFamily: boolean) => {
+    setGuestIsFamily(isFamily);
+    if (isFamily) {
+      const newGuestItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Family)`,
+            quantity: 0,
+            served: 0,
+            price: e.familyGuestPrice,
+          };
+
+          const newItemKids: Item = {
+            name: `Day ${index + 1}: ${e.name} (Kids)`,
+            quantity: 0,
+            served: 0,
+            price: e.kidsGuestPrice,
+          };
+
+          newGuestItems.push(newItem);
+          newGuestItems.push(newItemKids);
+        });
+      });
+      setGuestItems(newGuestItems);
+    } else {
+      const newGuestItems: Item[] = [];
+      event.days.forEach((day: Day, index: number) => {
+        day.items?.forEach((e: Ticket) => {
+          const newItem: Item = {
+            name: `Day ${index + 1}: ${e.name} (Single)`,
+            quantity: 0,
+            served: 0,
+            price: e.singleGuestPrice,
+          };
+
+          newGuestItems.push(newItem);
+        });
+      });
+      setGuestItems(newGuestItems);
+    }
+  };
+
+
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 mx-auto">
       <Card>
         <CardContent className="p-4">
           {/* <img
-                        src={event.imgURL}
-                        alt={event.title}
-                        className="w-full object-cover rounded-lg mb-4"
-                    /> */}
+						src={event.imgURL}
+						alt={event.title}
+						className="w-full object-cover rounded-lg mb-4"
+					/> */}
 
-          <Tabs defaultValue="booking" className="w-[400px]">
+          <Tabs defaultValue="info" className="">
             <TabsList>
               <TabsTrigger value="info">Info</TabsTrigger>
               <TabsTrigger value="booking">Booking</TabsTrigger>
             </TabsList>
             <TabsContent value="info">
-              <h1 className="text-center text-4xl font-bold mb-2">
-                {event.title}
-              </h1>
+              <h1 className="text-center text-4xl font-bold mb-2">{event.title}</h1>
               <div
                 className="text-muted-foreground mb-4 mt-4 description"
                 dangerouslySetInnerHTML={{
@@ -311,75 +392,156 @@ export default function EventDetailPage() {
               ></div>
 
               <p>
-                <strong>Start:</strong>{" "}
-                {new Date(event.startDate).toLocaleString()}
+                <strong>Start:</strong> {new Date(event.startDate).toLocaleString()}
               </p>
               <p>
                 <strong>End:</strong> {new Date(event.endDate).toLocaleString()}
               </p>
+
+              {event.days.map((day) => (
+                <>
+                  <Separator className="mt-10" />
+                  <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                  <Table>
+                    <TableHeader>
+                      <TableHead>Item</TableHead>
+                      <TableHead>Member Price (Single)</TableHead>
+                      <TableHead>Member Price (Family)</TableHead>
+                      <TableHead>Member Price (Kids)</TableHead>
+                      <TableHead>Guest Price (Single)</TableHead>
+                      <TableHead>Guest Price (Family)</TableHead>
+                      <TableHead>Guest Price (Kids)</TableHead>
+                    </TableHeader>
+
+                    <TableBody>
+                      {day.items.map((item) => (
+                        <TableRow key={item.name}>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>AED {item.singleMemberPrice}</TableCell>
+                          <TableCell>AED {item.familyMemberPrice}</TableCell>
+                          <TableCell>AED {item.kidsMemberPrice}</TableCell>
+                          <TableCell>AED {item.singleGuestPrice}</TableCell>
+                          <TableCell>AED {item.familyGuestPrice}</TableCell>
+                          <TableCell>AED {item.kidsGuestPrice}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
+              ))}
             </TabsContent>
             <TabsContent value="booking">
               <div className="mt-6 space-y-4">
-                <Tabs defaultValue="memberBooking" className="w-[400px]">
+                <Tabs defaultValue="memberBooking" className="">
                   <TabsList>
                     <TabsTrigger value="memberBooking">Member</TabsTrigger>
-                    {isGuestOrder && (
-                      <TabsTrigger value="guestBooking">Guest</TabsTrigger>
-                    )}
+                    {isGuestOrder && <TabsTrigger value="guestBooking">Guest</TabsTrigger>}
                   </TabsList>
                   <TabsContent value="memberBooking">
                     <div className="mt-6 space-y-4">
                       <h2 className="text-xl font-semibold">Member Booking</h2>
-                      {items.map((item) => (
-                        // <div key={item.name} className="flex items-center gap-4">
-                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
-
-                        <div
-                          key={item.name}
-                          className="flex w-full max-w-sm items-center space-x-2"
-                        >
-                          <Label className="min-w-[100px] capitalize">
-                            {item.name} - ₹{item.price}
-                          </Label>
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeItems(item.name, item.quantity, -1)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={item.quantity}
-                            onChange={() =>
-                              changeItems(item.name, item.quantity, 0)
-                            }
-                          />
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeItems(item.name, item.quantity, 1)
-                            }
-                          >
-                            +
-                          </Button>
-                        </div>
-                        // </div>
-                      ))}
 
                       <div className="flex items-center gap-3">
                         <Checkbox
-                          checked={isGuestOrder}
+                          onCheckedChange={(checked: boolean) => {
+                            changeIsFamily(checked);
+                          }}
+                        ></Checkbox>
+                        <Label>Is Family</Label>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <Checkbox
                           onCheckedChange={(checked: boolean) => {
                             setIsGuestOrder(checked);
                           }}
                         ></Checkbox>
                         <Label>Guest Booking</Label>
                       </div>
+
+                      <Separator />
+
+                      {!isFamily &&
+                        event.days.map((day, index) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead className="w-1">Member Price (Single)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
+
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>AED {item.singleMemberPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeItems(`Day ${index + 1}: ${item.name} (Single)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
+
+                      {isFamily &&
+                        event.days.map((day, index) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead className="w-1">Member Price (Family)</TableHead>
+                                <TableHead>Qty</TableHead>
+                                <TableHead className="w-1">Member Price (Kids)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
+
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>AED {item.familyMemberPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeItems(`Day ${index + 1}: ${item.name} (Family)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                    <TableCell>AED {item.kidsMemberPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeItems(`Day ${index + 1}: ${item.name} (Kids)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
                     </div>
                   </TabsContent>
                   <TabsContent value="guestBooking">
@@ -387,11 +549,7 @@ export default function EventDetailPage() {
                       <h2 className="text-xl font-semibold">Guest Booking</h2>
 
                       <Label htmlFor="email">Guest Name</Label>
-                      <Input
-                        type="text"
-                        value={String(guestName)}
-                        onChange={(e) => setGuestName(e.target.value)}
-                      ></Input>
+                      <Input type="text" value={String(guestName)} onChange={(e) => setGuestName(e.target.value)}></Input>
 
                       <div className="flex items-center gap-3">
                         <Checkbox
@@ -409,80 +567,98 @@ export default function EventDetailPage() {
                         // defaultValue={0}
                         className="w-24"
                         value={guestAdultCount}
-                        onChange={(e) =>
-                          setGuestAdultCount(Number(e.target.value))
-                        }
+                        onChange={(e) => setGuestAdultCount(Number(e.target.value))}
                       />
 
-                      {guestIsFamily && (
-                        <>
-                          <Label htmlFor="email">Child Count</Label>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={guestChildCount}
-                            onChange={(e) =>
-                              setGuestChildCount(Number(e.target.value))
-                            }
-                          />
-                        </>
-                      )}
+                      {!guestIsFamily &&
+                        event.days.map((day:Day, index:number) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
 
-                      {guestItems.map((item) => (
-                        // <div key={item.name} className="flex items-center gap-4">
-                        //   <Input type="number" min={0} defaultValue={0} className="w-24" onChange={(e) => changeItems(item.name, Number(e.target.value))} />
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead className="w-1">Member Price (Single)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
 
-                        <div
-                          key={item.name}
-                          className="flex w-full max-w-sm items-center space-x-2"
-                        >
-                          <Label className="min-w-[100px] capitalize">
-                            {item.name} - ₹{item.price}
-                          </Label>
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeGuestItems(item.name, item.quantity, -1)
-                            }
-                          >
-                            -
-                          </Button>
-                          <Input
-                            type="number"
-                            min={0}
-                            // defaultValue={0}
-                            className="w-24"
-                            value={item.quantity}
-                            onChange={() =>
-                              changeGuestItems(item.name, item.quantity, 0)
-                            }
-                          />
-                          <Button
-                            className="font-extrabold"
-                            onClick={() =>
-                              changeGuestItems(item.name, item.quantity, 1)
-                            }
-                          >
-                            +
-                          </Button>
-                        </div>
-                        // </div>
-                      ))}
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>AED {item.singleGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Single)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
+
+                      {guestIsFamily &&
+                        event.days.map((day, index) => (
+                          <>
+                            <h2 className="text-xl mt-5 font-semibold">{day.description}</h2>
+
+                            <Table>
+                              <TableHeader>
+                                <TableHead>Item</TableHead>
+                                <TableHead className="w-1">Guest Price (Family)</TableHead>
+                                <TableHead>Qty</TableHead>
+                                <TableHead className="w-1">Guest Price (Kids)</TableHead>
+                                <TableHead>Qty</TableHead>
+                              </TableHeader>
+
+                              <TableBody>
+                                {day.items.map((item) => (
+                                  <TableRow key={item.name}>
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>AED {item.familyGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Family)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                    <TableCell>AED {item.kidsGuestPrice}</TableCell>
+                                    <TableCell>
+                                      <Input
+                                        type="number"
+                                        min={0}
+                                        // defaultValue={0}
+                                        className="w-24"
+                                        defaultValue={0}
+                                        onChange={(e) => changeGuestItems(`Day ${index + 1}: ${item.name} (Kids)`, Number(e.target.value))}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </>
+                        ))}
                     </div>
                   </TabsContent>
                 </Tabs>
               </div>
 
               <div className="mt-6">
-                <p className="font-extrabold">Total Price: ₹{totalPrice}</p>
-                <Button
-                  disabled={totalPrice === 0}
-                  className="mt-2"
-                  onClick={() => setDialogOpen(true)}
-                >
-                  Update Booking
+                <p className="font-extrabold">Total Price: AED {totalPrice}</p>
+                <Button disabled={totalPrice === 0} className="mt-2" onClick={() => setDialogOpen(true)}>
+                  Buy items
                 </Button>
               </div>
             </TabsContent>
@@ -497,25 +673,19 @@ export default function EventDetailPage() {
             <DialogTitle>Confirm Your Order</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
-            {items.map((item) =>
-              item.quantity > 0 ? (
-                <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${
-                  item.quantity
-                }  = ₹${item.price * item.quantity}`}</p>
-              ) : null
-            )}
-            <p className="font-semibold mt-2">Total: ₹{totalPrice}</p>
+            <p className="font-semibold mt-2">Member Items</p>
+            {items.map((item) => (item.quantity > 0 ? <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${item.quantity}  = ₹${item.price * item.quantity}`}</p> : null))}
+            {isGuestOrder && <p className="font-semibold mt-2">Guest Items</p>}
+            {guestItems.map((item) => (item.quantity > 0 ? <p key={item.name}>{` ${item.name} ( ${item.price} ) X ${item.quantity}  = ₹${item.price * item.quantity}`}</p> : null))}
+            <p className="font-semibold mt-2">Total - Member : AED {totalPrice}</p>
+            <p className="font-semibold mt-2">Total - Guest : AED {totalGuestPrice}</p>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               Cancel
             </Button>
 
-            {status === "authenticated" ? (
-              <Button onClick={handlePay}>Confirm</Button>
-            ) : (
-              <Button onClick={handleUnloggedPay}>Login and Confirm</Button>
-            )}
+            {status === "authenticated" ? <Button onClick={handlePay}>Confirm</Button> : <Button onClick={handleUnloggedPay}>Login and Confirm</Button>}
           </DialogFooter>
         </DialogContent>
       </Dialog>
