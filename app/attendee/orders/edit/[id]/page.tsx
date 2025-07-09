@@ -74,73 +74,48 @@ export default function EventDetailPage() {
     fetch(`/api/event/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (!Array.isArray(data.items)) return <p className="p-6">Error loading items</p>;
+        if (!Array.isArray(data.days)) return <p className="p-6">Error loading items</p>;
         setEvent(data);
+        console.log("Called");
+
+
 
         //Setting Items state for Order Object
-        // const items = data.items;
-        // const newItems: Item[] = [];
-        // items?.forEach((e: Ticket) => {
-        //   const newItem: Item = {
-        //     name: e.name,
-        //     quantity: 0,
-        //     served: 0,
-        //     price: e.price,
-        //     serveStartTime: e.serveStartTime,
-        //     serveEndTime: e.serveEndTime,
-        //   };
-        //   newItems.push(newItem);
-        //   setItems(newItems);
-        // });
+        const days = data.days;
+        console.log(data);
 
-        // const newGuestItems: Item[] = [];
-        // items?.forEach((e: Ticket) => {
-        //   const newItem: Item = {
-        //     name: e.name,
-        //     quantity: 0,
-        //     served: 0,
-        //     price: e.priceGuestSingle,
-        //     serveStartTime: e.serveStartTime,
-        //     serveEndTime: e.serveEndTime,
-        //   };
-        //   newGuestItems.push(newItem);
-        //   setGuestItems(newGuestItems);
-        // });
+        const newItems: Item[] = [];
+        days.forEach((day: Day, index: number) => {
+          day.items?.forEach((e: Ticket) => {
+            const newItem: Item = {
+              name: `Day ${index + 1}: ${e.name} (Single)`,
+              quantity: 0,
+              served: 0,
+              price: e.singleMemberPrice,
+            };
+            newItems.push(newItem);
+            setItems(newItems);
+          });
+        });
 
-        //Getting Local Storage Items after Redirecting
-        const savedItems = localStorage.getItem("selectedItems");
-        if (savedItems) {
-          try {
-            const savedItemsJSON = JSON.parse(savedItems);
-            if (savedItemsJSON && savedItemsJSON.eventID == id) {
-              let total = 0;
-              savedItemsJSON.items.forEach(
-                // @ts-expect-error : item will be of type  Item
-                (e) => (total += e.quantity * e.price)
-              );
+        const newGuestItems: Item[] = [];
+        days.forEach((day: Day, index: number) => {
+          day.items?.forEach((e: Ticket) => {
+            const newItem: Item = {
+              name: `Day ${index + 1}: ${e.name} (Single)`,
+              quantity: 0,
+              served: 0,
+              price: e.singleMemberPrice,
+            };
+            newGuestItems.push(newItem);
+            setGuestItems(newGuestItems);
+          });
+        });
 
-              let guestTotal = 0;
-              savedItemsJSON.items.forEach(
-                // @ts-expect-error : item will be of type  Item
-                (e) => (guestTotal += e.quantity * e.price)
-              );
 
-              setTotalPrice(total);
-              setTotalGuestPrice(guestTotal);
 
-              setItems(savedItemsJSON.memberItems);
-              setIsGuestOrder(savedItemsJSON.isGuestOrder);
-              setGuestName(savedItemsJSON.guestName);
-              setGuestIsFamily(savedItemsJSON.guestIsFamily);
-              setGuestAdultCount(savedItemsJSON.guestAdultCount);
-              setGuestChildCount(savedItemsJSON.guestChildCount);
-              setGuestItems(savedItemsJSON.guestItems);
-              setDialogOpen(true);
-            }
-          } catch (e) {
-            console.error("No saved items", e);
-          }
-        }
+
+
       });
   };
 
@@ -152,13 +127,13 @@ export default function EventDetailPage() {
 
         if (data && data.memberItems) {
           fetchEvent(data.eventId);
-          setItems(data.memberItems);
+          // setItems(data.memberItems);
           setIsGuestOrder(data.isGuestOrder);
           setGuestName(data.guestName);
           setGuestIsFamily(data.guestIsFamily);
           setGuestAdultCount(data.guestAdultCount);
           setGuestChildCount(data.guestChildCount);
-          setGuestItems(data.guestItems);
+          // setGuestItems(data.guestItems);
 
           let total = 0;
           // @ts-expect-error : e
