@@ -18,6 +18,8 @@ import {
   DateTimeInput,
   TimeInput,
   required,
+  FieldTitle,
+  Labeled,
 } from "react-admin";
 
 import { RichTextInput } from "ra-input-rich-text";
@@ -104,13 +106,29 @@ export const EventCreate = () => (
           <TextInput source="description" validate={required()} />
           <ArrayInput source="items" validate={required()}>
             <SimpleFormIterator inline>
-              <TextInput source="name" validate={required()} />
-              <NumberInput source="singleMemberPrice" validate={required()} />
-              <NumberInput source="familyMemberPrice" validate={required()} />
-              <NumberInput source="kidsMemberPrice" validate={required()} />
-              <NumberInput source="singleGuestPrice" validate={required()} />
-              <NumberInput source="familyGuestPrice" validate={required()} />
-              <NumberInput source="kidsGuestPrice" validate={required()} />
+              
+              <Labeled label="Item Name">
+                <TextInput source="name" validate={required()} />
+              </Labeled>
+              <Labeled label="Member Price (Single)">
+                <NumberInput source="singleMemberPrice" validate={required()} />
+              </Labeled>
+              <Labeled label="Member Price (Family)">
+                <NumberInput source="familyMemberPrice" validate={required()} />
+              </Labeled>
+              <Labeled label="Member Price (Kids)">
+                <NumberInput source="kidsMemberPrice" validate={required()} />
+              </Labeled>
+              <Labeled label="Guest Price (Single)">
+                <NumberInput source="singleGuestPrice" validate={required()} />
+              </Labeled>
+              <Labeled label="Guest Price (Family)">
+                <NumberInput source="familyGuestPrice" validate={required()} />
+              </Labeled>
+              <Labeled label="Guest Price (Kids)">
+                <NumberInput source="kidsGuestPrice" validate={required()} />
+              </Labeled>
+
             </SimpleFormIterator>
           </ArrayInput>
         </SimpleFormIterator>
