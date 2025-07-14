@@ -417,6 +417,7 @@ export default function EventDetailPage() {
 
                       <div className="flex items-center gap-3">
                         <Checkbox
+                        defaultChecked={isFamily}
                           onCheckedChange={(checked: boolean) => {
                             changeIsFamily(checked);
                           }}
@@ -426,6 +427,7 @@ export default function EventDetailPage() {
 
                       <div className="flex items-center gap-3">
                         <Checkbox
+                        defaultChecked={isGuestOrder}
                           onCheckedChange={(checked: boolean) => {
                             setIsGuestOrder(checked);
                           }}
@@ -526,6 +528,7 @@ export default function EventDetailPage() {
 
                       <div className="flex items-center gap-3">
                         <Checkbox
+                        defaultChecked={guestIsFamily}
                           onCheckedChange={(checked: boolean) => {
                             changeGuestIsFamily(checked);
                           }}
